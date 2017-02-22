@@ -31,10 +31,10 @@ N = 20 # temp
 map_gradient = [[int(random.random()*100) for i in range(N)] for j in range(N)] # temp
 for i in range(N):
 	# add walls
-	map_gradient[0][i] = 100
-	map_gradient[-1][i] = 100
-	map_gradient[i][0] = 100
-	map_gradient[i][-1] = 100
+	map_gradient[0][i] = 0
+	map_gradient[-1][i] = 0
+	map_gradient[i][0] = 0
+	map_gradient[i][-1] = 0
 
 for i in range(len(map_gradient)):
 	for k in range(len(map_gradient)):
