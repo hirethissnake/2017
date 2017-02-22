@@ -38,7 +38,7 @@ class Grid:
 	def addBoundary(self, value):
 	
 		for i in range(self.size):
-			self.grid[0][i] = 0
-			self.grid[-1][i] = 0
-			self.grid[i][0] = 0
-			self.grid[i][-1] = 0
+			self.grid[0][i] = value
+			self.grid[-1][i] = value
+			self.grid[i][0] = value
+			self.grid[i][-1] = value
