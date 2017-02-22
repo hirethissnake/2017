@@ -9,7 +9,7 @@ def press(btn):
     else:
         app.infoBox('Help', 'Nah dawg, I can\'t help you.')
 
-# app = gui('Login Window', '400x200')
+app = gui('Login Window', '400x200')
 app.setBg('white')
 app.setFont(14, font='Segoe UI')
 app.setTitle('SneakySnake Visualiser')
