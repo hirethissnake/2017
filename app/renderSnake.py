@@ -41,8 +41,8 @@ for i in range(len(map_gradient)):
 		l = map_gradient[i][k]
 		title = str(i) + "," + str(k)
 		
-		hex = '#%02x%02x%02x' % tuple(i * 255 for i in colorsys.hls_to_rgb((l * 1.2) / float(360), 0.6, 0.8)) #interpolate b/w red and green based on l, then convert to hex
-
+		hex = '#%02x%02x%02x' % tuple(i * 255 for i in colorsys.hls_to_rgb((l * 1.2) / float(360), 0.6, 0.8))
+	
 		app.addLabel(title, '', i, k)
 		app.setLabelBg(title, hex)
 
