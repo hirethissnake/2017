@@ -1,5 +1,6 @@
 from appJar import gui
 import random # temp
+import colorsys
 
 # function called by pressing the buttons
 def press(btn):
@@ -38,20 +39,12 @@ for i in range(N):
 for i in range(len(map_gradient)):
     for k in range(len(map_gradient)):
         l = map_gradient[i][k]
-    	title = str(i) + "," + str(k)
-        color = '#42b0f4' # Light blue, best possible score
-        if l > 10: 
-            color = '#41f47f' # Good, light green
-        if l > 30:
-            color = '#c1f441' # Average-Good, yellow-green
-        if l > 60:
-            color = '#f4eb41' # Average, yellow
-        if l > 80:
-            color = '#f49141' # Bad-average, orange
-        if l > 90:
-            color = '#f44341' # Bad, red
+        title = str(i) + "," + str(k)
+        
+        hex = '#%02x%02x%02x' % tuple(i * 255 for i in colorsys.hls_to_rgb((k * 6) / float(360), 0.6, 0.8)) #interpolate b/w red and green based on k, then convert to hex
+
         app.addLabel(title, '', i, k)
-        app.setLabelBg(title, color)
+        app.setLabelBg(title, hex)
 
 
 app.go()
