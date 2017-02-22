@@ -1,3 +1,16 @@
+# Sneaky Snake
+
+A aggressive / defensive Battlesnake implementation. Written by Phil Denhoff, Daniel Frankcom, Eric Showers, Kyle, and Alex Welsh-Piedrahita.
+
+Current feature list is in the `.docx` file. The requirements are listed in `requirements.txt`. They can be batch installed with
+```
+pip install -r requirements.txt
+```
+Dependencies should be visually confirmed to be installed with
+```
+pip list
+```
+
 # battlesnake-python
 
 A simple [BattleSnake AI](http://battlesnake.io) written in Python. 
