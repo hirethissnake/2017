@@ -5,18 +5,20 @@ import colorsys
 class Grid:
 
 	def __init__(self, size):
-	
+		"""Initialization code. Set grid size and create blank grid
+		of size x size shape."""
 		self.size = size # set grid size
 		self.grid = [[0 for i in range(size)] for j in range(size)] # generate a grid of size x size
 		
 		
 	def randomize(self, min, max):
-	
+		"""Fill grid with random values between min and max."""
 		self.grid = [[randint(min, max) for i in range(self.size)] for j in range(self.size)] # fill grid with numbers between min and max
 	
 	
 	def show(self):
-	
+		"""Use AppJar to visualize each step of the algorithm,
+		to see how different cells are weighted differently."""
 		app = gui('Login Window', '400x400')
 		app.setBg('white')
 		app.setTitle('SneakySnake Visualiser')
@@ -36,7 +38,8 @@ class Grid:
 		
 		
 	def addBoundary(self, value):
-	
+		"""Weight fully negative the walls of the grid. This assumes our grid
+		size includes the wall cells."""
 		for i in range(self.size):
 			self.grid[0][i] = value
 			self.grid[-1][i] = value
