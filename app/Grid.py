@@ -9,15 +9,37 @@ class Grid:
 		of size x size shape."""
 		self.size = size # set grid size
 		self.grid = [[0 for i in range(size)] for j in range(size)] # generate a grid of size x size
+	
+	
+	def getSize(self):
+		"""Return grid size"""
+	
 		
-		
-	def randomize(self, min, max):
+	def randomizeWeights(self, min, max):
 		"""Fill grid with random values between min and max."""
 		self.grid = [[randint(min, max) for i in range(self.size)] for j in range(self.size)] # fill grid with numbers between min and max
 	
 	
-	def show(self):
-		"""Use AppJar to visualize each step of the algorithm,
+	def weightCell(self, row, col, modifier):
+		"""Multiple cell by modifier value"""
+		#TODO
+			#Modify grid cell
+			
+	
+	def setCell(self, row, col, value):
+		"""Set cell to value"""
+		#TODO
+			#Set grid cell
+			
+	
+	def getCell(self, row, col):
+		"""Return cell value"""
+		#TODO
+			#Return cell value
+	
+	
+	def showColours(self):
+		"""Use colours to visualize each step of the algorithm,
 		to see how different cells are weighted differently."""
 		app = gui('Login Window', '400x400')
 		app.setBg('white')
@@ -37,11 +59,18 @@ class Grid:
 		app.go()
 		
 		
-	def addBoundary(self, value):
-		"""Weight fully negative the walls of the grid. This assumes our grid
-		size includes the wall cells."""
+	def showNumbers(self):
+		"""Use numbers to visualize each step of the algorithm,
+		to see how different cells are weighted differently."""
+		#TODO
+			#Show visualization
+		
+		
+	"""def addBoundary(self, value):
+		#Weight fully negative the walls of the grid. This assumes our grid
+		#size includes the wall cells.
 		for i in range(self.size):
 			self.grid[0][i] = value
 			self.grid[-1][i] = value
 			self.grid[i][0] = value
-			self.grid[i][-1] = value
+			self.grid[i][-1] = value""" #I don't think we need a boundary, unnecessary storage, can simply check bounds and set weight to 0

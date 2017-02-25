@@ -20,9 +20,11 @@ class Game:
 		#TODO
 			#Run each algorithm to make decisions
 			#Find best route to desired square
-			#return decision
-		
-		
+			#Ensure boundary is not selected (shouldn't be an issue since we would only head towards positively weighted squares anyway and boundary square do not exist according to algorithm)
+			#If several candidates, pick one at random
+			#Return decision
+	
+	
 	def weightNotHitSelf(self):
 		"""Weight grid to avoid snake hitting itself"""
 		#TODO
