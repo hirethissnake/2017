@@ -7,6 +7,7 @@ class Snake:
 			#Init positions queue (can easily pop front when moving forwards and add to back)
 			#Init health
 			#Init state (unknown, food, attack, flee) - can predict for other snakes and set based on know values for our own
+			#Init list of past positions
 		
 		
 	def update(self, headPosition, foodBoolean):
@@ -14,6 +15,7 @@ class Snake:
 		#TODO
 			#Update positions queue
 			#Did we get food? Increase health if yes, decrease health if no
+			#Append to past positions
 	
 	
 	def getSize(self):

@@ -3,8 +3,7 @@ class Game:
 	def __init__(self, size):
 		"""Initialize the Game class"""
 		#TODO
-			#Init weight grid
-			#Init grid graph
+			#Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
 			#Init snakes
 			#Init move number (how many since start of game)
 		
