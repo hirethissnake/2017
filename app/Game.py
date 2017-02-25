@@ -76,5 +76,4 @@ class Game:
 			#How long are they?
 			#How much traversal room are we leaving them?
 			#Do they need food? Do they have it in the trapped location?
-			#How long are we? Can we effectively block them for long enough?
-			
+			#How long are we? Can we effectively block them for long enough?	
