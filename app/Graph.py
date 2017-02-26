@@ -1,3 +1,5 @@
+"""Calculate best path and path benefits.
+	Includes vertices and edges."""
 class Graph:
 	
 	def __init__(self, adjMatrix, directedBoolean):

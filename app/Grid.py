@@ -1,3 +1,4 @@
+"""Make weighted grid."""
 from appJar import gui
 from random import randint
 import colorsys
@@ -17,7 +18,11 @@ class Grid:
 		
 	def randomizeWeights(self, min, max):
 		"""Fill grid with random values between min and max."""
-		self.grid = [[randint(min, max) for i in range(self.size)] for j in range(self.size)] # fill grid with numbers between min and max
+		# self.grid = [[randint(min, max) for i in range(self.size)] for j in range(self.size)] # fill grid with numbers between min and max
+		self.grid = [[i*j for i in range(self.size)] for j in range(self.size)]
+		self.grid[10][10] = 0
+		self.grid[15][15] = -50
+		self.grid[17][17] = 150
 	
 	
 	def weightCell(self, row, col, modifier):
@@ -51,7 +56,12 @@ class Grid:
 				
 				# interpolate square value from gridValue into HSV value between red and green, convert to RGB, convert to hex
 				hex = '#%02x%02x%02x' % tuple(i * 255 for i in colorsys.hls_to_rgb((gridValue * 1.2) / float(360), 0.6, 0.8))
-				
+				if gridValue == 0: # color perfect non-valid entries black
+					hex = '#000000'
+				if gridValue == 100: # color perfect full-valid entries blue
+					hex = '#2196F3'
+				if gridValue > 100 or gridValue < 0: # color invalid entries grey
+					hex = '#616161'
 				title = str(i) + "," + str(k)
 				app.addLabel(title, '', i, k)
 				app.setLabelBg(title, hex)
