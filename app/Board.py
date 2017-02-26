@@ -49,6 +49,5 @@ class Board:
 
 
 if __name__ == '__main__':
-    """Run code in this class for testing"""
     g = Board(20)
     g.setWeight("1,1", 2)
