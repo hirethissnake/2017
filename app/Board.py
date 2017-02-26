@@ -1,6 +1,8 @@
 """Calculate best path and path benefits.
 	Includes vertices and edges."""
-class Graph:
+import igraph	
+
+class Board:
 	
 	def __init__(self, adjMatrix, directedBoolean):
 		"""Initialize the Graph class"""
@@ -23,3 +25,6 @@ class Graph:
 	...etc
 	
 	"""
+	
+if __name__ == '__main__':
+    print "Hello, world!"

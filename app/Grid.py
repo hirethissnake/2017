@@ -18,11 +18,7 @@ class Grid:
 		
 	def randomizeWeights(self, min, max):
 		"""Fill grid with random values between min and max."""
-		# self.grid = [[randint(min, max) for i in range(self.size)] for j in range(self.size)] # fill grid with numbers between min and max
-		self.grid = [[i*j for i in range(self.size)] for j in range(self.size)]
-		self.grid[10][10] = 0
-		self.grid[15][15] = -50
-		self.grid[17][17] = 150
+		self.grid = [[randint(min, max) for i in range(self.size)] for j in range(self.size)] # fill grid with numbers between min and max
 	
 	
 	def weightCell(self, row, col, modifier):
