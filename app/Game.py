@@ -1,4 +1,9 @@
+"""Process all game data. Handles getting in new board states, analyzing snake
+health, and providing Main with the best next move."""
+
 class Game:
+    """Allow for several Battlesnake games to be played at once by providing
+    several different Game objects."""
 
     def __init__(self, size):
         """Initialize the Game class"""
@@ -6,7 +11,7 @@ class Game:
             #Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
             #Init snakes
             #Init move number (how many since start of game)
-
+			
 
     def update(self, snakeHeadPositions, foodPositions):
         """Update game with current board from server"""
