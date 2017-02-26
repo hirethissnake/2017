@@ -3,6 +3,8 @@
 
 	Picks movments depending on Djikstra's algortithm (thanks, python-igraph).
 """
+# pylint: disable=W0312
+# pylint: disable=C0330
 import os
 import bottle
 from Grid import Grid
@@ -19,7 +21,7 @@ def static(path):
 @bottle.post('/start')
 def start():
 	"""Respond to POST /start with important details like what our snake looks
-	like."""
+	like, and what our taunt is."""
 	# pylint: disable=E1136
 	data = bottle.request.json
 	game_id = data['game_id']
@@ -70,8 +72,8 @@ def move():
 APPLICATION = bottle.default_app()
 if __name__ == '__main__':
 
-	grid = Grid(22)
-	grid.randomizeWeights(0, 100)
-	grid.showColours()
-	
+	GRID = Grid(22)
+	GRID.randomizeWeights(0, 100)
+	GRID.showColours()
+
 	bottle.run(APPLICATION, host=os.getenv('IP', '0.0.0.0'), port=os.getenv('PORT', '8080'))
