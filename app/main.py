@@ -71,8 +71,4 @@ def move():
 APPLICATION = bottle.default_app()
 if __name__ == '__main__':
 
-    GRID = Grid(22)
-    GRID.randomizeWeights(0, 100)
-    GRID.showColours()
-
     bottle.run(APPLICATION, host=os.getenv('IP', '0.0.0.0'), port=os.getenv('PORT', '8080'))
