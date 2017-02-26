@@ -1,7 +1,7 @@
 """Make weighted grid."""
 from random import randint
 import colorsys
-from appJar import gui
+# from appJar import gui
 
 class Grid:
     """Store board location weights in 2D array."""
@@ -47,9 +47,9 @@ class Grid:
     def showColours(self):
         """Use colours to visualize each step of the algorithm,
         to see how different cells are weighted differently."""
-        app = gui('Login Window', '400x400')
-        app.setBg('white')
-        app.setTitle('SneakySnake Visualiser')
+        # app = gui('Login Window', '400x400')
+        # app.setBg('white')
+        # app.setTitle('SneakySnake Visualiser')
 
         for i in range(self.size):
             for k in range(self.size):
@@ -67,10 +67,10 @@ class Grid:
                 if gridValue > 100 or gridValue < 0: # color invalid entries grey
                     hexCode = '#616161'
                 title = str(i) + "," + str(k)
-                app.addLabel(title, '', i, k)
-                app.setLabelBg(title, hexCode)
+                # app.addLabel(title, '', i, k)
+                # app.setLabelBg(title, hexCode)
 
-        app.go()
+        # app.go()
 
 
     def showNumbers(self):
