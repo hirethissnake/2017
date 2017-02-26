@@ -6,6 +6,7 @@ class Board:
 
     def __init__(self, size):
         """Initialize the Graph class"""
+
         self.graph = igraph.Graph(directed=True)
         for row in range(size + 1):
             for col in range(size + 1):
