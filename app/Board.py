@@ -3,9 +3,10 @@
 import igraph
 
 class Board:
+    """Store square weight and calculate optimal paths between them."""
 
     def __init__(self, size):
-        """Initialize the Graph class"""
+        """Initialize the Graph class."""
 
         self.graph = igraph.Graph(directed=True)
         for row in range(size + 1):
@@ -14,13 +15,16 @@ class Board:
 
         for row in range(size):
             for col in range(size):
-                self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' + str(col + 1), weight=0)
-                self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) + ',' + str(col))
+                self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
+                str(col + 1), weight=1)
+                self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
+                ',' + str(col), weight=1)
 
         print self.graph
 
-	def shortestPath(u, v):
-		print test
+    def shortestPath(self, u, v):
+        """Return shortest path between nodes u and v."""
+        return self.graph.get_shortest_paths(u, to=v, weight="weight")
 
     """
 
