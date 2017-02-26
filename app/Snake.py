@@ -31,7 +31,9 @@ class Snake:
         #TODO
             # Return health
 
-
+    def getFoodUrgency(self):
+        """How badly do we need food?"""
+        
     def getHeadPosition(self):
         """Return head position"""
         #TODO
