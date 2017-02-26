@@ -35,7 +35,7 @@ class Board:
         for vertex in shortest:
             print self.graph.vs.find(vertex)"""
 
-    def shortestPath(self, u, v):
+    def optimumPath(self, u, v):
         """Return shortest path between nodes u and v."""
         return self.graph.get_shortest_paths(u, to=v, weights="weight",
                                              mode="OUT", output="vpath")[0]
