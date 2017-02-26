@@ -28,26 +28,26 @@ class Board:
                 self.graph.add_edge(str(row) + ',' + str(col), str(row - 1) +
                                     "," + str(col), weight=1)
 
-        """shortest = self.shortestPath("0,1", "2,5")
-
-        print self.graph
-        print shortest
-        for vertex in shortest:
-            print self.graph.vs.find(vertex)"""
 
     def optimumPath(self, u, v):
         """Return shortest path between nodes u and v."""
-        return self.graph.get_shortest_paths(u, to=v, weights="weight",
+        vertexIds = self.graph.get_shortest_paths(u, to=v, weights="weight",
                                              mode="OUT", output="vpath")[0]
+        vertexNames = []
+        for vertexId in vertexIds:
+            vertexNames.append(self.graph.vs.find(vertexId)["name"])
+        return vertexNames
 
     def setWeight(self, u, weight):
         """Set incoming edges of vertex u to weight"""
         edges = self.graph.incident(self.graph.vs.find(u))
         for edge in edges:
             self.graph.es.find(edge)["weight"] = weight
-        print self.graph.es["weight"]
 
 
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight("1,1", 2)
+    g.setWeight("0,1", 10)
+    g.setWeight("1,1", 10)
+    g.setWeight("2,1", 10)
+    print g.optimumPath("0,0", "2,5")
