@@ -1,14 +1,17 @@
 """Calculate best path and path benefits.
     Includes vertices and edges."""
+import re
 import igraph
 
 
 class Board:
     """Store square weight and calculate optimal paths between them."""
 
+
     def __init__(self, size):
         """Initialize the Graph class."""
 
+        self.size = size
         self.graph = igraph.Graph(directed=True)
         for row in range(size + 1):
             for col in range(size + 1):
@@ -38,11 +41,25 @@ class Board:
             vertexNames.append(self.graph.vs.find(vertexId)["name"])
         return vertexNames
 
+
     def setWeight(self, u, weight):
         """Set incoming edges of vertex u to weight"""
+
+        if not isinstance(weight, int) and not isinstance(weight, float):
+            raise ValueError('Weight must be a number')
+        if weight < 0:
+            weight = 0
+        elif weight > 100:
+            weight = 100
+
+        match = re.match('^(\\d+),(\\d+)$', u)
+        if match.group(0) >= self.size or match.group(0) < 0 or match.group(1) \
+          >= self.size or match.group(1) < 0:
+            raise ValueError('node u is invalid')
+
         edges = self.graph.incident(self.graph.vs.find(u))
         for edge in edges:
-            self.graph.es.find(edge)["weight"] = weight
+            self.graph.es.find(edge)["weight"] = 100 - weight
 
 
 if __name__ == '__main__':
