@@ -2,10 +2,17 @@
 
 A aggressive / defensive Battlesnake implementation. Written by Phil Denhoff, Daniel Frankcom, Eric Showers, Kyle, and Alex Welsh-Piedrahita.
 
-Current feature list is in the `.docx` file. The requirements are listed in `requirements.txt`. They can be batch installed with
+Current feature list is in the `.docx` file. The requirements are listed in `requirements.txt`. They can be batch installed, as an administrator, with
 ```
 pip install -r requirements.txt
 ```
+and python-igraph can be install by following instructiors at
+[python-igraph install](http://igraph.org/python/#pyinstall). For windows, use Christoph Gohlke's unofficial installers, and
+
+```
+python -m pip install /path/to/igraph.whl
+```
+ --- 
 Dependencies should be visually confirmed to be installed with
 ```
 pip list
@@ -13,7 +20,7 @@ pip list
 
 # battlesnake-python
 
-A simple [BattleSnake AI](http://battlesnake.io) written in Python. 
+A simple [BattleSnake AI](http://battlesnake.io) written in Python.
 
 Visit [battlesnake.io/readme](http://battlesnake.io/readme) for API documentation and instructions for running your AI.
 

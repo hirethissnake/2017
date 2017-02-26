@@ -78,15 +78,3 @@ class Grid:
         to see how different cells are weighted differently."""
         #TODO
             #Show visualization
-
-
-    """def addBoundary(self, value):
-        #Weight fully negative the walls of the grid. This assumes our grid
-        #size includes the wall cells.
-        for i in range(self.size):
-            self.grid[0][i] = value
-            self.grid[-1][i] = value
-            self.grid[i][0] = value
-            self.grid[i][-1] = value"""
-        # I don't think we need a boundary, unnecessary storage
-        #  can simply check bounds and set weight to 0
