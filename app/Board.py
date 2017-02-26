@@ -4,19 +4,22 @@ import igraph
 
 class Board:
 	
-	def __init__(self, adjMatrix, directedBoolean):
+	def __init__(self, size):
 		"""Initialize the Graph class"""
-		#TODO
-			#Init vertices
-			#Init edges
-			#Init isWeighted boolean
-		
+		self.graph = igraph.Graph()
+		for row in range(size + 1):
+			for col in range(size + 1):
+				self.graph.add_vertex(name=str(row) + ',' + str(col))
+				
+		for row in range(size):
+			for col in range(size):
+				self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' + str(col + 1))
+				self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) + ',' + str(col))
+			
+		print(self.graph)
 		
 	"""
-	
-	I won't fill this skeleton out fully as we may end up using a graph class
-	for simplicity's sake, however below are some necessary features for our graph
-	
+
 	isDirected()
 	shortestPath(u,v)
 	isPathPossible()
@@ -27,4 +30,4 @@ class Board:
 	"""
 	
 if __name__ == '__main__':
-    print "Hello, world!"
+    g = Board(20)
