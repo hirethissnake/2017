@@ -33,6 +33,7 @@ class Board:
 
 
     def optimumPath(self, u, v):
+
         """Return shortest path between nodes u and v."""
         vertexIds = self.graph.get_shortest_paths(u, to=v, weights="weight",
                                              mode="OUT", output="vpath")[0]
@@ -45,26 +46,34 @@ class Board:
     def setWeight(self, u, weight):
         """Set incoming edges of vertex u to weight"""
 
-        if not isinstance(weight, int) and not isinstance(weight, float):
-            raise ValueError('Weight must be a number')
+        self.setWeightErrorCheck(u, weight)  #comment this out for speed
+
         if weight < 0:
             weight = 0
         elif weight > 100:
             weight = 100
-
-        match = re.match('^(\\d+),(\\d+)$', u)
-        if match.group(0) >= self.size or match.group(0) < 0 or match.group(1) \
-          >= self.size or match.group(1) < 0:
-            raise ValueError('node u is invalid')
 
         edges = self.graph.incident(self.graph.vs.find(u))
         for edge in edges:
             self.graph.es.find(edge)["weight"] = 100 - weight
 
 
+    def setWeightErrorCheck(self, u, weight):
+        """Check setWeight() method for errors"""
+
+        if not isinstance(weight, int) and not isinstance(weight, float):
+            raise ValueError('Weight must be a number')
+
+        match = re.match('^(\\d+),(\\d+)$', u)
+        if match is None:
+            raise ValueError('node u should be in the form \'a,b\'')
+        one = int(match.group(1))
+        two = int(match.group(2))
+        if one >= self.size or one < 0 or two >= self.size or two < 0:
+            raise ValueError('node u is invalid')
+
+
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight("0,1", 10)
-    g.setWeight("1,1", 10)
-    g.setWeight("2,1", 10)
+    g.setWeight("1,5", 10)
     print g.optimumPath("0,0", "2,5")
