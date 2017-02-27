@@ -32,15 +32,39 @@ class Board:
                                     "," + str(col), weight=1)
 
 
-    def optimumPath(self, u, v):
+    def isNode(self, u):
+        """Check if u is a valid node"""
 
+        match = re.match('^(\\d+),(\\d+)$', u)
+        if match is None:
+            raise ValueError('nodes should be in the form \'a,b\'')
+        one = int(match.group(1))
+        two = int(match.group(2))
+        if one >= self.size or one < 0 or two >= self.size or two < 0:
+            raise ValueError('node is out of bounds')
+
+
+    def optimumPath(self, u, v):
         """Return shortest path between nodes u and v."""
+
+        self.optimumPathErrorCheck(u, v)  #comment this out for speed
+
         vertexIds = self.graph.get_shortest_paths(u, to=v, weights="weight",
                                              mode="OUT", output="vpath")[0]
         vertexNames = []
         for vertexId in vertexIds:
             vertexNames.append(self.graph.vs.find(vertexId)["name"])
         return vertexNames
+
+
+    def optimumPathErrorCheck(self, u, v):
+        """Check optimumPath() method for errors"""
+
+        if u == v:
+            raise ValueError('u and v cannot be the same node')
+
+        self.isNode(u)
+        self.isNode(v)
 
 
     def setWeight(self, u, weight):
@@ -62,18 +86,12 @@ class Board:
         """Check setWeight() method for errors"""
 
         if not isinstance(weight, int) and not isinstance(weight, float):
-            raise ValueError('Weight must be a number')
+            raise ValueError('weight must be a number')
 
-        match = re.match('^(\\d+),(\\d+)$', u)
-        if match is None:
-            raise ValueError('node u should be in the form \'a,b\'')
-        one = int(match.group(1))
-        two = int(match.group(2))
-        if one >= self.size or one < 0 or two >= self.size or two < 0:
-            raise ValueError('node u is invalid')
+        self.isNode(u)
 
 
 if __name__ == '__main__':
     g = Board(20)
     g.setWeight("1,5", 10)
-    print g.optimumPath("0,0", "2,5")
+    print g.optimumPath("0,0", "0,a")
