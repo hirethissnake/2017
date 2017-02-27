@@ -1,5 +1,6 @@
 """Calculate best path and path benefits.
     Includes vertices and edges."""
+
 import re
 import igraph
 import colorsys
@@ -22,20 +23,20 @@ class Board:
         if size <= 1:
             raise ValueError('size must be greater than 1')
 
-        self.size = size
-        self.graph = igraph.Graph(directed=True)
-        for row in range(size + 1):
+        self.size = size # declare size instance variable
+        self.graph = igraph.Graph(directed=True) # declare graph
+        for row in range(size + 1): # create vertices
             for col in range(size + 1):
                 self.graph.add_vertex(name=str(row) + ',' + str(col))
 
-        for row in range(size):
+        for row in range(size): #create 1/2 edges
             for col in range(size):
                 self.graph.add_edge(str(row) + ',' + str(col),
                                     str(row) + ',' + str(col + 1), weight=50.0)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
                                     "," + str(col), weight=50.0)
 
-        for row in range(1, size + 1):
+        for row in range(1, size + 1): #create other 1/2 edges
             for col in range(1, size + 1):
                 self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
                                     str(col - 1), weight=50.0)
@@ -87,14 +88,16 @@ class Board:
 
         self.modifyWeightErrorCheck(u, weight)  # comment this out for speed
 
-        if weight < 0:
+        if weight < 0: #ensure weight is in bounds
             weight = 0
         elif weight > 100:
             weight = 100
 
         vertexId = self.graph.vs.find(u)
-        edges = self.graph.incident(vertexId)
+        edges = self.graph.incident(vertexId) # list of edges pointing to node
         for edge in edges:
+            # the below is '100-weight' as higher value nodes need less valuable
+            # edges for our shortestPath algorithm
             self.graph.es.find(edge)["weight"] = float(100 - weight)
 
 
@@ -176,8 +179,9 @@ class Board:
         self.checkNode(u)  # comment this out for speed
 
         vertexId = self.graph.vs.find(u)
-        edge = self.graph.incident(vertexId)[0]
-        return 100 - self.graph.es.find(edge)["weight"]
+        edge = self.graph.incident(vertexId)[0] # pick arbitrary edge from list
+                                                # of edges pointing to node
+        return 100 - self.graph.es.find(edge)["weight"] # make human-readable
 
 
     def optimumPath(self, u, v):
@@ -191,9 +195,11 @@ class Board:
 
         vertexIds = self.graph.get_shortest_paths(u, to=v, weights="weight",
                                              mode="OUT", output="vpath")[0]
+                                             # generate list of Ids in path
         vertexNames = []
         for vertexId in vertexIds:
-            name = self.graph.vs.find(vertexId)["name"]
+            name = self.graph.vs.find(vertexId)["name"] # get human-readable
+                                                        # node names
             vertexNames.append(name)
         return vertexNames
 
@@ -244,15 +250,15 @@ class Board:
                 if weight > 100 or weight < 0: # color invalid entries grey
                     hexCode = '#616161'
 
-                if numbers:
+                if numbers: # add numbers
                     app.addLabel(nodeName, weight, i, k)
                 else:
                     app.addLabel(nodeName, '', i, k)
 
-                if colours is True:
-                    app.setLabelBg(nodeName, hexCode)  # set background colour
+                if colours is True: # add colours
+                    app.setLabelBg(nodeName, hexCode)
 
-        app.go()
+        app.go() # show window
 
     @staticmethod
     def showErrorCheck(colours, numbers):
