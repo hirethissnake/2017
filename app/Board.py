@@ -11,6 +11,11 @@ class Board:
     def __init__(self, size):
         """Initialize the Graph class."""
 
+        if not isinstance(size, int) and not isinstance(size, float):
+            raise ValueError('size must be a number')
+        if size <= 1:
+            raise ValueError('size must be greater than 1')
+
         self.size = size
         self.graph = igraph.Graph(directed=True)
         for row in range(size + 1):
@@ -32,7 +37,7 @@ class Board:
                                     "," + str(col), weight=1)
 
 
-    def isNode(self, u):
+    def checkNode(self, u):
         """Check if u is a valid node"""
 
         match = re.match('^(\\d+),(\\d+)$', u)
@@ -63,8 +68,8 @@ class Board:
         if u == v:
             raise ValueError('u and v cannot be the same node')
 
-        self.isNode(u)
-        self.isNode(v)
+        self.checkNode(u)
+        self.checkNode(v)
 
 
     def setWeight(self, u, weight):
@@ -88,10 +93,10 @@ class Board:
         if not isinstance(weight, int) and not isinstance(weight, float):
             raise ValueError('weight must be a number')
 
-        self.isNode(u)
+        self.checkNode(u)
 
 
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight("1,5", 10)
-    print g.optimumPath("0,0", "0,a")
+    g.setWeight("0,0", 10)
+    print g.optimumPath("0,0", "3,5")
