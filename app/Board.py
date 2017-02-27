@@ -11,8 +11,8 @@ class Board:
     def __init__(self, size):
         """Initialize the Graph class."""
 
-        if not isinstance(size, int) and not isinstance(size, float):
-            raise ValueError('size must be a number')
+        if not isinstance(size, int):
+            raise ValueError('size must be an integer')
         if size <= 1:
             raise ValueError('size must be greater than 1')
 
@@ -25,20 +25,20 @@ class Board:
         for row in range(size):
             for col in range(size):
                 self.graph.add_edge(str(row) + ',' + str(col),
-                                    str(row) + ',' + str(col + 1), weight=1)
+                                    str(row) + ',' + str(col + 1), weight=50)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
-                                    "," + str(col), weight=1)
+                                    "," + str(col), weight=50)
 
         for row in range(1, size + 1):
             for col in range(1, size + 1):
                 self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
-                                    str(col - 1), weight=1)
+                                    str(col - 1), weight=50)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row - 1) +
-                                    "," + str(col), weight=1)
+                                    "," + str(col), weight=50)
 
 
     def checkNode(self, u):
-        """Check if u is a valid node"""
+        """Check if u is a valid node."""
 
         match = re.match('^(\\d+),(\\d+)$', u)
         if match is None:
@@ -58,12 +58,13 @@ class Board:
                                              mode="OUT", output="vpath")[0]
         vertexNames = []
         for vertexId in vertexIds:
-            vertexNames.append(self.graph.vs.find(vertexId)["name"])
+            name = self.graph.vs.find(vertexId)["name"]
+            vertexNames.append(name)
         return vertexNames
 
 
     def optimumPathErrorCheck(self, u, v):
-        """Check optimumPath() method for errors"""
+        """Check optimumPath() method for errors."""
 
         if u == v:
             raise ValueError('u and v cannot be the same node')
@@ -73,7 +74,7 @@ class Board:
 
 
     def setWeight(self, u, weight):
-        """Set incoming edges of vertex u to weight"""
+        """Set incoming edges of vertex u to weight."""
 
         self.setWeightErrorCheck(u, weight)  #comment this out for speed
 
@@ -82,13 +83,14 @@ class Board:
         elif weight > 100:
             weight = 100
 
-        edges = self.graph.incident(self.graph.vs.find(u))
+        vertexId = self.graph.vs.find(u)
+        edges = self.graph.incident(vertexId)
         for edge in edges:
-            self.graph.es.find(edge)["weight"] = 100 - weight
+            self.graph.es.find(edge)["weight"] = float(100 - weight)
 
 
     def setWeightErrorCheck(self, u, weight):
-        """Check setWeight() method for errors"""
+        """Check setWeight() method for errors."""
 
         if not isinstance(weight, int) and not isinstance(weight, float):
             raise ValueError('weight must be a number')
@@ -96,7 +98,33 @@ class Board:
         self.checkNode(u)
 
 
+    def multiplyWeight(self, u, multiplier):
+        """Multiply weight of node u by multiplier."""
+
+        currentWeight = self.getWeight(u)
+        self.setWeight(u, currentWeight * multiplier)
+
+
+    def divideWeight(self, u, divisor):
+        """Divide weight of node u by divisor."""
+
+        currentWeight = self.getWeight(u)
+        self.setWeight(u, currentWeight / divisor)
+
+
+    def getWeight(self, u):
+        """Return the weight of the node u."""
+
+        self.checkNode(u)  #comment this out for speed
+        vertexId = self.graph.vs.find(u)
+        edge = self.graph.incident(vertexId)[0]
+        return 100 - self.graph.es.find(edge)["weight"]
+
+
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight("0,0", 10)
+    g.setWeight("1,0", 80)
     print g.optimumPath("0,0", "3,5")
+    print g.getWeight("1,0")
+    g.multiplyWeight("2,0", 1)
+    print g.getWeight("2,0")
