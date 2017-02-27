@@ -2,6 +2,8 @@
     Includes vertices and edges."""
 import re
 import igraph
+import colorsys
+from appJar import gui
 
 
 class Board:
@@ -49,28 +51,8 @@ class Board:
             raise ValueError('node is out of bounds')
 
 
-    def optimumPath(self, u, v):
-        """Return shortest path between nodes u and v."""
-
-        self.optimumPathErrorCheck(u, v)  #comment this out for speed
-
-        vertexIds = self.graph.get_shortest_paths(u, to=v, weights="weight",
-                                             mode="OUT", output="vpath")[0]
-        vertexNames = []
-        for vertexId in vertexIds:
-            name = self.graph.vs.find(vertexId)["name"]
-            vertexNames.append(name)
-        return vertexNames
-
-
-    def optimumPathErrorCheck(self, u, v):
-        """Check optimumPath() method for errors."""
-
-        if u == v:
-            raise ValueError('u and v cannot be the same node')
-
-        self.checkNode(u)
-        self.checkNode(v)
+    def getSize(self):
+        return self.size
 
 
     def setWeight(self, u, weight):
@@ -135,10 +117,77 @@ class Board:
         return 100 - self.graph.es.find(edge)["weight"]
 
 
+    def optimumPath(self, u, v):
+        """Return shortest path between nodes u and v."""
+
+        self.optimumPathErrorCheck(u, v)  #comment this out for speed
+
+        vertexIds = self.graph.get_shortest_paths(u, to=v, weights="weight",
+                                             mode="OUT", output="vpath")[0]
+        vertexNames = []
+        for vertexId in vertexIds:
+            name = self.graph.vs.find(vertexId)["name"]
+            vertexNames.append(name)
+        return vertexNames
+
+
+    def optimumPathErrorCheck(self, u, v):
+        """Check optimumPath() method for errors."""
+
+        if u == v:
+            raise ValueError('u and v cannot be the same node')
+
+        self.checkNode(u)
+        self.checkNode(v)
+
+
+    def showColours(self):
+        """Use colours to visualize each step of the algorithm,
+        to see how different cells are weighted differently."""
+
+        app = gui('Login Window', '400x400')
+        app.setBg('white')
+        app.setTitle('SneakySnake Visualiser')
+
+        for i in range(self.size):
+            for k in range(self.size):
+                gridValue = self.getWeight(str(i) + "," + str(k))
+
+                # interpolate square value from gridValue into HSV value
+                # between red and green, convert to RGB, convert to hex
+                hexCode = '#%02x%02x%02x' % tuple(i * 255 for i in
+                            colorsys.hls_to_rgb((gridValue * 1.2) /
+                            float(360), 0.6, 0.8))
+                if gridValue == 0: # color perfect non-valid entries black
+                    hexCode = '#000000'
+                if gridValue == 100: # color perfect full-valid entries blue
+                    hexCode = '#2196F3'
+                if gridValue > 100 or gridValue < 0: # color invalid entries grey
+                    hexCode = '#616161'
+                title = str(i) + "," + str(k)
+                app.addLabel(title, '', i, k)
+                app.setLabelBg(title, hexCode)
+
+        app.go()
+
+
+    def showNumbers(self):
+        """Use numbers to visualize each step of the algorithm,
+        to see how different cells are weighted differently."""
+        #TODO
+            #Show visualization
+
+
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight("1,0", 80)
+    g.setWeight("1,0", 500)
+    g.setWeight("1,1", 100)
+    g.setWeight("19,19", -1)
+    g.setWeight("19,18", 0)
+    g.setWeight("10,10", 80)
+    g.setWeight("10,9", 20)
     print g.optimumPath("0,0", "3,5")
     print g.getWeight("1,0")
     g.multiplyWeight("2,0", 1)
     print g.getWeight("2,0")
+    #g.showColours()
