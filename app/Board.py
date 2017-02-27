@@ -11,7 +11,11 @@ class Board:
 
 
     def __init__(self, size):
-        """Initialize the Graph class."""
+        """
+        Initialize the Graph class.
+
+        param1: integer - size of board
+        """
 
         if not isinstance(size, int):
             raise ValueError('size must be an integer')
@@ -40,7 +44,11 @@ class Board:
 
 
     def checkNode(self, u):
-        """Check if u is a valid node."""
+        """
+        Check if u is a valid node.
+
+        param1: string - node in the form <integer>,<integer>
+        """
 
         match = re.match('^(\\d+),(\\d+)$', u)
         if match is None:
@@ -51,16 +59,33 @@ class Board:
             raise ValueError('node is out of bounds')
 
 
+    @staticmethod
+    def checkNumber(num):
+        """
+        Check if num is an integer/float.
+
+        param1: unknown - item to confirm if integer/float
+        """
+
+        if not isinstance(num, int) and not isinstance(num, float):
+            raise ValueError('number must be an integer/float')
+
+
     def getSize(self):
-        """Return board size"""
+        """Return board size."""
 
         return self.size
 
 
     def setWeight(self, u, weight):
-        """Set incoming edges of vertex u to weight."""
+        """
+        Set incoming edges of vertex u to weight.
 
-        self.setWeightErrorCheck(u, weight)  # comment this out for speed
+        param1: string - node in the form <integer>,<integer>
+        param2: integer/float - weight to set
+        """
+
+        self.modifyWeightErrorCheck(u, weight)  # comment this out for speed
 
         if weight < 0:
             weight = 0
@@ -73,54 +98,94 @@ class Board:
             self.graph.es.find(edge)["weight"] = float(100 - weight)
 
 
-    def setWeightErrorCheck(self, u, weight):
-        """Check setWeight() method for errors."""
-
-        if not isinstance(weight, int) and not isinstance(weight, float):
-            raise ValueError('weight must be a number')
-
-        self.checkNode(u)
-
-
     def multiplyWeight(self, u, multiplier):
-        """Multiply weight of node u by multiplier."""
+        """
+        Multiply weight of node u by multiplier.
+
+        param1: string - node in the form <integer>,<integer>
+        param2: integer/float - number to multiply weight by
+        """
+
+        self.modifyWeightErrorCheck(u, multiplier)  # comment this out for speed
 
         currentWeight = self.getWeight(u)
         self.setWeight(u, currentWeight * multiplier)
 
 
     def divideWeight(self, u, divisor):
-        """Divide weight of node u by divisor."""
+        """
+        Divide weight of node u by divisor.
+
+        param1: string - node in the form <integer>,<integer>
+        param2: integer/float - number to divide weight by
+        """
+
+        self.modifyWeightErrorCheck(u, divisor)  # comment this out for speed
 
         currentWeight = self.getWeight(u)
         self.setWeight(u, currentWeight / divisor)
 
 
     def addWeight(self, u, addend):
-        """Increase weight of node u by addend."""
+        """
+        Increase weight of node u by addend.
+
+        param1: string - node in the form <integer>,<integer>
+        param2: integer/float - number to add to weight
+        """
+
+        self.modifyWeightErrorCheck(u, addend)  # comment this out for speed
 
         currentWeight = self.getWeight(u)
         self.setWeight(u, currentWeight + addend)
 
 
     def subtractWeight(self, u, subtrahend):
-        """Decrease weight of node u by subtrahend."""
+        """
+        Decrease weight of node u by subtrahend.
+
+        param1: string - node in the form <integer>,<integer>
+        param2: integer/float - number to subtract from weight
+        """
+
+        self.modifyWeightErrorCheck(u, subtrahend)  # comment this out for speed
 
         currentWeight = self.getWeight(u)
         self.setWeight(u, currentWeight - subtrahend)
 
 
+    def modifyWeightErrorCheck(self, u, num):
+        """
+        Check weight modification method for errors.
+
+        param1: unknown - item to confirm if node
+        param2: unknown - item to confirm if integer/float
+        """
+
+        self.checkNode(u)
+        self.checkNumber(num)
+
+
     def getWeight(self, u):
-        """Return the weight of the node u."""
+        """
+        Return the weight of the node u.
+
+        param1: string - node in the form <integer>,<integer>
+        """
 
         self.checkNode(u)  # comment this out for speed
+
         vertexId = self.graph.vs.find(u)
         edge = self.graph.incident(vertexId)[0]
         return 100 - self.graph.es.find(edge)["weight"]
 
 
     def optimumPath(self, u, v):
-        """Return shortest path between nodes u and v."""
+        """
+        Return shortest path between nodes u and v.
+
+        param1,2: string - node in the form <integer>,<integer>
+        """
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
 
@@ -134,7 +199,11 @@ class Board:
 
 
     def optimumPathErrorCheck(self, u, v):
-        """Check optimumPath() method for errors."""
+        """
+        Check optimumPath() method for errors.
+
+        param1,2: unknown - item to confirm if node
+        """
 
         if u == v:
             raise ValueError('u and v cannot be the same node')
@@ -144,7 +213,12 @@ class Board:
 
 
     def show(self, colours, numbers):
-        """Visualize weights of each node"""
+        """
+        Visualize weights of each node
+
+        param1: boolean - show colours on display?
+        param2: boolean - show numbers on display?
+        """
 
         self.showErrorCheck(colours, numbers)  # comment this out for speed
 
@@ -182,7 +256,11 @@ class Board:
 
     @staticmethod
     def showErrorCheck(colours, numbers):
-        """Check show() method for errors."""
+        """
+        Check show() method for errors.
+
+        param1,2: unknown - item to check if boolean
+        """
 
         if not isinstance(colours, bool):
             raise ValueError('colours must be a boolean')
