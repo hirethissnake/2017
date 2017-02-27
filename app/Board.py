@@ -112,6 +112,20 @@ class Board:
         self.setWeight(u, currentWeight / divisor)
 
 
+    def addWeight(self, u, addend):
+        """Increase weight of node u by addend."""
+
+        currentWeight = self.getWeight(u)
+        self.setWeight(u, currentWeight + addend)
+
+
+    def subtractWeight(self, u, subtrahend):
+        """Decrease weight of node u by subtrahend."""
+
+        currentWeight = self.getWeight(u)
+        self.setWeight(u, currentWeight - subtrahend)
+
+
     def getWeight(self, u):
         """Return the weight of the node u."""
 
