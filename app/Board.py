@@ -27,16 +27,16 @@ class Board:
         for row in range(size):
             for col in range(size):
                 self.graph.add_edge(str(row) + ',' + str(col),
-                                    str(row) + ',' + str(col + 1), weight=50)
+                                    str(row) + ',' + str(col + 1), weight=50.0)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
-                                    "," + str(col), weight=50)
+                                    "," + str(col), weight=50.0)
 
         for row in range(1, size + 1):
             for col in range(1, size + 1):
                 self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
-                                    str(col - 1), weight=50)
+                                    str(col - 1), weight=50.0)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row - 1) +
-                                    "," + str(col), weight=50)
+                                    "," + str(col), weight=50.0)
 
 
     def checkNode(self, u):
@@ -52,13 +52,15 @@ class Board:
 
 
     def getSize(self):
+        """Return board size"""
+
         return self.size
 
 
     def setWeight(self, u, weight):
         """Set incoming edges of vertex u to weight."""
 
-        self.setWeightErrorCheck(u, weight)  #comment this out for speed
+        self.setWeightErrorCheck(u, weight)  # comment this out for speed
 
         if weight < 0:
             weight = 0
@@ -111,7 +113,7 @@ class Board:
     def getWeight(self, u):
         """Return the weight of the node u."""
 
-        self.checkNode(u)  #comment this out for speed
+        self.checkNode(u)  # comment this out for speed
         vertexId = self.graph.vs.find(u)
         edge = self.graph.incident(vertexId)[0]
         return 100 - self.graph.es.find(edge)["weight"]
@@ -120,7 +122,7 @@ class Board:
     def optimumPath(self, u, v):
         """Return shortest path between nodes u and v."""
 
-        self.optimumPathErrorCheck(u, v)  #comment this out for speed
+        self.optimumPathErrorCheck(u, v)  # comment this out for speed
 
         vertexIds = self.graph.get_shortest_paths(u, to=v, weights="weight",
                                              mode="OUT", output="vpath")[0]
@@ -141,41 +143,52 @@ class Board:
         self.checkNode(v)
 
 
-    def showColours(self):
-        """Use colours to visualize each step of the algorithm,
-        to see how different cells are weighted differently."""
+    def show(self, colours, numbers):
+        """Visualize weights of each node"""
 
-        app = gui('Login Window', '400x400')
+        self.showErrorCheck(colours, numbers)  # comment this out for speed
+
+        app = gui('Login Window', '950x950')
         app.setBg('white')
         app.setTitle('SneakySnake Visualiser')
 
         for i in range(self.size):
             for k in range(self.size):
-                gridValue = self.getWeight(str(i) + "," + str(k))
+
+                nodeName = str(i) + "," + str(k)
+                weight = self.getWeight(nodeName)
 
                 # interpolate square value from gridValue into HSV value
                 # between red and green, convert to RGB, convert to hex
                 hexCode = '#%02x%02x%02x' % tuple(i * 255 for i in
-                            colorsys.hls_to_rgb((gridValue * 1.2) /
+                            colorsys.hls_to_rgb((weight * 1.2) /
                             float(360), 0.6, 0.8))
-                if gridValue == 0: # color perfect non-valid entries black
+                if weight == 0: # color perfect non-valid entries black
                     hexCode = '#000000'
-                if gridValue == 100: # color perfect full-valid entries blue
+                if weight == 100: # color perfect full-valid entries blue
                     hexCode = '#2196F3'
-                if gridValue > 100 or gridValue < 0: # color invalid entries grey
+                if weight > 100 or weight < 0: # color invalid entries grey
                     hexCode = '#616161'
-                title = str(i) + "," + str(k)
-                app.addLabel(title, '', i, k)
-                app.setLabelBg(title, hexCode)
+
+                if numbers:
+                    app.addLabel(nodeName, weight, i, k)
+                else:
+                    app.addLabel(nodeName, '', i, k)
+
+                if colours is True:
+                    app.setLabelBg(nodeName, hexCode)  # set background colour
 
         app.go()
 
+    @staticmethod
+    def showErrorCheck(colours, numbers):
+        """Check show() method for errors."""
 
-    def showNumbers(self):
-        """Use numbers to visualize each step of the algorithm,
-        to see how different cells are weighted differently."""
-        #TODO
-            #Show visualization
+        if not isinstance(colours, bool):
+            raise ValueError('colours must be a boolean')
+
+        if not isinstance(numbers, bool):
+            raise ValueError('numbers must be a boolean')
 
 
 if __name__ == '__main__':
@@ -190,4 +203,4 @@ if __name__ == '__main__':
     print g.getWeight("1,0")
     g.multiplyWeight("2,0", 1)
     print g.getWeight("2,0")
-    #g.showColours()
+    #g.show(True, False)
