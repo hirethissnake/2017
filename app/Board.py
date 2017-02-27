@@ -73,7 +73,11 @@ class Board:
 
 
     def getSize(self):
-        """Return board size."""
+        """
+        Return board size.
+
+        return: integer - size of board
+        """
 
         return self.size
 
@@ -174,6 +178,7 @@ class Board:
         Return the weight of the node u.
 
         param1: string - node in the form <integer>,<integer>
+        return: integer/float - weight of node u
         """
 
         self.checkNode(u)  # comment this out for speed
@@ -189,6 +194,7 @@ class Board:
         Return shortest path between nodes u and v.
 
         param1,2: string - node in the form <integer>,<integer>
+        return: [string] - node names in the optimum path from u to v
         """
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
