@@ -6,7 +6,7 @@
 
 from Snake import Snake
 
-NUM_CASES = 10
+NUM_CASES = 13
 current_case = 0
 
 def Snake_test_1():
@@ -42,13 +42,29 @@ positions: " + str(init_params[1]), 0)
         testCase(1, 1, 7)
     del s1
 
+    Snake_test_2()
+
 def Snake_test_2():
     """Update tests."""
     print 'Testing update'
-    init_params = [2, [[0, 1], [1, 1]], 75, 's2']
+    init_params = [3, [[0, 1], [1, 1], [1, 2]], 66, 's2']
     s2 = Snake(init_params[0], init_params[1], init_params[2], init_params[3])
 
+    # valid updates
     s2.update([1, 0], 'false', init_params[2]-1)
+    testCase(s2.getHeadPosition(), [1, 0], 8)
+    testCase(s2.getHealth(), init_params[2]-1, 9)
+    testCase(s2.getSize(), init_params[0], 10)
+
+    s2.update([2, 0], 'true', init_params[2]-2)
+    testCase(s2.getSize(), init_params[0]+1, 11)
+
+    # invalid updates
+    try:
+        s2.update([3, 0], 'true', 'dog')
+        testCase('nope', 'failed test', 12)
+    except ValueError:
+        testCase(1, 1, 12)
 
 
 def testCase(var1, var2, testNum):
