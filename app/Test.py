@@ -12,7 +12,7 @@ current_case = 0
 def Snake_test_1():
     """Test basic .getX and .setX functionality."""
     print 'Testing .getX using init'
-    init_params = [2, [[0, 1], [1, 1]], 75, 't1'] # pylint: disable=W0612
+    init_params = [2, [[0, 1], [1, 1]], 75, 's1']
     s1 = Snake(init_params[0], init_params[1], init_params[2], init_params[3])
 
     # test .toString()
@@ -27,6 +27,8 @@ positions: " + str(init_params[1]), 0)
     testCase(s1.getSize(), init_params[0], 3)
     testCase(s1.getHeadPosition(), init_params[1][0], 4)
     testCase(s1.getAllPositions(), init_params[1], 5)
+    # not implelemented yet
+    # testCase(s1.getFoodUrgency(), X, num)
 
     print 'Testing .setState'
     # a) valid state
@@ -38,7 +40,15 @@ positions: " + str(init_params[1]), 0)
         testCase('absolutely', 'terribly wrong', 7)
     except ValueError:
         testCase(1, 1, 7)
+    del s1
 
+def Snake_test_2():
+    """Update tests."""
+    print 'Testing update'
+    init_params = [2, [[0, 1], [1, 1]], 75, 's2']
+    s2 = Snake(init_params[0], init_params[1], init_params[2], init_params[3])
+
+    s2.update([1, 0], 'false', init_params[2]-1)
 
 
 def testCase(var1, var2, testNum):
