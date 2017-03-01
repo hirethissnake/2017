@@ -238,9 +238,12 @@ class Board:
         """
         Return vertex name with priority index
 
-        param1: int - index to return priority
+        param1: int - index to return priority from 0 - (size-1)
         return: string - node name with priority index
         """
+
+        #check if number
+        #check if between 0 and size-1
 
         self.sortWeights()
         return self.weightOrder[index]
