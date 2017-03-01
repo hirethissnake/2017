@@ -236,7 +236,7 @@ class Board:
 
     def getNodeWithPriority(self, index):
         """
-        Return vertex name with priority index 
+        Return vertex name with priority index
 
         param1: int - index to return priority
         return: string - node name with priority index
