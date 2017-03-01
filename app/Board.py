@@ -229,10 +229,21 @@ class Board:
 
     def sortWeights(self):
         """
-        Declare a set of (vertex, weight) orderde by weight
+        Declare a set of (vertex, weight) ordered by weight
         """
 
         self.weightOrder = self.dictionary.values()
+
+    def getCellWithPriority(self, index):
+        """
+        Return vertex name with priority index
+
+        param1: int - index to return priority
+        return: string - node name with priority index
+        """
+
+        self.sortWeights()
+        return self.weightOrder[index]
 
 
     def optimumPath(self, u, v):
