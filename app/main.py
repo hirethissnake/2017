@@ -39,25 +39,20 @@ def start():
 
     return {
         'color': '#00FF00',
-        'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
+        'taunt': 'SSssssSSSsSSsssS',
         'head_url': head_url,
-        'name': 'snekky snaken'
+        'name': 'sneak'
     }
-
-
-def pick_dir(directions):
-    """Picks a direction from `directions` that is hopefully best."""
-    print directions
-    print MAPS
-    return 'up'
-
 
 @bottle.post('/move')
 def move():
     """Respond to POST /move with an adequate choice of movement."""
     data = bottle.request.json
+	# TODO: Do things with data\
+	
+	for x in data['food']:
+    	food_pos[x] = data['food'][x]
 
-    print data # TODO: Do things with data
     directions = ['up', 'down', 'left', 'right']
     move_dir = pick_dir(list(directions))
 
