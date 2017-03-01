@@ -49,11 +49,19 @@ class Board:
                                     ',' + str(col), weight=50.0)
 
         self.dictionary = ValueSortedDict()
-        for row in range(0, size): # populate dictionary with vertices
+        for row in range(0, size):
             for col in range(0, size):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
         self.weightOrder = []
+
+        self.edges = dict()
+        for row in range(0, size):
+            for col in range(0, size):
+                vertexId = self.graph.vs.find(str(row) + ',' + str(col))
+                edges = self.graph.incident(vertexId) # list of edges
+                edges = [self.graph.es.find(edge) for edge in edges]
+                self.edges[str(row) + ',' + str(col)] = edges
 
 
     def checkNode(self, u):
@@ -109,12 +117,15 @@ class Board:
         elif weight > 100:
             weight = 100
 
-        vertexId = self.graph.vs.find(u)
+        for edge in self.edges[u]:
+            edge['weight'] = 100 - float(weight)
+
+        """vertexId = self.graph.vs.find(u)
         edges = self.graph.incident(vertexId) # list of edges pointing to node
         for edge in edges:
             # the below is '100-weight' as higher value nodes need less valuable
             # edges for our shortestPath algorithm
-            self.graph.es.find(edge)['weight'] = float(100 - weight)
+            self.graph.es.find(edge)['weight'] = float(100 - weight)"""
 
         self.dictionary[u] = float(weight)
 
@@ -319,16 +330,11 @@ class Board:
 
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight('1,0', 80)
-    g.setWeight('1,1', 500)
-    g.setWeight('19,19', -1)
-    g.setWeight('19,18', 0)
-    g.setWeight('10,10', 80)
-    g.setWeight('10,9', 20)
+    g.setWeight('0,1', 20)
     print g.optimumPath('0,0', '3,5')
-    print g.getWeight('1,0')
-    g.multiplyWeight('2,0', 1)
-    print g.getWeight('2,0')
-    g.sortWeights()
+    #print g.getWeight('1,0')
+    #g.multiplyWeight('2,0', 1)
+    #print g.getWeight('2,0')
+    #g.sortWeights()
     #print g.dictionary
-    #g.show(True, False)
+    #g.show(True, True)
