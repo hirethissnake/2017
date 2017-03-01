@@ -295,13 +295,7 @@ class Board:
         vertexIds = self.graph.get_shortest_paths(u, to=v, weights='weight',
                                              mode='OUT', output='vpath')[0]
                                              # generate list of Ids in path
-        vertexNames = []
-        for vertexId in vertexIds:
-            name = self.graph.vs.find(vertexId)['name'] # get human-readable
-                                                        # node names
-            vertexNames.append(name)
-
-        return vertexNames
+        return [self.graph.vs.find(x)['name'] for x in vertexIds]  # readable
 
 
     def optimumPathErrorCheck(self, u, v):
@@ -379,10 +373,10 @@ class Board:
 
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight('0,1', 80)
+    g.setWeight('0,1', 20)
     g.setWeight('2,2', 100)
-    #print g.optimumPath('0,0', '3,5')
-    print g.getNodesWithPriority(2, 4)
+    print g.optimumPath('0,0', '3,5')
+    print g.getNodesWithPriority(0, 1)
     print g.isNodeWeightUnique('0,2')
     print g.countNodeWeightCopies('2,2')
     #print g.getWeight('0,1')
