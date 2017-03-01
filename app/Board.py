@@ -1,5 +1,7 @@
-"""Calculate best path and path benefits.
-    Includes vertices and edges."""
+"""
+Calculate best path and path benefits.
+Includes vertices and edges.
+"""
 
 import re
 import igraph
@@ -8,7 +10,9 @@ from appJar import gui
 
 
 class Board:
-    """Store square weight and calculate optimal paths between them."""
+    """
+    Store square weight and calculate optimal paths between them.
+    """
 
 
     def __init__(self, size):
@@ -212,7 +216,9 @@ class Board:
 
 
     def sortWeights(self):
-        """Declare a set of (vertex, weight) orderde by weight"""
+        """
+        Declare a set of (vertex, weight) orderde by weight
+        """
 
         self.weightOrder = sorted(self.dictionary.iteritems(), key=lambda
                                   (k, v): (v, k)) # flip weight to front for
