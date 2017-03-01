@@ -7,6 +7,7 @@ import re
 import igraph
 import colorsys
 from appJar import gui
+from sortedcollections import ValueSortedDict
 
 
 class Board:
@@ -47,12 +48,12 @@ class Board:
                 self.graph.add_edge(str(row) + ',' + str(col), str(row - 1) +
                                     ',' + str(col), weight=50.0)
 
-        self.dictionary = dict()
+        self.dictionary = ValueSortedDict()
         for row in range(0, size): # populate dictionary with vertices
             for col in range(0, size):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
-        self.weightOrder = [] # declare ordered set for later use
+        self.weightOrder = []
 
 
     def checkNode(self, u):
@@ -186,20 +187,20 @@ class Board:
         self.checkNumber(num)
 
 
-    def getWeightManually(self, u):
-        """
+    """def getWeightManually(self, u):
+
         Return the weight of the node u by traversing the graph.
 
         param1: string - node in the form <integer>,<integer>
         return: integer/float - weight of node u
-        """
+
 
         self.checkNode(u)  # comment this out for speed
 
         vertexId = self.graph.vs.find(u)
         edge = self.graph.incident(vertexId)[0] # pick arbitrary edge from list
                                                 # of edges pointing to node
-        return 100 - self.graph.es.find(edge)['weight'] # make human-readable
+        return 100 - self.graph.es.find(edge)['weight'] # make human-readable"""
 
 
     def getWeight(self, u):
@@ -220,9 +221,7 @@ class Board:
         Declare a set of (vertex, weight) orderde by weight
         """
 
-        self.weightOrder = sorted(self.dictionary.iteritems(), key=lambda
-                                  (k, v): (v, k)) # flip weight to front for
-                                                  # ordering effectively
+        self.weightOrder = self.dictionary.values()
 
 
     def optimumPath(self, u, v):
