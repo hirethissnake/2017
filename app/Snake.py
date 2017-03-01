@@ -1,7 +1,4 @@
 """Independent snake object for use in Game."""
-#TODO:
-    # The food boolean in Health change in update() should be triggered in This
-    # class, following when Health > Last_Health
 
 class Snake:
     """

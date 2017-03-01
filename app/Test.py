@@ -9,7 +9,8 @@ from Snake import Snake
 
 num_cases = 0
 current_case = 0
-
+# remove global errors
+# pylint: disable=W0603
 
 def Snake_test_1():
     """Test basic .getX and .setX functionality.
@@ -52,8 +53,13 @@ positions: " + str(init_params[1]), 'toString')
 
 
 def Snake_test_2():
-    """Update tests."""
+    """Test update() functionality.
+    This test suite has 5 tests.
+    """
     print 'Testing update'
+    global num_cases
+    num_cases += 5
+
     init_params = [3, [[0, 1], [1, 1], [1, 2]], 66, 's2']
     s2 = Snake(init_params[0], init_params[1], init_params[2], init_params[3])
 
