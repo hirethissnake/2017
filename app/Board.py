@@ -34,14 +34,21 @@ class Board:
                 self.graph.add_edge(str(row) + ',' + str(col),
                                     str(row) + ',' + str(col + 1), weight=50.0)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
-                                    "," + str(col), weight=50.0)
+                                    ',' + str(col), weight=50.0)
 
         for row in range(1, size + 1): #create other 1/2 edges
             for col in range(1, size + 1):
                 self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
                                     str(col - 1), weight=50.0)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row - 1) +
-                                    "," + str(col), weight=50.0)
+                                    ',' + str(col), weight=50.0)
+
+        self.dictionary = dict()
+        for row in range(0, size): # populate dictionary with vertices
+            for col in range(0, size):
+                self.dictionary[str(row) + ',' + str(col)] = 50.0
+
+        self.weightOrder = [] # declare ordered set for later use
 
 
     def checkNode(self, u):
@@ -102,7 +109,9 @@ class Board:
         for edge in edges:
             # the below is '100-weight' as higher value nodes need less valuable
             # edges for our shortestPath algorithm
-            self.graph.es.find(edge)["weight"] = float(100 - weight)
+            self.graph.es.find(edge)['weight'] = float(100 - weight)
+
+        self.dictionary[u] = float(weight)
 
 
     def multiplyWeight(self, u, multiplier):
@@ -173,9 +182,9 @@ class Board:
         self.checkNumber(num)
 
 
-    def getWeight(self, u):
+    def getWeightManually(self, u):
         """
-        Return the weight of the node u.
+        Return the weight of the node u by traversing the graph.
 
         param1: string - node in the form <integer>,<integer>
         return: integer/float - weight of node u
@@ -186,7 +195,28 @@ class Board:
         vertexId = self.graph.vs.find(u)
         edge = self.graph.incident(vertexId)[0] # pick arbitrary edge from list
                                                 # of edges pointing to node
-        return 100 - self.graph.es.find(edge)["weight"] # make human-readable
+        return 100 - self.graph.es.find(edge)['weight'] # make human-readable
+
+
+    def getWeight(self, u):
+        """
+        Return the weight of the node u from the dictionary.
+
+        param1: string - node in the form <integer>,<integer>
+        return: integer/float - weight of node u
+        """
+
+        self.checkNode(u)  # comment this out for speed
+
+        return self.dictionary[u]
+
+
+    def sortWeights(self):
+        """Declare a set of (vertex, weight) orderde by weight"""
+
+        self.weightOrder = sorted(self.dictionary.iteritems(), key=lambda
+                                  (k, v): (v, k)) # flip weight to front for
+                                                  # ordering effectively
 
 
     def optimumPath(self, u, v):
@@ -199,12 +229,12 @@ class Board:
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
 
-        vertexIds = self.graph.get_shortest_paths(u, to=v, weights="weight",
-                                             mode="OUT", output="vpath")[0]
+        vertexIds = self.graph.get_shortest_paths(u, to=v, weights='weight',
+                                             mode='OUT', output='vpath')[0]
                                              # generate list of Ids in path
         vertexNames = []
         for vertexId in vertexIds:
-            name = self.graph.vs.find(vertexId)["name"] # get human-readable
+            name = self.graph.vs.find(vertexId)['name'] # get human-readable
                                                         # node names
             vertexNames.append(name)
         return vertexNames
@@ -238,10 +268,10 @@ class Board:
         app.setBg('white')
         app.setTitle('SneakySnake Visualiser')
 
-        for i in range(self.size):
-            for k in range(self.size):
+        for row in range(self.size):
+            for col in range(self.size):
 
-                nodeName = str(i) + "," + str(k)
+                nodeName = str(row) + ',' + str(col)
                 weight = self.getWeight(nodeName)
 
                 # interpolate square value from gridValue into HSV value
@@ -257,14 +287,15 @@ class Board:
                     hexCode = '#616161'
 
                 if numbers: # add numbers
-                    app.addLabel(nodeName, weight, i, k)
+                    app.addLabel(nodeName, weight, col, row)
                 else:
-                    app.addLabel(nodeName, '', i, k)
+                    app.addLabel(nodeName, '', col, row)
 
                 if colours is True: # add colours
                     app.setLabelBg(nodeName, hexCode)
 
         app.go() # show window
+
 
     @staticmethod
     def showErrorCheck(colours, numbers):
@@ -283,14 +314,16 @@ class Board:
 
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight("1,0", 500)
-    g.setWeight("1,1", 100)
-    g.setWeight("19,19", -1)
-    g.setWeight("19,18", 0)
-    g.setWeight("10,10", 80)
-    g.setWeight("10,9", 20)
-    print g.optimumPath("0,0", "3,5")
-    print g.getWeight("1,0")
-    g.multiplyWeight("2,0", 1)
-    print g.getWeight("2,0")
+    g.setWeight('1,0', 80)
+    g.setWeight('1,1', 500)
+    g.setWeight('19,19', -1)
+    g.setWeight('19,18', 0)
+    g.setWeight('10,10', 80)
+    g.setWeight('10,9', 20)
+    print g.optimumPath('0,0', '3,5')
+    print g.getWeight('1,0')
+    g.multiplyWeight('2,0', 1)
+    print g.getWeight('2,0')
+    g.sortWeights()
+    #print g.dictionary
     #g.show(True, False)
