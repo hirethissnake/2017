@@ -23,25 +23,26 @@ class Board:
         param1: integer - size of board
         """
 
-        if not isinstance(size, int):
-            raise ValueError('size must be an integer')
+        self.checkInt(size) # comment this out for speed
+
         if size <= 1:
             raise ValueError('size must be greater than 1')
 
-        self.size = size # declare size instance variable
-        self.graph = igraph.Graph(directed=True) # declare graph
-        for row in range(size + 1): # create vertices
+        self.size = size  # declare size instance variable
+
+        self.graph = igraph.Graph(directed=True)  # declare graph
+        for row in range(size + 1):  # create vertices
             for col in range(size + 1):
                 self.graph.add_vertex(name=str(row) + ',' + str(col))
 
-        for row in range(size): #create 1/2 edges
+        for row in range(size):  # create 1/2 edges
             for col in range(size):
                 self.graph.add_edge(str(row) + ',' + str(col),
                                     str(row) + ',' + str(col + 1), weight=50.0)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
                                     ',' + str(col), weight=50.0)
 
-        for row in range(1, size + 1): #create other 1/2 edges
+        for row in range(1, size + 1):  # create other 1/2 edges
             for col in range(1, size + 1):
                 self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
                                     str(col - 1), weight=50.0)
@@ -49,14 +50,12 @@ class Board:
                                     ',' + str(col), weight=50.0)
 
         self.dictionary = ValueSortedDict()
-        for row in range(0, size):
+        for row in range(0, size):  # populate dictionary
             for col in range(0, size):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
-        self.weightOrder = []
-
         self.edges = dict()
-        for row in range(0, size):
+        for row in range(0, size):  # save edges incident to each vertex
             for col in range(0, size):
                 vertexId = self.graph.vs.find(str(row) + ',' + str(col))
                 edges = self.graph.incident(vertexId) # list of edges
@@ -71,10 +70,10 @@ class Board:
         param1: string - node in the form <integer>,<integer>
         """
 
-        match = re.match('^(\\d+),(\\d+)$', u)
+        match = re.match('^(\\d+),(\\d+)$', u)  # ensure a,b
         if match is None:
             raise ValueError('nodes should be in the form \'a,b\'')
-        one = int(match.group(1))
+        one = int(match.group(1))  # get each of a and b
         two = int(match.group(2))
         if one >= self.size or one < 0 or two >= self.size or two < 0:
             raise ValueError('node is out of bounds')
@@ -90,6 +89,18 @@ class Board:
 
         if not isinstance(num, int) and not isinstance(num, float):
             raise ValueError('number must be an integer/float')
+
+
+    @staticmethod
+    def checkInt(num):
+        """
+        Check if num is an integer.
+
+        param1: unknown - item to confirm if integer
+        """
+
+        if not isinstance(num, int):
+            raise ValueError('number must be an integer')
 
 
     def getSize(self):
@@ -117,17 +128,11 @@ class Board:
         elif weight > 100:
             weight = 100
 
-        for edge in self.edges[u]:
+        for edge in self.edges[u]:  # 100 - weight is to unsure higher weights
+                                    # correlate to shorter paths when traversing
             edge['weight'] = 100 - float(weight)
 
-        """vertexId = self.graph.vs.find(u)
-        edges = self.graph.incident(vertexId) # list of edges pointing to node
-        for edge in edges:
-            # the below is '100-weight' as higher value nodes need less valuable
-            # edges for our shortestPath algorithm
-            self.graph.es.find(edge)['weight'] = float(100 - weight)"""
-
-        self.dictionary[u] = float(weight)
+        self.dictionary[u] = 100 - float(weight)  # ensure front is highest
 
 
     def multiplyWeight(self, u, multiplier):
@@ -198,22 +203,6 @@ class Board:
         self.checkNumber(num)
 
 
-    """def getWeightManually(self, u):
-
-        Return the weight of the node u by traversing the graph.
-
-        param1: string - node in the form <integer>,<integer>
-        return: integer/float - weight of node u
-
-
-        self.checkNode(u)  # comment this out for speed
-
-        vertexId = self.graph.vs.find(u)
-        edge = self.graph.incident(vertexId)[0] # pick arbitrary edge from list
-                                                # of edges pointing to node
-        return 100 - self.graph.es.find(edge)['weight'] # make human-readable"""
-
-
     def getWeight(self, u):
         """
         Return the weight of the node u from the dictionary.
@@ -224,29 +213,73 @@ class Board:
 
         self.checkNode(u)  # comment this out for speed
 
-        return self.dictionary[u]
+        return 100 - self.dictionary[u]  # allow human-readable
 
-
-    def sortWeights(self):
-        """
-        Declare a set of (vertex, weight) ordered by weight
-        """
-
-        self.weightOrder = self.dictionary.values()
 
     def getNodeWithPriority(self, index):
         """
-        Return vertex name with priority index
+        Return vertex name with priority index.
 
-        param1: int - index to return priority from 0 - (size-1)
+        param1: int - index to return priority
         return: string - node name with priority index
         """
 
-        #check if number
-        #check if between 0 and size-1
+        self.checkInt(index)  # comment this out for speed
 
-        self.sortWeights()
-        return self.weightOrder[index]
+        return self.dictionary.iloc[index:5]
+
+
+    def getNodesWithPriority(self, start, end):
+        """
+        Return vertex name with priority index.
+
+        param1: int - start index to return priority
+        param2: int - end index to return priority
+        return: [string] - node names with priority from start-end
+        """
+
+        self.getNodesWithPriorityErrorCheck(start, end)  # comment for speed
+
+        return self.dictionary.iloc[start : end + 1]
+
+
+    def getNodesWithPriorityErrorCheck(self, start, end):
+        """
+        Check getNodesWithPriority() for errors.
+
+        param1: int - start index to return priority
+        param2: int - end index to return priority
+        """
+
+        self.checkInt(start)
+        self.checkInt(end)
+
+
+    def isNodeWeightUnique(self, u):
+        """
+        Return False if weight appears more than once in the graph.
+
+        param1: string - node to check for duplicate weights
+        return: boolean - True if weight is unique, Fale otherwise
+        """
+
+        if self.countNodeWeightCopies(u) > 1:
+            return False
+        return True
+
+
+    def countNodeWeightCopies(self, u):
+        """
+        Return False if weight appears more than once in the graph.
+
+        param1: string - node to check for duplicate weights
+        return: boolean - True if weight is unique, Fale otherwise
+        """
+
+        self.checkNode(u)  # comment this out for speed
+
+        targetWeight = 100 - self.getWeight(u)
+        return self.dictionary.values().count(targetWeight)  # occurrences
 
 
     def optimumPath(self, u, v):
@@ -267,6 +300,7 @@ class Board:
             name = self.graph.vs.find(vertexId)['name'] # get human-readable
                                                         # node names
             vertexNames.append(name)
+
         return vertexNames
 
 
@@ -342,13 +376,18 @@ class Board:
             raise ValueError('numbers must be a boolean')
 
 
+
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight('0,1', 20)
-    print g.optimumPath('0,0', '3,5')
-    #print g.getWeight('1,0')
+    g.setWeight('0,1', 80)
+    g.setWeight('2,2', 100)
+    #print g.optimumPath('0,0', '3,5')
+    print g.getNodesWithPriority(2, 4)
+    print g.isNodeWeightUnique('0,2')
+    print g.countNodeWeightCopies('2,2')
+    #print g.getWeight('0,1')
     #g.multiplyWeight('2,0', 1)
     #print g.getWeight('2,0')
-    #g.sortWeights()
+    #g.sortNames()
     #print g.dictionary
     #g.show(True, True)
