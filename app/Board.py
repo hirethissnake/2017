@@ -234,7 +234,7 @@ class Board:
 
         self.weightOrder = self.dictionary.values()
 
-    def getCellWithPriority(self, index):
+    def getNodeWithPriority(self, index):
         """
         Return vertex name with priority index
 
