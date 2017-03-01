@@ -1,4 +1,8 @@
 """Independent snake object for use in Game."""
+#TODO:
+    # The food boolean in Health change in update() should be triggered in This
+    # class, following when Health > Last_Health
+
 class Snake:
     """Feisty snake object.
 
@@ -47,7 +51,7 @@ class Snake:
         """Update snake after previous move.
 
         param1: array - [x, y] of current head position of the snake.
-        param2: 'true' or 'false' - whether the snake ate food in last turn.
+        param2: string, 'true' or 'false' - whether the snake ate food in last turn.
         param3: health - snake's most recent health"""
         if  not isinstance(health, int):
             raise ValueError('health must be an integer')
@@ -57,7 +61,9 @@ class Snake:
         self.health = health
 
         self.positions.insert(0, headPosition)
-        if foodBoolean != 'true':
+        if foodBoolean == 'true':
+            self.size += 1
+        else:
             del self.positions[-1]
 
         self.old_positions.insert(0, self.positions)
