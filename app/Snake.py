@@ -1,7 +1,4 @@
 """Independent snake object for use in Game."""
-#TODO:
-    # The food boolean in Health change in update() should be triggered in This
-    # class, following when Health > Last_Health
 
 class Snake:
     """
@@ -13,6 +10,7 @@ class Snake:
         positions (array[array): array of [x,y] describing snakes body
         health (int): 0..100, describes moves a snake has before death, unless
             that snake eats food.
+        old_health (int): health of snake on last move
         old_positions (array[array[array]]): array of array of [x,y] describing
             past locations the snake was at @dfrankcom ?
         state (string): (unknown | food | attack | flee), describes past actions
@@ -45,11 +43,12 @@ class Snake:
         self.identifier = identifier
         self.positions = positions
         self.health = health
+        self.old_health = health
         self.old_positions = [positions]
 
         self.state = 'unknown'
 
-    def update(self, headPosition, foodBoolean, health):
+    def update(self, headPosition, health):
         """
         Update snake after previous move.
 
@@ -65,12 +64,16 @@ class Snake:
         if health > 100 or health < 0:
             raise ValueError('health must be between 100 and 0')
 
+        self.old_health = self.health
         self.health = health
 
         self.positions.insert(0, headPosition)
-        if foodBoolean:
+        # test if snake ate
+        if self.old_health < health:
+            # it did
             self.size += 1
         else:
+            # it did not
             del self.positions[-1]
 
         self.old_positions.insert(0, self.positions)
@@ -139,6 +142,15 @@ class Snake:
         """
 
         return self.state
+
+    def getIdentifier(self):
+        """
+        Return snake's identifier.
+
+        return: uuid (as string)
+        """
+
+        return self.identifier
 
     def toString(self):
         """
