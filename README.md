@@ -1,6 +1,6 @@
 # Sneaky Snake
 
-A aggressive / defensive Battlesnake implementation. Written by Phil Denhoff, Daniel Frankcom, Eric Showers, Kyle, and Alex Welsh-Piedrahita.
+A aggressive / defensive Battlesnake implementation. Written by Phil Denhoff, Daniel Frankcom, Eric Showers, Kyle Thorpe, and Alex Welsh-Piedrahita.
 
 Current feature list is in the `.docx` file. The requirements are listed in `requirements.txt`. They can be batch installed, as an administrator, with
 ```
@@ -12,7 +12,7 @@ and python-igraph can be install by following instructiors at
 ```
 python -m pip install /path/to/igraph.whl
 ```
- --- 
+ ---
 Dependencies should be visually confirmed to be installed with
 ```
 pip list
