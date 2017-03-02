@@ -124,8 +124,8 @@ class Board:
 
         self.modifyWeightErrorCheck(u, weight)  # comment this out for speed
 
-        if weight < 0: #ensure weight is in bounds
-            weight = 0
+        if weight <= 0:  # ensure weight is in bounds
+            weight = float("-inf")  # do not visit under any circumstances
         elif weight > 100:
             weight = 100
 
@@ -357,6 +357,7 @@ class Board:
         """
         Visualize weights of each node.
 
+        param1: array - path nodes to colour
         param1: boolean - show colours on display?
         param2: boolean - show numbers on display?
         """
@@ -376,13 +377,15 @@ class Board:
                 hexCode = '#%02x%02x%02x' % tuple(i * 255 for i in
                             colorsys.hls_to_rgb((weight * 1.2) /
                             float(360), 0.6, 0.8))
-                if weight == 0: # color perfect non-valid entries black
+                if weight == float('-inf'): # color perfect non-valid entries black
                     hexCode = '#000000'
                 if weight == 100: # color perfect full-valid entries blue
                     hexCode = '#0033cc'
-                if weight > 100 or weight < 0: # color invalid entries grey
+                if weight > 100 or (weight != float('-inf') and weight < 0):
+                    # color invalid entries grey
                     hexCode = '#616161'
                 if nodeName in pathValues:
+                    # color path values cyan
                     hexCode = '#66ffff'
 
                 if numbers: # add numbers
@@ -399,17 +402,17 @@ class Board:
 
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight('0,1', 0.1)
-    g.setWeight('2,0', 99.9)
-    g.setWeight('2,1', 100)
-    g.setWeight('5,2', 100)
-    g.setWeight('0,4', 99.9)
-    g.setWeight('0,5', 100)
-    print g.optimumPath('0,0', '6,4')
-    print g.getNodesWithPriority(0, 1)
-    print g.isNodeWeightUnique('0,2')
-    print g.countNodeWeightCopies('2,2')
-    #g.showPath('0,0', '6,4')
+    g.setWeight('0,5', 0)
+    g.setWeight('1,5', 0)
+    g.setWeight('2,5', 0)
+    g.setWeight('3,5', 0)
+    g.setWeight('1,3', 99.9)
+    g.setWeight('4,5', 100)
+    #print g.optimumPath('0,0', '6,4')
+    #print g.getNodesWithPriority(0, 1)
+    #print g.isNodeWeightUnique('0,2')
+    #print g.countNodeWeightCopies('2,2')
+    g.showPath('0,0', '0,10')
     #g.showWeights(True, False)
     #print g.getWeight('0,1')
     #g.multiplyWeight('2,0', 1)
@@ -417,6 +420,7 @@ if __name__ == '__main__':
     #g.sortNames()
     #print g.dictionary
     #g.show(True, True)
+    print g.getWeight('3,5')
 
     """
     matrix = []
