@@ -1,5 +1,6 @@
 """Process all game data. Handles getting in new board states, analyzing snake
 health, and providing Main with the best next move."""
+from Snake import Snake
 
 class Game:
     """Allow for several Battlesnake games to be played at once by providing
@@ -11,12 +12,21 @@ class Game:
             #Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
             #Init snakes
             #Init move number (how many since start of game)
-			
 
-    def update(self, snakeHeadPositions, foodPositions):
+    def update(self, snakesData, foodPositions):
         """Update game with current board from server"""
         #TODO
             #Calculate all game changes and store
+
+        #Creates a list of snakes in the game
+        snakeArr = []
+        for x in snakesData:
+            identity = snakesData[x]['id']
+            hp = snakesData[x]['health_points']
+            coords = snakesData[x]['health_points']
+            size = len(coords)
+
+            snakeArr.append(Snake(size, coords, hp, identity))
 
 
     def getNextMove(self):

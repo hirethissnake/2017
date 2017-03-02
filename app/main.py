@@ -5,9 +5,9 @@
 """
 
 import os
+import random
 import bottle
-from Grid import Grid
-
+from Game import Game
 
 MAPS = {}
 
@@ -47,17 +47,29 @@ def start():
 @bottle.post('/move')
 def move():
     """Respond to POST /move with an adequate choice of movement."""
+
+    first_turn = True
     data = bottle.request.json
-	# TODO: Do things with data\
-	
-	for x in data['food']:
-    	food_pos[x] = data['food'][x]
+
+    food_loc = data['food']
+    snakes = data['snakes']
+    us = data['you']
+    height = data['height']
+    turn = data['turn']
+    game_id = data['game_id']
+
+    if first_turn:
+        battle = Game(height)
+        first_turn = False
+    else:
+        battle.update(snakes, food_loc)
 
     directions = ['up', 'down', 'left', 'right']
-    move_dir = pick_dir(list(directions))
+
+
 
     return {
-        'move': move_dir,
+        'move': random.choice(directions),
         'taunt': 'battlesnake-python!'
     }
 
