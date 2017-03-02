@@ -220,7 +220,7 @@ class Board:
         """
         Return vertex name with priority index.
 
-        param1: int - index to return priority
+        param1: int - index to return priority (can be negative)
         return: string - node name with priority index
         """
 
@@ -312,15 +312,53 @@ class Board:
         self.checkNode(v)
 
 
-    def show(self, colours, numbers):
+    def showWeights(self, colours, numbers):
         """
-        Visualize weights of each node
+        Visualize weights of each node.
 
         param1: boolean - show colours on display?
         param2: boolean - show numbers on display?
         """
 
-        self.showErrorCheck(colours, numbers)  # comment this out for speed
+        self.showWeightsErrorCheck(colours, numbers)  # comment for speed
+
+        self.showCombiner([], colours, numbers)
+
+
+    @staticmethod
+    def showWeightsErrorCheck(colours, numbers):
+        """
+        Check showWeights() method for errors.
+
+        param1,2: unknown - item to check if boolean
+        """
+
+        if not isinstance(colours, bool):
+            raise ValueError('colours must be a boolean')
+
+        if not isinstance(numbers, bool):
+            raise ValueError('numbers must be a boolean')
+
+
+    def showPath(self, u, v):
+        """
+        Visualize path between nodes u and v.
+
+        param1,2: string - node in the form <integer>,<integer>
+        """
+
+        self.optimumPathErrorCheck(u, v)  # comment this out for speed
+
+        self.showCombiner(self.optimumPath(u, v), True, True)
+
+
+    def showCombiner(self, pathValues, colours, numbers):
+        """
+        Visualize weights of each node.
+
+        param1: boolean - show colours on display?
+        param2: boolean - show numbers on display?
+        """
 
         app = gui('Login Window', '950x950')
         app.setBg('white')
@@ -340,9 +378,11 @@ class Board:
                 if weight == 0: # color perfect non-valid entries black
                     hexCode = '#000000'
                 if weight == 100: # color perfect full-valid entries blue
-                    hexCode = '#2196F3'
+                    hexCode = '#0033cc'
                 if weight > 100 or weight < 0: # color invalid entries grey
                     hexCode = '#616161'
+                if nodeName in pathValues:
+                    hexCode = '#66ffff'
 
                 if numbers: # add numbers
                     app.addLabel(nodeName, weight, col, row)
@@ -355,30 +395,21 @@ class Board:
         app.go() # show window
 
 
-    @staticmethod
-    def showErrorCheck(colours, numbers):
-        """
-        Check show() method for errors.
-
-        param1,2: unknown - item to check if boolean
-        """
-
-        if not isinstance(colours, bool):
-            raise ValueError('colours must be a boolean')
-
-        if not isinstance(numbers, bool):
-            raise ValueError('numbers must be a boolean')
-
-
 
 if __name__ == '__main__':
     g = Board(20)
-    g.setWeight('0,1', 20)
-    g.setWeight('2,2', 100)
-    print g.optimumPath('0,0', '3,5')
+    g.setWeight('0,1', 0.1)
+    g.setWeight('2,0', 99.9)
+    g.setWeight('2,1', 100)
+    g.setWeight('5,2', 100)
+    g.setWeight('0,4', 99.9)
+    g.setWeight('0,5', 100)
+    print g.optimumPath('0,0', '6,4')
     print g.getNodesWithPriority(0, 1)
     print g.isNodeWeightUnique('0,2')
     print g.countNodeWeightCopies('2,2')
+    g.showPath('0,0', '6,4')
+    #g.showWeights(True, False)
     #print g.getWeight('0,1')
     #g.multiplyWeight('2,0', 1)
     #print g.getWeight('2,0')
