@@ -8,6 +8,7 @@ import igraph
 import colorsys
 from appJar import gui
 from sortedcollections import ValueSortedDict
+#from scipy.ndimage.filters import gaussian_filter
 
 
 class Board:
@@ -408,7 +409,7 @@ if __name__ == '__main__':
     print g.getNodesWithPriority(0, 1)
     print g.isNodeWeightUnique('0,2')
     print g.countNodeWeightCopies('2,2')
-    g.showPath('0,0', '6,4')
+    #g.showPath('0,0', '6,4')
     #g.showWeights(True, False)
     #print g.getWeight('0,1')
     #g.multiplyWeight('2,0', 1)
@@ -416,3 +417,14 @@ if __name__ == '__main__':
     #g.sortNames()
     #print g.dictionary
     #g.show(True, True)
+
+    """
+    matrix = []
+    for row in range(g.getSize()):
+        colList = []
+        for col in range(g.getSize()):
+            colList.append(100 - g.getWeight(str(row) + ',' + str(col)))
+        matrix.append(colList)
+    print matrix
+    print gaussian_filter(matrix, sigma=0.9)
+    """
