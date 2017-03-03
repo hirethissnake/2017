@@ -31,23 +31,23 @@ class Game:
         self.you = ''
         self.food = []
         self.turn = 0
-        self.dead_snakes = []
+        self.deadSnakes = []
 
     def update(self, data):
         """Update game with current board from server.
 
         param1: dictionary - all data from response. See Battlesnake docs
         for more info."""
-        for snake_data in data['snakes']:
-            if snake_data['id'] in self.snakes:
-                self.snakes[snake_data['id']].update(snake_data)
+        for snakeData in data['snakes']:
+            if snakeData['id'] in self.snakes:
+                self.snakes[snakeData['id']].update(snakeData)
             else:
-                self.snakes[snake_data['id']] = Snake(snake_data)
+                self.snakes[snakeData['id']] = Snake(snakeData)
 
         self.food = data['food']
         self.you = data['you']
         if 'dead_snakes' in data:
-            self.dead_snakes = data['dead_snakes']
+            self.deadSnakes = data['dead_snakes']
 
 
     def getNextMove(self):
@@ -130,7 +130,7 @@ class Game:
 
 # Example code testing
 if __name__ == '__main__':
-    initData = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
-    b = Game(initData)
+    INITDATA = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
+    b = Game(INITDATA)
     b.weightGrid.showCombiner(b.getNextMove(), True, False)
     print b.getNextMove()
