@@ -58,7 +58,19 @@ class Game:
     def weightFood(self):
         """Weight grid with food necessity"""
         #TODO
-            #How desperately do we need food?
+            #How desperately do we need food
+            #len(optimumPath)
+        j = 100
+        weightGrid.showPath(snakeHead,food)
+        for Point in self.foodPositions:
+            self.weightGrid.setWeights(Point,100)
+            if len(optimumPath(snakeHead,Point)) < j :
+                j=len(optimumPath(snakeHead,Point)
+            if self.health_points < (j + 5):
+
+
+
+
             #How long do we have to get there?
 
 
