@@ -29,14 +29,14 @@ subtractWeight          void        Decrease weight of ndoe by subtrahend
 
 ## GETTERS ##
 
-getNodeWithPriority     string      Return vertex name with priority of some value
-getNodesWithPriority    [string]    Return array of vertexes with priority
+getNodeWithPriority     [x,y]       Return vertex name with priority of some value
+getNodesWithPriority    [[x, y]]    Return array of vertexes with priority
                                         between start and end
 getSize                 [int, int]  Get board size as an x, y array
 getWeight               int/float   Return the weight of a node u
 isNodeWeightUnique      boolean     Check if node weight exists in board twice
 countNodeWeightCopies   int         Get the number of copies a specific weight
-optimumPath             [string]    Get the best path between two nodes
+optimumPath             [[x, y]]    Get the best path between two nodes
 
 ## SETTERS ##
 
@@ -129,7 +129,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Return a string as a node
 
-        param1: string - node in form 'a,b'
+        param1: [int, int] - node in form [x, y]
         return: [[x, y]] - node representation
         """
 
@@ -141,11 +141,11 @@ showPath                void        Display graphic of best path between nodes
         """
         Check if u is a valid node.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         """
 
         if len(u) != 2:
-            raise ValueError('nodes should be in the form [a,b]')
+            raise ValueError('nodes should be in the form [x, y]')
         if u[0] >= self.height or u[0] < 0 or u[1] >= self.width or u[1] < 0:
             raise ValueError('node is out of bounds')
 
@@ -188,7 +188,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Set incoming edges of vertex u to weight.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - weight to set
         """
 
@@ -267,7 +267,7 @@ showPath                void        Display graphic of best path between nodes
         Check modifyWeights() method for errors.
 
         param1: string - operator to check
-        param2: [string] - array of nodes to check
+        param2: [[int, int]] - array of nodes to check
         param3: [float/int] - array of weights to check
         """
 
@@ -282,7 +282,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Multiply weight of node u by multiplier.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - number to multiply weight by
         """
 
@@ -296,7 +296,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Divide weight of node u by divisor.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - number to divide weight by
         """
 
@@ -310,7 +310,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Increase weight of node u by addend.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - number to add to weight
         """
 
@@ -324,7 +324,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Decrease weight of node u by subtrahend.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - number to subtract from weight
         """
 
@@ -350,7 +350,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Return the weight of the node u from the dictionary.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         return: integer/float - weight of node u
         """
 
@@ -424,7 +424,7 @@ showPath                void        Display graphic of best path between nodes
         Return vertex name with priority index.
 
         param1: int - index to return priority (can be negative)
-        return: string - node name with priority index
+        return: [int, int] - node name with priority index
         """
 
         self.checkInt(index)  # comment this out for speed
@@ -439,7 +439,7 @@ showPath                void        Display graphic of best path between nodes
 
         param1: int - start index to return priority
         param2: int - end index to return priority
-        return: [string] - node names with priority from start-end
+        return: [[int, int]] - node names with priority from start-end
         """
 
         self.getNodesWithPriorityErrorCheck(start, end)  # comment for speed
@@ -466,7 +466,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Return False if weight appears more than once in the graph.
 
-        param1: string - node to check for duplicate weights
+        param1: [int, int] - node in the form [x, y]
         return: boolean - True if weight is unique, Fale otherwise
         """
 
@@ -479,7 +479,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Return False if weight appears more than once in the graph.
 
-        param1: string - node to check for duplicate weights
+        param1: [int, int] - node in the form [x, y]
         return: int - Returns number of other nodes with same weight
         """
 
@@ -493,8 +493,8 @@ showPath                void        Display graphic of best path between nodes
         """
         Return shortest path between nodes u and v.
 
-        param1,2: string - node in the form <integer>,<integer>
-        return: [string] - node names in the optimum path from u to v
+        param1,2: [int, int] - node in the form [x, y]
+        return: [[int, int]] - node names in the optimum path from u to v
         """
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
@@ -553,7 +553,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Visualize path between nodes u and v.
 
-        param1,2: string - node in the form <integer>,<integer>
+        param1,2: [int, int] - node in the form [x, y]
         """
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
