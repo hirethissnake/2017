@@ -14,6 +14,42 @@ from sortedcollections import ValueSortedDict
 class Board:
     """
     Store square weight and calculate optimal paths between them.
+
+    Has the following public methods:
+
+## OPERATORS ##
+
+__init__                void        Board initialization
+averageWeights          void        Balance weight values using heat equation
+modifyWeights           void        Operate on array of vertexes by array of
+                                        weights (parent for next four functions)
+multiplyWeight          void        Multiply weight of node by multiplier
+divideWeight            void        Divide weight of node by divisor
+addWeight               void        Increase weight of node by addend
+subtractWeight          void        Decrease weight of ndoe by subtrahend
+
+## GETTERS ##
+
+getNodeWithPriority     string      Return vertex name with priority of some value
+getNodesWithPriority    [string]    Return array of vertexes with priority
+                                        between start and end
+getSize                 [int, int]  Get board size as an x, y array
+getWeight               int/float   Return the weight of a node u
+isNodeWeightUnique      boolean     Check if node weight exists in board twice
+countNodeWeightCopies   int         Get the number of copies of some node
+optimumPath             [string]    Get the best path between two nodes
+
+## SETTERS ##
+
+setWeight               void        Set incoming edges of vertex u to some
+                                        weight
+setWeights              void        Set incoming edges of array of vertexes to
+                                        matching weight in array
+
+## DISPLAY ##
+showWeights             void        Opens visualiation of weights of all nodes
+showPath                void        Display graphic of best path between nodes
+showCombiner            void        Visualize the weights of all nodes by color
     """
 
 
@@ -410,7 +446,7 @@ class Board:
         Return False if weight appears more than once in the graph.
 
         param1: string - node to check for duplicate weights
-        return: boolean - True if weight is unique, Fale otherwise
+        return: int - Returns number of other nodes with same weight
         """
 
         self.checkNode(u)  # comment this out for speed
