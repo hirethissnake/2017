@@ -64,19 +64,12 @@ class Game:
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
-<<<<<<< HEAD
-        us = 0
-        for s in self.snakes:
-            if s.identifier == self.you:
-                us = s
-
-=======
         us = self.snakes[self.you] #Represents our snakes
         ourSnakePos = us.getAllPositions()
         ourTail = ourSnakePos[-1] #[[x, y],[x,y]]=
         ourTailX = ourTail[0]
         ourTailY = ourTail[1]
->>>>>>> origin/master
+
         for s in self.snakes:
             positions = s.getAllPositions()
             for x in positions:

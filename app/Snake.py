@@ -4,51 +4,50 @@ class Snake:
     """
     Feisty snake object.
 
-    Has the following states:
-        size (int): > 0, describes length of snake
-        identifier (uuid): unique identifier describing for each snake
-        positions (array[array): array of [x,y] describing snakes body
-        health (int): 0..100, describes moves a snake has before death, unless
-            that snake eats food.
-        old_health (int): health of snake on last move
-        old_positions (array[array[array]]): array of array of [x,y] describing
-            past locations the snake was at @dfrankcom ?
-        state (string): (unknown | food | attack | flee), describes past actions
-            of snake
+    Has the following attributes:
+    size            (int)       - > 0, describes length of snake
+    identifier      (uuid)      - unique identifier describing for each snake
+    positions       ([coords])  - array of [x,y] describing snakes body
+    health          (int)       - 0..100, describes moves a snake has before
+                                    death, unless that snake eats food.
+    old_health      (int)       - health of snake on last move
+    old_positions   ([[coords]])- array of array of [x,y] describing past
+                                    locations the snake was at
+    state           (string)    - (unknown | food | attack | flee), describes
+                                    past actions of snake
+    taunt           (string)    - snake's current taunt
+    name            (string)    - name of snake
     """
-    def __init__(self, size, positions, health, identifier):
+
+    def __init__(self, data):
         """
         Initialize the Snake class.
 
-        param1: int - length of snake
-        param2: array[array] - each element is a coord value
-                                from 0..width, 0..height and describes one body
-                                cell of a snake
-        param3: int - health of snake
-        param4: uuid - assigned ID for each snake
+        param1: data - all snake-related data from server
 
         Raises: ValueError
             if: size not int.
         """
         # comment out for
         # vv SPEED
-        self.isInt(size, 'size') # confirm size is int
-        self.isInt(health, 'health') # and health
-        self.isString(identifier, 'identifier')
+        self.isString(data['identifier'], 'identifier')
         # ^^ SPEED
 
-        if size <= 1:
-            raise ValueError('size must be greater than 1')
-        self.size = size
-        self.identifier = identifier
-        self.positions = positions
-        self.health = health
-        self.old_health = health
-        self.old_positions = [positions]
+        # often updated
+        self.identifier = data['id']
+        self.positions = data['positions']
+        self.health = data['health']
+        # old
+        self.old_size = len(self.positions)
+        self.old_health = data['health']
+        self.old_positions = [data['positions']]
+        # snake personality
+        self.taunt = data['taunt']
+        self.name = data['name']
 
         self.state = 'unknown'
 
-    def update(self, headPosition, health):
+    def update(self, data):
         """
         Update snake after previous move.
 
@@ -56,25 +55,15 @@ class Snake:
         param2: bool - whether the snake ate food in last turn.
         param3: health - snake's most recent health.
         """
-        # comment out for
-        # vv SPEED
-        self.isInt(health, 'health')
-        # ^^ SPEED
 
+        health = data['health']
         if health > 100 or health < 0:
             raise ValueError('health must be between 100 and 0')
 
         self.old_health = self.health
         self.health = health
 
-        self.positions.insert(0, headPosition)
-        # test if snake ate
-        if self.old_health < health:
-            # it did
-            self.size += 1
-        else:
-            # it did not
-            del self.positions[-1]
+        self.positions = data['coords']
 
         self.old_positions.insert(0, self.positions)
 
@@ -84,7 +73,7 @@ class Snake:
         return: int - snake
         """
 
-        return self.size
+        return len(self.positions)
 
     def getHealth(self):
         """"
@@ -120,6 +109,15 @@ class Snake:
 
         return self.positions
 
+    def getTailPosition(self):
+        """
+        Return array of tail position.
+
+        return: array - [x, y] of tail coords
+        """
+
+        return self.positions[-1]
+
     def setState(self, state):
         """
         Set snake state. One of (unknown | food | attack | flee).
@@ -152,17 +150,6 @@ class Snake:
 
         return self.identifier
 
-    def justAteFood(self):
-        """
-        Return if snake just ate food.
-
-        return: boolean
-        """
-
-        if self.old_health < self.health:
-            return True
-        return False
-
     def toString(self):
         """
         Return Snake attribues as a string.
@@ -170,7 +157,7 @@ class Snake:
 
         asString = "identifer: " + str(self.identifier) + "\n\
 health: " + str(self.health) + "\n\
-size: " + str(self.size) + "\n\
+size: " + str(len(self.positions)) + "\n\
 state: " + str(self.state) + "\n\
 positions: " + str(self.positions)
 
