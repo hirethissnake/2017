@@ -23,10 +23,10 @@ def start():
     like, and what our taunt is."""
     # pylint: disable=E1136
     data = bottle.request.json
-
+    #Create a game object with the data given
     game_id = data['game_id']
     battle = Game(data)
-
+    #Enter the game into the GameDictionary with the key value set to it's id
     gameDic[game_id] = battle
 
     head_url = '%s://%s/static/head.png' % (
@@ -47,13 +47,14 @@ def move():
     """Respond to POST /move with an adequate choice of movement."""
 
     data = bottle.request.json
-
+    #Store the id of this game and then access the matching object in GameDict
     curGame = data['game_id']
     battle = gameDic[curGame]
-
+    #Update the game with new gamestate
     battle.update(data)
+    #Request next best move
     nextMove = battle.getNextMove()
-
+    
     return {
         'move': nextMove,
         'taunt': 'battlesnake-python!'
