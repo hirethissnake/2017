@@ -7,16 +7,12 @@ class Game:
     several different Game objects."""
 
     def __init__(self, size):
-        """Initialize the Game class"""
+        """Initialize the Game class."""
         #TODO
             #Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
             #Init snakes
             #Init move number (how many since start of game)
 
-    def update(self, snakesData, foodPositions):
-        """Update game with current board from server"""
-        #TODO
-            #Calculate all game changes and store
 
         #Creates a list of snakes in the game
         snakeArr = []
