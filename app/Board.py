@@ -8,12 +8,46 @@ import igraph
 import colorsys
 from appJar import gui
 from sortedcollections import ValueSortedDict
-#from scipy.ndimage.filters import gaussian_filter
 
 
 class Board:
     """
     Store square weight and calculate optimal paths between them.
+
+    Has the following public methods:
+
+## OPERATORS ##     ## RETURN ##
+
+__init__                void        Board initialization
+averageWeights          void        Balance weight values using heat equation
+modifyWeights           void        Operate on array of vertexes by array of
+                                        weights (parent for next four functions)
+multiplyWeight          void        Multiply weight of node by multiplier
+divideWeight            void        Divide weight of node by divisor
+addWeight               void        Increase weight of node by addend
+subtractWeight          void        Decrease weight of ndoe by subtrahend
+
+## GETTERS ##
+
+getNodeWithPriority     string      Return vertex name with priority of some value
+getNodesWithPriority    [string]    Return array of vertexes with priority
+                                        between start and end
+getSize                 [int, int]  Get board size as an x, y array
+getWeight               int/float   Return the weight of a node u
+isNodeWeightUnique      boolean     Check if node weight exists in board twice
+countNodeWeightCopies   int         Get the number of copies a specific weight
+optimumPath             [string]    Get the best path between two nodes
+
+## SETTERS ##
+
+setWeight               void        Set incoming edges of vertex u to some
+                                        weight
+setWeights              void        Set incoming edges of array of vertexes to
+                                        matching weight in array
+
+## DISPLAY ##
+showWeights             void        Opens visualiation of weights of all nodes
+showPath                void        Display graphic of best path between nodes
     """
 
 
@@ -50,13 +84,13 @@ class Board:
                                     ',' + str(col), weight=50.0)
 
         self.dictionary = ValueSortedDict()
-        for row in range(0, height):  # populate dictionary
-            for col in range(0, width):
+        for row in range(height):  # populate dictionary
+            for col in range(width):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
         self.edges = dict()
-        for row in range(0, height):  # save edges incident to each vertex
-            for col in range(0, width):
+        for row in range(height):  # save edges incident to each vertex
+            for col in range(width):
                 vertexId = self.graph.vs.find(str(row) + ',' + str(col))
                 edges = self.graph.incident(vertexId) # list of edges
                 edges = [self.graph.es.find(edge) for edge in edges]
@@ -300,7 +334,68 @@ class Board:
 
         self.checkNode(u)  # comment this out for speed
 
-        return 100 - self.dictionary[u]  # allow human-readable
+        weight = 100 - self.dictionary[u]
+        if weight == -float('inf'):
+            weight = 0
+
+        return weight  # allow human-readable
+
+
+    def averageWeights(self, iterations):
+        """
+        Balance weight values using heat equation.
+
+        param1: int - number of iterations to perform
+        """
+
+        toReset = []
+        gridOld = []
+        for row in range(self.height):  # loop through every node
+            tempRow = []
+            for col in range(self.width):
+                nodeName = str(row) + ',' + str(col)
+                currentWeight = self.getWeight(nodeName)
+                tempRow.append(currentWeight)
+                if currentWeight != 50:
+                    toReset.append(nodeName)
+            gridOld.append(tempRow)
+
+        while iterations > 0:  # average grid iterations times
+            tempGrid = []
+            for row in range(self.height):  # loop through every node
+                tempRow = []
+                for col in range(self.width):
+                    currentWeight = gridOld[row][col]
+                    if str(row) + ',' + str(col) not in toReset:
+                        toAverage = []
+                        if row > 0:  #store surrounding nodes
+                            toAverage.append([row - 1, col])
+                        if row < self.height - 1:
+                            toAverage.append([row + 1, col])
+                        if col > 0:
+                            toAverage.append([row, col - 1])
+                        if col < self.width - 1:
+                            toAverage.append([row, col + 1])
+
+                        tempSum = currentWeight
+                        count = 1
+                        for node in toAverage:  # sum weights
+                            tempWeight = gridOld[node[0]][node[1]]
+                            if tempWeight != 50:
+                                tempSum += tempWeight
+                                count += 1
+                        average = float(tempSum / count)
+                        tempRow.append(average)
+                    else:
+                        tempRow.append(currentWeight)
+
+                tempGrid.append(tempRow)
+            gridOld = tempGrid
+            iterations -= 1  # decrement counter
+
+        for row in range(self.height):  # add weights back to graph
+            for col in range(self.width):
+                self.setWeight(str(row) + ',' + str(col), gridOld[row][col])
 
 
     def getNodeWithPriority(self, index):
@@ -360,7 +455,7 @@ class Board:
         Return False if weight appears more than once in the graph.
 
         param1: string - node to check for duplicate weights
-        return: boolean - True if weight is unique, Fale otherwise
+        return: int - Returns number of other nodes with same weight
         """
 
         self.checkNode(u)  # comment this out for speed
@@ -463,7 +558,7 @@ class Board:
                 hexCode = '#%02x%02x%02x' % tuple(i * 255 for i in
                             colorsys.hls_to_rgb((weight * 1.2) /
                             float(360), 0.6, 0.8))
-                if weight == float('-inf'): # color perfect non-valid entries black
+                if weight == 0: # color perfect non-valid entries black
                     hexCode = '#000000'
                 if weight == 100: # color perfect full-valid entries blue
                     hexCode = '#0033cc'
@@ -475,7 +570,7 @@ class Board:
                     hexCode = '#66ffff'
 
                 if numbers: # add numbers
-                    app.addLabel(nodeName, weight, col, row)
+                    app.addLabel(nodeName, "%.2f" % weight, col, row)
                 else:
                     app.addLabel(nodeName, '', col, row)
 
@@ -499,7 +594,7 @@ if __name__ == '__main__':
     #print g.getNodesWithPriority(0, 1)
     #print g.isNodeWeightUnique('0,2')
     #print g.countNodeWeightCopies('2,2')
-    g.showPath('0,0', '0,10')
+    #g.showPath('0,0', '0,10')
     #g.showWeights(True, False)
     #print g.getWeight('0,1')
     #g.multiplyWeight('2,0', 1)
@@ -508,6 +603,9 @@ if __name__ == '__main__':
     #print g.dictionary
     #g.show(True, True)
     print g.getWeight('3,5')
+    #g.showWeights(True, True)
+    g.averageWeights(20)
+    g.showWeights(True, True)
 
     """
     matrix = []

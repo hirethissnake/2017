@@ -4,79 +4,71 @@ class Snake:
     """
     Feisty snake object.
 
-    Has the following states:
-        size (int): > 0, describes length of snake
-        identifier (uuid): unique identifier describing for each snake
-        positions (array[array): array of [x,y] describing snakes body
-        health (int): 0..100, describes moves a snake has before death, unless
-            that snake eats food.
-        old_health (int): health of snake on last move
-        old_positions (array[array[array]]): array of array of [x,y] describing
-            past locations the snake was at @dfrankcom ?
-        state (string): (unknown | food | attack | flee), describes past actions
-            of snake
+    Has the following attributes:
+    size            (int)       - > 0, describes length of snake
+    identifier      (uuid)      - unique identifier describing for each snake
+    coords          ([coords])  - array of [x,y] describing snakes body
+    health_points   (int)       - 0..100, describes moves a snake has before
+                                    death, unless that snake eats food.
+    oldHealthPoints(int)       - health_points of snake on last move
+    oldCoords      ([[coords]])- array of array of [x,y] describing past
+                                    locations the snake was at
+    state           (string)    - (unknown | food | attack | flee), describes
+                                    past actions of snake
+    taunt           (string)    - snake's current taunt
+    name            (string)    - name of snake
     """
-    def __init__(self, size, positions, health, identifier):
+
+    def __init__(self, data):
         """
         Initialize the Snake class.
 
-        param1: int - length of snake
-        param2: array[array] - each element is a coord value
-                                from 0..width, 0..height and describes one body
-                                cell of a snake
-        param3: int - health of snake
-        param4: uuid - assigned ID for each snake
+        param1: data - all snake-related data from server
 
         Raises: ValueError
             if: size not int.
         """
         # comment out for
         # vv SPEED
-        self.isInt(size, 'size') # confirm size is int
-        self.isInt(health, 'health') # and health
-        self.isString(identifier, 'identifier')
+        self.isString(data['id'], 'id')
         # ^^ SPEED
 
-        if size <= 1:
-            raise ValueError('size must be greater than 1')
-        self.size = size
-        self.identifier = identifier
-        self.positions = positions
-        self.health = health
-        self.old_health = health
-        self.old_positions = [positions]
+        # often updated
+        self.identifier = data['id']
+        self.coords = data['coords']
+        self.healthPoints = data['healthPoints']
+        # old
+        self.oldSize = len(self.coords)
+        self.oldHealthPoints = data['healthPoints']
+        self.oldCoords = [data['coords']]
+        # snake personality
+        if 'taunt' in data:
+            self.taunt = data['taunt']
+        if 'name' in data:
+            self.name = data['name']
 
         self.state = 'unknown'
 
-    def update(self, headPosition, health):
+    def update(self, data):
         """
         Update snake after previous move.
 
-        param1: array - [x, y] of current head position of the snake.
-        param2: bool - whether the snake ate food in last turn.
-        param3: health - snake's most recent health.
+        param1: data - all snake-related data from server
         """
-        # comment out for
-        # vv SPEED
-        self.isInt(health, 'health')
-        # ^^ SPEED
 
-        if health > 100 or health < 0:
-            raise ValueError('health must be between 100 and 0')
+        healthPoints = data['healthPoints']
+        if healthPoints > 100 or healthPoints < 0:
+            raise ValueError('healthPoints must be between 100 and 0')
 
-        self.old_health = self.health
-        self.health = health
+        self.oldHealthPoints = self.healthPoints
+        self.healthPoints = healthPoints
 
-        self.positions.insert(0, headPosition)
-        # test if snake ate
-        if self.old_health < health:
-            # it did
-            self.size += 1
-        else:
-            # it did not
-            del self.positions[-1]
+        self.coords = data['coords']
 
-        self.old_positions.insert(0, self.positions)
+        if 'taunt' in data:
+            self.taunt = data['taunt']
+
+        self.oldCoords.insert(0, self.coords)
 
     def getSize(self):
         """
@@ -84,24 +76,24 @@ class Snake:
         return: int - snake
         """
 
-        return self.size
+        return len(self.coords)
 
     def getHealth(self):
         """"
-        Return snake health
-        return: int - health
+        Return snake healthPoints
+        return: int - healthPoints
         """
 
-        return self.health
+        return self.healthPoints
 
     def getHunger(self):
         """
         Return hunger of snake
 
-        return: int - 100-health.
+        return: int - 100-healthPoints.
         """
 
-        return 100 - self.health
+        return 100 - self.healthPoints
 
     def getHeadPosition(self):
         """
@@ -109,16 +101,25 @@ class Snake:
         return: array - as [x, y] coords.
         """
 
-        return self.positions[0]
+        return self.coords[0]
 
     def getAllPositions(self):
         """
-        Return array of positions.
+        Return array of coords.
 
         return: array[array] - [x,y] of all body coords.
         """
 
-        return self.positions
+        return self.coords
+
+    def getTailPosition(self):
+        """
+        Return array of tail position.
+
+        return: array - [x, y] of tail coords
+        """
+
+        return self.coords[-1]
 
     def setState(self, state):
         """
@@ -158,10 +159,9 @@ class Snake:
         """
 
         asString = "identifer: " + str(self.identifier) + "\n\
-health: " + str(self.health) + "\n\
-size: " + str(self.size) + "\n\
+healthPoints: " + str(self.healthPoints) + "\n\
 state: " + str(self.state) + "\n\
-positions: " + str(self.positions)
+coords: " + str(self.coords)
 
         return asString
 

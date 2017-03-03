@@ -1,24 +1,34 @@
-# Sneaky Snake
+## Sneaky Snake
 
 A aggressive / defensive Battlesnake implementation. Written by Phil Denhoff, Daniel Frankcom, Eric Showers, Kyle Thorpe, and Alex Welsh-Piedrahita.
 
-Current feature list is in the `.docx` file. The requirements are listed in `requirements.txt`. They can be batch installed, as an administrator, with
+Current feature list is in the `.docx` file. 
+
+### Running / Installing
+
+Install the Microsoft Visual C++ compiler for Python 2.7 from [aka.ms/vcpython27](http://aka.ms/vcpython27).
+
+The required Python packages are listed in `requirements.txt`. They can be batch installed, as an administrator (use sudo), with
+
 ```
 pip install -r requirements.txt
 ```
-and python-igraph can be install by following instructiors at
-[python-igraph install](http://igraph.org/python/#pyinstall). For windows, use Christoph Gohlke's unofficial installers, and
+
+and python-igraph can be installed by following instructions at
+[python-igraph install](http://igraph.org/python/#pyinstall). For Windows, use Christoph Gohlke's unofficial installers (pick *-cp27), and
 
 ```
 python -m pip install /path/to/igraph.whl
 ```
+
  ---
+
 Dependencies should be visually confirmed to be installed with
 ```
 pip list
 ```
 
-# battlesnake-python
+## battlesnake-python
 
 A simple [BattleSnake AI](http://battlesnake.io) written in Python.
 
@@ -80,4 +90,4 @@ heroku logs --tail
 
 ## Questions?
 
-Email [battlesnake@sendwithus.com](mailto:battlesnake@sendwithus.com), or tweet [@send_with_us](http://twitter.com/send_with_us).
+Email [phildenhoff@gmail.com](mailto:phildenhoff@gmail.com).
