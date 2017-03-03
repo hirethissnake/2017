@@ -127,13 +127,84 @@ class Board:
         if weight <= 0:  # ensure weight is in bounds
             weight = float("-inf")  # do not visit under any circumstances
         elif weight > 100:
-            weight = 100
+            weight = float(100)
 
         for edge in self.edges[u]:  # 100 - weight is to unsure higher weights
                                     # correlate to shorter paths when traversing
             edge['weight'] = 100 - float(weight)
 
         self.dictionary[u] = 100 - float(weight)  # ensure front is highest
+
+
+    def setWeights(self, nodes, values):
+        """
+        Modify a list of node weights.
+
+        param1: string - operator ('*', '/', '+', '-')
+        param2: [string] - array of nodes in the form <integer>,<integer>
+        param3: [float/int] - array of weights corresponding to nodes
+        """
+
+        self.setWeightsErrorCheck(nodes, values)
+
+        tempLen = len(nodes)
+
+        for nodeIndex in range(tempLen):
+            self.setWeight(nodes[nodeIndex], values[nodeIndex])
+
+
+    @staticmethod
+    def setWeightsErrorCheck(nodes, values):
+        """
+        Check setWeights() method for errors.
+
+        param2: [string] - array of nodes to check
+        param3: [float/int] - array of weights to check
+        """
+
+        if len(nodes) != len(values):
+            raise ValueError('lists must be the same length')
+
+
+    def modifyWeights(self, operator, nodes, values):
+        """
+        Modify a list of node weights.
+
+        param1: string - operator ('*', '/', '+', '-')
+        param2: [string] - array of nodes in the form <integer>,<integer>
+        param3: [float/int] - array of weights corresponding to nodes
+        """
+
+        self.modifyWeightsErrorCheck(operator, nodes, values)
+
+        tempLen = len(nodes)
+
+        for nodeIndex in range(tempLen):
+            if operator == "*":
+                self.multiplyWeight(nodes[nodeIndex], values[nodeIndex])
+            elif operator == "/":
+                self.divideWeight(nodes[nodeIndex], values[nodeIndex])
+            elif operator == "+":
+                self.addWeight(nodes[nodeIndex], values[nodeIndex])
+            elif operator == "-":
+                self.subtractWeight(nodes[nodeIndex], values[nodeIndex])
+
+
+    @staticmethod
+    def modifyWeightsErrorCheck(operator, nodes, values):
+        """
+        Check modifyWeights() method for errors.
+
+        param1: string - operator to check
+        param2: [string] - array of nodes to check
+        param3: [float/int] - array of weights to check
+        """
+
+        if len(nodes) != len(values):
+            raise ValueError('lists must be the same length')
+        if operator != '*' and operator != '/' and operator != '+' \
+                    and operator != '-':
+            raise ValueError('invalid operator')
 
 
     def multiplyWeight(self, u, multiplier):
@@ -408,6 +479,7 @@ if __name__ == '__main__':
     g.setWeight('3,5', 0)
     g.setWeight('1,3', 99.9)
     g.setWeight('4,5', 100)
+    g.setWeights(['1,1', '2,1'], [0.2, 0.2])
     #print g.optimumPath('0,0', '6,4')
     #print g.getNodesWithPriority(0, 1)
     #print g.isNodeWeightUnique('0,2')
