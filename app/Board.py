@@ -17,51 +17,67 @@ class Board:
     """
 
 
-    def __init__(self, size):
+    def __init__(self, width, height):
         """
         Initialize the Graph class.
 
-        param1: integer - size of board
+        param1: integer - width of board
+        param2: integer - height of board
         """
 
-        self.checkInt(size) # comment this out for speed
+        self.initErrorCheck(width, height)  # comment this out for speed
 
-        if size <= 1:
-            raise ValueError('size must be greater than 1')
-
-        self.size = size  # declare size instance variable
+        self.width = width  # declare size of board
+        self.height = height
 
         self.graph = igraph.Graph(directed=True)  # declare graph
-        for row in range(size + 1):  # create vertices
-            for col in range(size + 1):
+        for row in range(height + 1):  # create vertices
+            for col in range(width + 1):
                 self.graph.add_vertex(name=str(row) + ',' + str(col))
 
-        for row in range(size):  # create 1/2 edges
-            for col in range(size):
+        for row in range(height):  # create 1/2 edges
+            for col in range(width):
                 self.graph.add_edge(str(row) + ',' + str(col),
                                     str(row) + ',' + str(col + 1), weight=50.0)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
                                     ',' + str(col), weight=50.0)
 
-        for row in range(1, size + 1):  # create other 1/2 edges
-            for col in range(1, size + 1):
+        for row in range(1, height + 1):  # create other 1/2 edges
+            for col in range(1, width + 1):
                 self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
                                     str(col - 1), weight=50.0)
                 self.graph.add_edge(str(row) + ',' + str(col), str(row - 1) +
                                     ',' + str(col), weight=50.0)
 
         self.dictionary = ValueSortedDict()
-        for row in range(0, size):  # populate dictionary
-            for col in range(0, size):
+        for row in range(0, height):  # populate dictionary
+            for col in range(0, width):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
         self.edges = dict()
-        for row in range(0, size):  # save edges incident to each vertex
-            for col in range(0, size):
+        for row in range(0, height):  # save edges incident to each vertex
+            for col in range(0, width):
                 vertexId = self.graph.vs.find(str(row) + ',' + str(col))
                 edges = self.graph.incident(vertexId) # list of edges
                 edges = [self.graph.es.find(edge) for edge in edges]
                 self.edges[str(row) + ',' + str(col)] = edges
+
+
+    def initErrorCheck(self, width, height):
+        """
+        Check init() for errors.
+
+        param1: integer - width to check
+        param2: integer - height to check
+        """
+
+        self.checkInt(width)
+        self.checkInt(height)
+
+        if width <= 1:
+            raise ValueError('width must be greater than 1')
+        if height <= 1:
+            raise ValueError('height must be greater than 1')
 
 
     def checkNode(self, u):
@@ -76,7 +92,7 @@ class Board:
             raise ValueError('nodes should be in the form \'a,b\'')
         one = int(match.group(1))  # get each of a and b
         two = int(match.group(2))
-        if one >= self.size or one < 0 or two >= self.size or two < 0:
+        if one >= self.height or one < 0 or two >= self.width or two < 0:
             raise ValueError('node is out of bounds')
 
 
@@ -108,10 +124,10 @@ class Board:
         """
         Return board size.
 
-        return: integer - size of board
+        return: [integer] - array with [width, height]
         """
 
-        return self.size
+        return [self.width, self.height]
 
 
     def setWeight(self, u, weight):
@@ -140,12 +156,11 @@ class Board:
         """
         Modify a list of node weights.
 
-        param1: string - operator ('*', '/', '+', '-')
-        param2: [string] - array of nodes in the form <integer>,<integer>
-        param3: [float/int] - array of weights corresponding to nodes
+        param1: [string] - array of nodes in the form <integer>,<integer>
+        param2: [float/int] - array of weights corresponding to nodes
         """
 
-        self.setWeightsErrorCheck(nodes, values)
+        self.setWeightsErrorCheck(nodes, values)  # comment for speed
 
         tempLen = len(nodes)
 
@@ -175,7 +190,7 @@ class Board:
         param3: [float/int] - array of weights corresponding to nodes
         """
 
-        self.modifyWeightsErrorCheck(operator, nodes, values)
+        self.modifyWeightsErrorCheck(operator, nodes, values)  # comment speed
 
         tempLen = len(nodes)
 
@@ -437,8 +452,8 @@ class Board:
         app.setBg('white')
         app.setTitle('SneakySnake Visualiser')
 
-        for row in range(self.size):
-            for col in range(self.size):
+        for row in range(self.height):
+            for col in range(self.width):
 
                 nodeName = str(row) + ',' + str(col)
                 weight = self.getWeight(nodeName)
@@ -472,7 +487,7 @@ class Board:
 
 
 if __name__ == '__main__':
-    g = Board(20)
+    g = Board(20, 20)
     g.setWeight('0,5', 0)
     g.setWeight('1,5', 0)
     g.setWeight('2,5', 0)
