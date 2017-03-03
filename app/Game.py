@@ -1,17 +1,38 @@
 """Process all game data. Handles getting in new board states, analyzing snake
 health, and providing Main with the best next move."""
+
+
 from Snake import Snake
+from Board import Board
+
 
 class Game:
     """Allow for several Battlesnake games to be played at once by providing
-    several different Game objects."""
+    several different Game objects.
 
-    def __init__(self, size):
-        """Initialize the Game class."""
-        #TODO
-            #Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
-            #Init snakes
-            #Init move number (how many since start of game)
+    Has following attributes:
+    weightGrid      (board)     - Board object
+    width           (int)       - Board width
+    height          (int)       - Board height
+    you             (string)    - UUID representing what our snake's ID is
+    foodPositions   (array)     - array of coord arrays
+    turn            (int)       - 0-indexed int representing completed turns
+    dead_snakes     (array)     - array of Snake objects that no longer compete"""
+
+    def __init__(self, data):
+        """Initialize the Game class.
+
+        param1: dictionary - all data from /start POST.
+        """
+        self.weightGrid = Board(data['width'], data['height'])
+        self.width = data['width']
+        self.height = data['height']
+
+        self.snakes = {}
+        self.you = ''
+        self.foodPositions = []
+        self.turn = 0
+        self.dead_snakes = []
 
     def update(self, data):
         """Update game with current board from server.
@@ -19,10 +40,10 @@ class Game:
         param1: dictionary - all data from response. See Battlesnake docs
         for more info."""
         for snake in data['snakes']:
-            if snake in self.snakes:
-                print 'yay!'
+            if snake['id'] in self.snakes:
+                self.snakes[snake['id']].update(data)
             else:
-                print 'boo!'
+                self.snakes[snake['id']] = Snake(data)
 
         self.foodPositions = data['food']
         self.dead_snakes = data['dead_snakes']
@@ -34,26 +55,33 @@ class Game:
         #TODO
             #Run each algorithm to make decisions
             #Find best route to desired square
-            #Ensure boundary is not selected (shouldn't be an issue since we would only head towards positively weighted squares anyway and boundary square do not exist according to algorithm)
+            #Ensure boundary is not selected (shouldn't be an issue since we
+            # would only head towards positively weighted squares anyway and
+            # boundary square do not exist according to algorithm)
             #If several candidates, pick one at random
             #Return decision
 
 
-    def weightNotHitSelf(self):
-        """Weight grid to avoid snake hitting itself"""
+    def weightNotHitSnakes(self):
+        """Weight grid to avoid snake hitting other snakes and it self"""
+        us = 0
+        for s in self.snakes:
+            if s.identifier == self.you:
+                us = s
+
+        for s in self.snakes:
+            positions = s.getAllPositions()
+            for x in positions:
+                for y in positions[x]:
+                    pos = x+','+y
+                    self.weightGrid.setWeight(pos, 0)
         #TODO
-            #Weight self as 0
-            #Are we getting food this move? (Do we need to weight our tail 0)
-
-
-    def weightNotHitOthers(self):
-        """Weight grid to avoid snake hitting other snakes"""
-        #TODO
-            #Weight other snakes as 0
-            #Are they getting food this move? (Do we need to weigh their tails 0)
-            #Are they dying this move?
-            #How big are they? Don't block heads of small snakes
-
+        #Weight self as 0
+        #Are we getting food this move? (Do we need to weight our tail 0)
+        #Weight other snakes as 0
+        #Are they getting food this move? (Do we need to weigh their tails 0)
+        #Are they dying this move?
+        #How big are they? Don't block heads of small snakes
 
     def weightFood(self):
         """Weight grid with food necessity"""
