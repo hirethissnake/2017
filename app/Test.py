@@ -14,28 +14,28 @@ current_case = 0
 
 def Snake_test_1():
     """Test basic .getX and .setX functionality.
-    This test suite has 9 tests.
+    This test suite has 10 tests.
     """
     print 'Testing .getX using init'
     global num_cases
-    num_cases += 9
+    num_cases += 10
 
-    init_params = [2, [[0, 1], [1, 1]], 75, 's1']
-    s1 = Snake(init_params[0], init_params[1], init_params[2], init_params[3])
+    init_params = {'id':'s1', 'coords':[[0, 1], [1, 1]], 'health':75}
+    s1 = Snake(init_params)
 
     # test .toString()
     # I am sorry this test is gross.
-    testCase(s1.toString(), "identifer: " + str(init_params[3]) + "\n\
-health: " + str(init_params[2]) + "\n\
-size: " + str(init_params[0]) + "\n\
+    testCase(s1.toString(), "identifer: " + str(init_params['id']) + "\n\
+health: " + str(init_params['health']) + "\n\
 state: unknown\n\
-positions: " + str(init_params[1]), 'toString')
+coords: " + str(init_params['coords']), 'toString')
+    testCase(s1.getSize(), len(init_params['coords']), 'getSize')
     testCase(s1.getState(), 'unknown', 'getState')
-    testCase(s1.getHealth(), init_params[2], 'getHealth')
-    testCase(s1.getSize(), init_params[0], 'getSize')
-    testCase(s1.getHeadPosition(), init_params[1][0], 'getHeadPosition')
-    testCase(s1.getAllPositions(), init_params[1], 'getAllPositions')
-    testCase(s1.getIdentifier(), init_params[3], 'getIdentifier')
+    testCase(s1.getHealth(), init_params['health'], 'getHealth')
+    testCase(s1.getHeadPosition(), init_params['coords'][0], 'getHeadPosition')
+    testCase(s1.getTailPosition(), init_params['coords'][-1], 'getTailPosition')
+    testCase(s1.getAllPositions(), init_params['coords'], 'getAllPositions')
+    testCase(s1.getIdentifier(), init_params['id'], 'getIdentifier')
     # not implelemented yet
     # testCase(s1.getFoodUrgency(), X, num)
 
@@ -60,21 +60,26 @@ def Snake_test_2():
     global num_cases
     num_cases += 5
 
-    init_params = [3, [[0, 1], [1, 1], [1, 2]], 66, 's2']
-    s2 = Snake(init_params[0], init_params[1], init_params[2], init_params[3])
+    init_params = {'id':'s2', 'coords':[[0, 1], [1, 1], [1, 2]], 'health':66}
+    s2 = Snake(init_params)
+
+    update_params = {'health':65, 'coords':[[0,0], [0, 1], [1, 1]]}
 
     # valid updates
-    s2.update([1, 0], init_params[2]-1)
-    testCase(s2.getHeadPosition(), [1, 0], 'getHeadPosition after update')
-    testCase(s2.getHealth(), init_params[2]-1, 'getHealth after update')
-    testCase(s2.getSize(), init_params[0], 'getSize after update')
+    s2.update(update_params)
+    testCase(s2.getHeadPosition(), [0, 0], 'getHeadPosition after update')
+    testCase(s2.getHealth(), init_params['health']-1, 'getHealth after update')
+    testCase(s2.getSize(), len(init_params['coords']), 'getSize after update')
 
-    s2.update([2, 0], 100)
-    testCase(s2.getSize(), init_params[0]+1, 'getSize after update')
+    update_params = {'health':100, 'coords':[[1, 0], [0,0], [0, 1], [1, 1]]}
+
+    s2.update(update_params)
+    testCase(s2.getSize(), len(init_params['coords'])+1, 'getSize after update')
 
     # invalid updates
     try:
-        s2.update([3, 0], 'dog')
+        update_params = {'health':'dog', 'coords':[[2, 0], [1,0], [0, 0], [0, 1]]}
+        s2.update(update_params)
         testCase('nope', 'failed test', 'invalid update')
     except ValueError:
         testCase(1, 1, 'invalid update')
@@ -86,6 +91,8 @@ def testCase(var1, var2, testIdent):
     if var1 != var2:
         errStr = str('FAILED TEST for %s. Completed %i of %i tests.'\
                     % (str(testIdent), current_case, num_cases))
+        print 'Value 1', var1
+        print 'Value 2', var2
         raise ValueError(errStr)
     current_case += 1
 

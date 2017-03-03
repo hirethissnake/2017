@@ -7,11 +7,11 @@ class Snake:
     Has the following attributes:
     size            (int)       - > 0, describes length of snake
     identifier      (uuid)      - unique identifier describing for each snake
-    positions       ([coords])  - array of [x,y] describing snakes body
+    coords       ([coords])  - array of [x,y] describing snakes body
     health          (int)       - 0..100, describes moves a snake has before
                                     death, unless that snake eats food.
     old_health      (int)       - health of snake on last move
-    old_positions   ([[coords]])- array of array of [x,y] describing past
+    old_coords   ([[coords]])- array of array of [x,y] describing past
                                     locations the snake was at
     state           (string)    - (unknown | food | attack | flee), describes
                                     past actions of snake
@@ -30,20 +30,22 @@ class Snake:
         """
         # comment out for
         # vv SPEED
-        self.isString(data['identifier'], 'identifier')
+        self.isString(data['id'], 'id')
         # ^^ SPEED
 
         # often updated
         self.identifier = data['id']
-        self.positions = data['positions']
+        self.coords = data['coords']
         self.health = data['health']
         # old
-        self.old_size = len(self.positions)
+        self.old_size = len(self.coords)
         self.old_health = data['health']
-        self.old_positions = [data['positions']]
+        self.old_coords = [data['coords']]
         # snake personality
-        self.taunt = data['taunt']
-        self.name = data['name']
+        if 'taunt' in data:
+            self.taunt = data['taunt']
+        if 'name' in data:
+            self.name = data['name']
 
         self.state = 'unknown'
 
@@ -51,9 +53,7 @@ class Snake:
         """
         Update snake after previous move.
 
-        param1: array - [x, y] of current head position of the snake.
-        param2: bool - whether the snake ate food in last turn.
-        param3: health - snake's most recent health.
+        param1: data - all snake-related data from server
         """
 
         health = data['health']
@@ -63,9 +63,9 @@ class Snake:
         self.old_health = self.health
         self.health = health
 
-        self.positions = data['coords']
+        self.coords = data['coords']
 
-        self.old_positions.insert(0, self.positions)
+        self.old_coords.insert(0, self.coords)
 
     def getSize(self):
         """
@@ -73,7 +73,7 @@ class Snake:
         return: int - snake
         """
 
-        return len(self.positions)
+        return len(self.coords)
 
     def getHealth(self):
         """"
@@ -98,16 +98,16 @@ class Snake:
         return: array - as [x, y] coords.
         """
 
-        return self.positions[0]
+        return self.coords[0]
 
     def getAllPositions(self):
         """
-        Return array of positions.
+        Return array of coords.
 
         return: array[array] - [x,y] of all body coords.
         """
 
-        return self.positions
+        return self.coords
 
     def getTailPosition(self):
         """
@@ -116,7 +116,7 @@ class Snake:
         return: array - [x, y] of tail coords
         """
 
-        return self.positions[-1]
+        return self.coords[-1]
 
     def setState(self, state):
         """
@@ -157,9 +157,8 @@ class Snake:
 
         asString = "identifer: " + str(self.identifier) + "\n\
 health: " + str(self.health) + "\n\
-size: " + str(len(self.positions)) + "\n\
 state: " + str(self.state) + "\n\
-positions: " + str(self.positions)
+coords: " + str(self.coords)
 
         return asString
 

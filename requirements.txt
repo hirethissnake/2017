@@ -3,5 +3,4 @@ gevent==1.0.2
 greenlet==0.4.9
 gunicorn==19.4.5
 appJar==0.42
-igraph==0.1.11
 sortedcollections==0.4.2
