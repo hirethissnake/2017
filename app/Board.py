@@ -314,43 +314,54 @@ class Board:
         param1: int - number of iterations to perform
         """
 
-        tempGrid = []
         toReset = []
-        for row in range(self.height - 1):  # loop through every node
+        gridOld = []
+        for row in range(self.height):  # loop through every node
             tempRow = []
-            for col in range(self.width - 1):
-                currentWeight = self.getWeight(str(row) + ',' + str(col))
-                if currentWeight != 50:
-                    toReset.append(str(row) + ',' + str(col))
-                toAverage = []
-                if row > 0:
-                    toAverage.append(str(row - 1) + ',' + str(col))
-                if row < self.height - 1:
-                    toAverage.append(str(row + 1) + ',' + str(col))
-                if col > 0:
-                    toAverage.append(str(row) + ',' + str(col - 1))
-                if col < self.width - 1:
-                    toAverage.append(str(row) + ',' + str(col + 1))
-
-                tempSum = currentWeight
-                count = 1
-                for node in toAverage:
-                    tempWeight = self.getWeight(node)
-                    if tempWeight != 50:
-                        tempSum += tempWeight
-                        count += 1
-                average = float(tempSum / count)
-                tempRow.append(average)
-
-            tempGrid.append(tempRow)
-
-        for row in range(self.height - 1):
-            for col in range(self.width - 1):
+            for col in range(self.width):
                 nodeName = str(row) + ',' + str(col)
-                if not nodeName in toReset:
-                    self.setWeight(nodeName, tempGrid[row][col])
+                currentWeight = self.getWeight(nodeName)
+                tempRow.append(currentWeight)
+                if currentWeight != 50:
+                    toReset.append(nodeName)
+            gridOld.append(tempRow)
 
-        print toReset
+        while iterations > 0:  # average grid iterations times
+            tempGrid = []
+            for row in range(self.height):  # loop through every node
+                tempRow = []
+                for col in range(self.width):
+                    currentWeight = gridOld[row][col]
+                    if str(row) + ',' + str(col) not in toReset:
+                        toAverage = []
+                        if row > 0:  #store surrounding nodes
+                            toAverage.append([row - 1, col])
+                        if row < self.height - 1:
+                            toAverage.append([row + 1, col])
+                        if col > 0:
+                            toAverage.append([row, col - 1])
+                        if col < self.width - 1:
+                            toAverage.append([row, col + 1])
+
+                        tempSum = currentWeight
+                        count = 1
+                        for node in toAverage:  # sum weights
+                            tempWeight = gridOld[node[0]][node[1]]
+                            if tempWeight != 50:
+                                tempSum += tempWeight
+                                count += 1
+                        average = float(tempSum / count)
+                        tempRow.append(average)
+                    else:
+                        tempRow.append(currentWeight)
+
+                tempGrid.append(tempRow)
+            gridOld = tempGrid
+            iterations -= 1  # decrement counter
+
+        for row in range(self.height):  # add weights back to graph
+            for col in range(self.width):
+                self.setWeight(str(row) + ',' + str(col), gridOld[row][col])
 
 
     def getNodeWithPriority(self, index):
@@ -559,7 +570,7 @@ if __name__ == '__main__':
     #g.show(True, True)
     print g.getWeight('3,5')
     #g.showWeights(True, True)
-    g.averageWeights(1)
+    g.averageWeights(20)
     g.showWeights(True, True)
 
     """
