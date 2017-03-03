@@ -8,7 +8,6 @@ import igraph
 import colorsys
 from appJar import gui
 from sortedcollections import ValueSortedDict
-#from scipy.ndimage.filters import gaussian_filter
 
 
 class Board:
