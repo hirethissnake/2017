@@ -20,7 +20,7 @@ class Game:
         self.width = data['width']
         self.height = data['height']
         self.turn = data['turn']
-        
+
         #Init snakes
 
     def update(self, snakesData, foodPositions):
@@ -29,6 +29,7 @@ class Game:
             #Calculate all game changes and store
 
         #Creates a list of snakes in the game
+        #Update foodPositions every tick.
         snakeArr = []
         for x in snakesData:
             identity = snakesData[x]['id']
@@ -51,11 +52,11 @@ class Game:
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
-        us = 0
-        for s in self.snakes:
-            if(s.identifier == self.you):
-                us = s
-
+        us = self.snakes[self.you] #Represents our snakes
+        ourSnakePos = us.getAllPositions()
+        ourTail = ourSnakePos[-1] #[[x, y],[x,y]]=
+        ourTailX = ourTail[0]
+        ourTailY = ourTail[1]
         for s in self.snakes:
             positions = s.getAllPositions()
             for x in positions:
@@ -65,6 +66,7 @@ class Game:
         #TODO
         #Weight self as 0
         #Are we getting food this move? (Do we need to weight our tail 0)
+            #Check if head position is in old food positions.
         #Weight other snakes as 0
         #Are they getting food this move? (Do we need to weigh their tails 0)
         #Are they dying this move?

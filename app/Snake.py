@@ -152,6 +152,17 @@ class Snake:
 
         return self.identifier
 
+    def justAteFood(self):
+        """
+        Return if snake just ate food.
+
+        return: boolean
+        """
+
+        if self.old_health < self.health:
+            return True
+        return False
+
     def toString(self):
         """
         Return Snake attribues as a string.
