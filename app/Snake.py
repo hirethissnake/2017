@@ -36,10 +36,10 @@ class Snake:
         # often updated
         self.identifier = data['id']
         self.coords = data['coords']
-        self.healthPoints = data['health_points']
+        self.healthPoints = data['healthPoints']
         # old
         self.oldSize = len(self.coords)
-        self.oldHealthPoints = data['health_points']
+        self.oldHealthPoints = data['healthPoints']
         self.oldCoords = [data['coords']]
         # snake personality
         if 'taunt' in data:
@@ -56,9 +56,9 @@ class Snake:
         param1: data - all snake-related data from server
         """
 
-        healthPoints = data['health_points']
+        healthPoints = data['healthPoints']
         if healthPoints > 100 or healthPoints < 0:
-            raise ValueError('health_points must be between 100 and 0')
+            raise ValueError('healthPoints must be between 100 and 0')
 
         self.oldHealthPoints = self.healthPoints
         self.healthPoints = healthPoints
