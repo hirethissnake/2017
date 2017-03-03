@@ -13,16 +13,20 @@ class Game:
             #Init snakes
             #Init move number (how many since start of game)
 
+    def update(self, data):
+        """Update game with current board from server.
 
-        #Creates a list of snakes in the game
-        snakeArr = []
-        for x in snakesData:
-            identity = snakesData[x]['id']
-            hp = snakesData[x]['health_points']
-            coords = snakesData[x]['health_points']
-            size = len(coords)
+        param1: dictionary - all data from response. See Battlesnake docs
+        for more info."""
+        for snake in data['snakes']:
+            if snake in self.snakes:
+                print 'yay!'
+            else:
+                print 'boo!'
 
-            snakeArr.append(Snake(size, coords, hp, identity))
+        self.foodPositions = data['food']
+        self.dead_snakes = data['dead_snakes']
+        self.you = data['you']
 
 
     def getNextMove(self):
