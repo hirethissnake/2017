@@ -4,12 +4,15 @@
     and their independent functions."""
 
 
+import json
+import requests
 from Snake import Snake
 from Game import Game
 
 
 numCases = 0
 currentCase = 0
+URL = 'http://localhost:8080'
 # remove global errors
 # pylint: disable=W0603
 
@@ -27,7 +30,7 @@ def snakeTest1():
     # test .toString()
     # I am sorry this test is gross.
     testCase(s1.toString(), "identifer: " + str(initParams['id']) + "\n\
-health_points: " + str(initParams['health_points']) + "\n\
+healthPoints: " + str(initParams['health_points']) + "\n\
 state: unknown\n\
 coords: " + str(initParams['coords']), 'toString')
     testCase(s1.getSize(), len(initParams['coords']), 'getSize')
@@ -161,14 +164,87 @@ def gameTest2():
     global numCases
     numCases += 0
 
+def mainTest1():
+    """Test update functionality for game starting.
+    This test suite has 8 tests.
+    """
+    print "Testing main /start."
+    global numCases
+    numCases += 8
+
+    paramData = {'width':20, 'height':20, 'game_id':'game1'}
+    headers = {'Content-Type':'application/json'}
+
+    # start testing
+    r = requests.post(str(URL)+'/start', json=paramData, headers=headers)
+
+    try:
+        responseData = json.loads(r.text)
+    except TypeError:
+        testCase('data', 'invalid', 'json-formatted /start response data')
+    except AttributeError:
+        testCase('data', 'invalid', 'json-formatted /start response data')
+
+    testCase('color' in responseData, True, 'main returns color')
+    testCase('head_url' in responseData, True, 'main returns head_url')
+    testCase('name' in responseData, True, 'main returns name')
+    testCase('taunt' in responseData, True, 'main returns taunt')
+
+    # optional tests
+    try:
+        testCase('head_type' in responseData, True, 'main returns head_type (optional)')
+    except ValueError as err:
+        print err
+    try:
+        testCase('tail_type' in responseData, True, 'main returns tail_type (optional)')
+    except ValueError as err:
+        print err
+    try:
+        testCase('secondary_color' in responseData, True, 'main returns secondary_color (optional)')
+    except ValueError as err:
+        print err
+
+def mainTest2():
+    """Test update functionality for game movement.
+    This test suite has 0 tests.
+    """
+    print "Testing main /move."
+    global numCases
+    numCases += 2
+
+    paramData = {"snakes": [{"taunt": "git gud", "name": "my-snake",
+    "id": "25229082-f0d7-4315-8c52-6b0ff23fb1fb", "health_points": 93, "coords":
+    [[0, 0], [0, 1], [0, 2]]}, {"taunt": "cash me outside", "name":
+    "angry-whitegirl", "id": "ex-uuid",
+    "health_points": 93, "coords": [[15, 14], [15, 13], [15, 12]]}], "width":20,
+    "height":20, "game_id": "game1",
+    "food":[[4, 5], [8, 9]], "you":"25229082-f0d7-4315-8c52-6b0ff23fb1fb"}
+    headers = {'Content-Type':'application/json'}
+
+    # start testing
+    r = requests.post(str(URL)+'/move', json=paramData, headers=headers)
+
+    try:
+        responseData = json.loads(r.text)
+    except TypeError:
+        testCase('data', 'invalid', 'json-formatted /move response data')
+    except AttributeError:
+        testCase('data', 'invalid', 'json-formatted /move response data')
+
+    testCase('move' in responseData, True, 'main returns move')
+    testCase('taunt' in responseData, True, 'main returns new taunt')
+
+    testCase(responseData['move'], 'up' or 'down' or 'left' or 'right', 'valid move')
+
 def testCase(var1, var2, testIdent):
     """Run comparison tests, and if they fail, will raise an exception."""
     global currentCase
     if var1 != var2:
-        errStr = str('FAILED TEST for %s. Completed %i of %i tests.'\
-                    % (str(testIdent), currentCase, numCases))
-        print 'Value 1', var1
-        print 'Value 2', var2
+        #errStr = str('FAILED TEST for %s. Completed %i of %i tests.'\
+        #            % (str(testIdent), currentCase, numCases))
+        errStr = str('FAILED TEST for %s.' % str(testIdent))
+        print '  Value 1', var1
+        print '  Value 2', var2
         raise ValueError(errStr)
     currentCase += 1
 
@@ -182,7 +258,11 @@ if __name__ == '__main__':
         print '-- Testing Snake.py --'
         snakeTest1()
         snakeTest2()
-        print "Test completed successfully. Passed " + str(currentCase) + \
-         " of " + str(numCases) + " test cases."
+        print '-- Testing Main.py --'
+        mainTest1()
+        mainTest2()
+        print "Test completed successfully."
     except ValueError as failure:
         print failure
+
+    print "Passed %s of %s test cases." % (str(currentCase), str(numCases))
