@@ -50,13 +50,13 @@ class Board:
                                     ',' + str(col), weight=50.0)
 
         self.dictionary = ValueSortedDict()
-        for row in range(0, height):  # populate dictionary
-            for col in range(0, width):
+        for row in range(height):  # populate dictionary
+            for col in range(width):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
         self.edges = dict()
-        for row in range(0, height):  # save edges incident to each vertex
-            for col in range(0, width):
+        for row in range(height):  # save edges incident to each vertex
+            for col in range(width):
                 vertexId = self.graph.vs.find(str(row) + ',' + str(col))
                 edges = self.graph.incident(vertexId) # list of edges
                 edges = [self.graph.es.find(edge) for edge in edges]
@@ -300,7 +300,57 @@ class Board:
 
         self.checkNode(u)  # comment this out for speed
 
-        return 100 - self.dictionary[u]  # allow human-readable
+        weight = 100 - self.dictionary[u]
+        if weight == -float('inf'):
+            weight = 0
+
+        return weight  # allow human-readable
+
+
+    def averageWeights(self, iterations):
+        """
+        Balance weight values using heat equation.
+
+        param1: int - number of iterations to perform
+        """
+
+        tempGrid = []
+        toReset = []
+        for row in range(self.height - 1):  # loop through every node
+            tempRow = []
+            for col in range(self.width - 1):
+                currentWeight = self.getWeight(str(row) + ',' + str(col))
+                if currentWeight != 50:
+                    toReset.append(str(row) + ',' + str(col))
+                toAverage = []
+                if row > 0:
+                    toAverage.append(str(row - 1) + ',' + str(col))
+                if row < self.height - 1:
+                    toAverage.append(str(row + 1) + ',' + str(col))
+                if col > 0:
+                    toAverage.append(str(row) + ',' + str(col - 1))
+                if col < self.width - 1:
+                    toAverage.append(str(row) + ',' + str(col + 1))
+
+                tempSum = currentWeight
+                count = 1
+                for node in toAverage:
+                    tempWeight = self.getWeight(node)
+                    if tempWeight != 50:
+                        tempSum += tempWeight
+                        count += 1
+                average = float(tempSum / count)
+                tempRow.append(average)
+
+            tempGrid.append(tempRow)
+
+        for row in range(self.height - 1):
+            for col in range(self.width - 1):
+                nodeName = str(row) + ',' + str(col)
+                if not nodeName in toReset:
+                    self.setWeight(nodeName, tempGrid[row][col])
+
+        print toReset
 
 
     def getNodeWithPriority(self, index):
@@ -463,7 +513,7 @@ class Board:
                 hexCode = '#%02x%02x%02x' % tuple(i * 255 for i in
                             colorsys.hls_to_rgb((weight * 1.2) /
                             float(360), 0.6, 0.8))
-                if weight == float('-inf'): # color perfect non-valid entries black
+                if weight == 0: # color perfect non-valid entries black
                     hexCode = '#000000'
                 if weight == 100: # color perfect full-valid entries blue
                     hexCode = '#0033cc'
@@ -475,7 +525,7 @@ class Board:
                     hexCode = '#66ffff'
 
                 if numbers: # add numbers
-                    app.addLabel(nodeName, weight, col, row)
+                    app.addLabel(nodeName, "%.2f" % weight, col, row)
                 else:
                     app.addLabel(nodeName, '', col, row)
 
@@ -499,7 +549,7 @@ if __name__ == '__main__':
     #print g.getNodesWithPriority(0, 1)
     #print g.isNodeWeightUnique('0,2')
     #print g.countNodeWeightCopies('2,2')
-    g.showPath('0,0', '0,10')
+    #g.showPath('0,0', '0,10')
     #g.showWeights(True, False)
     #print g.getWeight('0,1')
     #g.multiplyWeight('2,0', 1)
@@ -508,6 +558,9 @@ if __name__ == '__main__':
     #print g.dictionary
     #g.show(True, True)
     print g.getWeight('3,5')
+    #g.showWeights(True, True)
+    g.averageWeights(1)
+    g.showWeights(True, True)
 
     """
     matrix = []
