@@ -8,7 +8,7 @@ class Snake:
     size            (int)       - > 0, describes length of snake
     identifier      (uuid)      - unique identifier describing for each snake
     coords          ([coords])  - array of [x,y] describing snakes body
-    health_points   (int)       - 0..100, describes moves a snake has before
+    healthPoints   (int)       - 0..100, describes moves a snake has before
                                     death, unless that snake eats food.
     oldHealthPoints(int)       - health_points of snake on last move
     oldCoords      ([[coords]])- array of array of [x,y] describing past
@@ -28,18 +28,14 @@ class Snake:
         Raises: ValueError
             if: size not int.
         """
-        # comment out for
-        # vv SPEED
-        self.isString(data['id'], 'id')
-        # ^^ SPEED
 
         # often updated
         self.identifier = data['id']
         self.coords = data['coords']
-        self.healthPoints = data['healthPoints']
+        self.healthPoints = data['health_points']
         # old
         self.oldSize = len(self.coords)
-        self.oldHealthPoints = data['healthPoints']
+        self.oldHealthPoints = data['health_points']
         self.oldCoords = [data['coords']]
         # snake personality
         if 'taunt' in data:
@@ -56,9 +52,9 @@ class Snake:
         param1: data - all snake-related data from server
         """
 
-        healthPoints = data['healthPoints']
+        healthPoints = data['health_points']
         if healthPoints > 100 or healthPoints < 0:
-            raise ValueError('healthPoints must be between 100 and 0')
+            raise ValueError('health_points must be between 100 and 0')
 
         self.oldHealthPoints = self.healthPoints
         self.healthPoints = healthPoints
