@@ -114,6 +114,29 @@ showPath                void        Display graphic of best path between nodes
             raise ValueError('height must be greater than 1')
 
 
+    def nodeAsString(self, u):
+        """
+        Return a node as a string
+
+        param1: [[x, y]] - node to convert
+        return: string - node representation
+        """
+
+        return str(u[0]) + ',' + str(u[1])
+
+
+    def stringAsNode(self, u):
+        """
+        Return a string as a node
+
+        param1: string - node in form 'a,b'
+        return: [[x, y]] - node representation
+        """
+
+        coords = u.split(',')
+        return [int(coords[0]), int(coords[1])]
+
+
     def checkNode(self, u):
         """
         Check if u is a valid node.
@@ -121,12 +144,9 @@ showPath                void        Display graphic of best path between nodes
         param1: string - node in the form <integer>,<integer>
         """
 
-        match = re.match('^(\\d+),(\\d+)$', u)  # ensure a,b
-        if match is None:
-            raise ValueError('nodes should be in the form \'a,b\'')
-        one = int(match.group(1))  # get each of a and b
-        two = int(match.group(2))
-        if one >= self.height or one < 0 or two >= self.width or two < 0:
+        if len(u) != 2:
+            raise ValueError('nodes should be in the form [a,b]')
+        if u[0] >= self.height or u[0] < 0 or u[1] >= self.width or u[1] < 0:
             raise ValueError('node is out of bounds')
 
 
@@ -179,18 +199,20 @@ showPath                void        Display graphic of best path between nodes
         elif weight > 100:
             weight = float(100)
 
-        for edge in self.edges[u]:  # 100 - weight is to unsure higher weights
+        nodeName = self.nodeAsString(u)
+
+        for edge in self.edges[nodeName]:  # 100 - weight is to unsure higher weights
                                     # correlate to shorter paths when traversing
             edge['weight'] = 100 - float(weight)
 
-        self.dictionary[u] = 100 - float(weight)  # ensure front is highest
+        self.dictionary[nodeName] = 100 - float(weight)  # ensure front is highest
 
 
     def setWeights(self, nodes, values):
         """
         Modify a list of node weights.
 
-        param1: [string] - array of nodes in the form <integer>,<integer>
+        param1: [[int, int]] - array of nodes in the form [<integer>,<integer>]
         param2: [float/int] - array of weights corresponding to nodes
         """
 
@@ -207,7 +229,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Check setWeights() method for errors.
 
-        param2: [string] - array of nodes to check
+        param2: [[int, int]] - array of nodes to check
         param3: [float/int] - array of weights to check
         """
 
@@ -220,7 +242,7 @@ showPath                void        Display graphic of best path between nodes
         Modify a list of node weights.
 
         param1: string - operator ('*', '/', '+', '-')
-        param2: [string] - array of nodes in the form <integer>,<integer>
+        param2: [[int, int]] - array of nodes in the form <integer>,<integer>
         param3: [float/int] - array of weights corresponding to nodes
         """
 
@@ -334,7 +356,7 @@ showPath                void        Display graphic of best path between nodes
 
         self.checkNode(u)  # comment this out for speed
 
-        weight = 100 - self.dictionary[u]
+        weight = 100 - self.dictionary[self.nodeAsString(u)]
         if weight == -float('inf'):
             weight = 0
 
@@ -353,11 +375,10 @@ showPath                void        Display graphic of best path between nodes
         for row in range(self.height):  # loop through every node
             tempRow = []
             for col in range(self.width):
-                nodeName = str(row) + ',' + str(col)
-                currentWeight = self.getWeight(nodeName)
+                currentWeight = self.getWeight([row, col])
                 tempRow.append(currentWeight)
                 if currentWeight != 50:
-                    toReset.append(nodeName)
+                    toReset.append([row, col])
             gridOld.append(tempRow)
 
         while iterations > 0:  # average grid iterations times
@@ -366,7 +387,7 @@ showPath                void        Display graphic of best path between nodes
                 tempRow = []
                 for col in range(self.width):
                     currentWeight = gridOld[row][col]
-                    if str(row) + ',' + str(col) not in toReset:
+                    if [row, col] not in toReset:
                         toAverage = []
                         if row > 0:  #store surrounding nodes
                             toAverage.append([row - 1, col])
@@ -395,7 +416,7 @@ showPath                void        Display graphic of best path between nodes
 
         for row in range(self.height):  # add weights back to graph
             for col in range(self.width):
-                self.setWeight(str(row) + ',' + str(col), gridOld[row][col])
+                self.setWeight([row, col], gridOld[row][col])
 
 
     def getNodeWithPriority(self, index):
@@ -408,7 +429,8 @@ showPath                void        Display graphic of best path between nodes
 
         self.checkInt(index)  # comment this out for speed
 
-        return self.dictionary.iloc[index:5]
+        nodeString = self.dictionary.iloc[index]
+        return [int(x) for x in nodeString.split(',')]
 
 
     def getNodesWithPriority(self, start, end):
@@ -422,7 +444,10 @@ showPath                void        Display graphic of best path between nodes
 
         self.getNodesWithPriorityErrorCheck(start, end)  # comment for speed
 
-        return self.dictionary.iloc[start : end + 1]
+        nodesString = self.dictionary.iloc[start : end + 1]
+        nodesArray = [self.stringAsNode(x) for x in nodesString]
+
+        return nodesArray
 
 
     def getNodesWithPriorityErrorCheck(self, start, end):
@@ -474,10 +499,12 @@ showPath                void        Display graphic of best path between nodes
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
 
-        vertexIds = self.graph.get_shortest_paths(u, to=v, weights='weight',
-                                             mode='OUT', output='vpath')[0]
+        ids = self.graph.get_shortest_paths(self.nodeAsString(u),
+                                                  to=self.nodeAsString(v),
+                                                  weights='weight', mode='OUT',
+                                                  output='vpath')[0]
                                              # generate list of Ids in path
-        return [self.graph.vs.find(x)['name'] for x in vertexIds]  # readable
+        return [self.stringAsNode(self.graph.vs.find(x)['name']) for x in ids]
 
 
     def optimumPathErrorCheck(self, u, v):
@@ -551,7 +578,7 @@ showPath                void        Display graphic of best path between nodes
             for col in range(self.width):
 
                 nodeName = str(row) + ',' + str(col)
-                weight = self.getWeight(nodeName)
+                weight = self.getWeight([row, col])
 
                 # interpolate square value from gridValue into HSV value
                 # between red and green, convert to RGB, convert to hex
@@ -565,7 +592,7 @@ showPath                void        Display graphic of best path between nodes
                 if weight > 100 or (weight != float('-inf') and weight < 0):
                     # color invalid entries grey
                     hexCode = '#616161'
-                if nodeName in pathValues:
+                if [row, col] in pathValues:
                     # color path values cyan
                     hexCode = '#66ffff'
 
@@ -583,37 +610,28 @@ showPath                void        Display graphic of best path between nodes
 
 if __name__ == '__main__':
     g = Board(20, 20)
-    g.setWeight('0,5', 0)
-    g.setWeight('1,5', 0)
-    g.setWeight('2,5', 0)
-    g.setWeight('3,5', 0)
-    g.setWeight('1,3', 99.9)
-    g.setWeight('4,5', 100)
-    g.setWeights(['1,1', '2,1'], [0.2, 0.2])
-    #print g.optimumPath('0,0', '6,4')
+    g.setWeight([0, 5], 0)
+    g.setWeight([1, 5], 0)
+    g.setWeight([2, 5], 0)
+    g.setWeight([3, 5], 0)
+    g.setWeight([1, 3], 99.9)
+    g.setWeight([4, 5], 100)
+    g.setWeights([[1, 1], [2, 1]], [0.2, 0.2])
+    print g.optimumPath([0, 0], [6, 4])
     #print g.getNodesWithPriority(0, 1)
-    #print g.isNodeWeightUnique('0,2')
-    #print g.countNodeWeightCopies('2,2')
-    #g.showPath('0,0', '0,10')
+    #print g.isNodeWeightUnique([0, 2])
+    #print g.countNodeWeightCopies([2, 2])
     #g.showWeights(True, False)
-    #print g.getWeight('0,1')
-    #g.multiplyWeight('2,0', 1)
-    #print g.getWeight('2,0')
+    #print g.getWeight([0, 1])
+    #g.multiplyWeight([2, 0], 1)
+    #print g.getWeight([2, 0])
     #g.sortNames()
     #print g.dictionary
     #g.show(True, True)
-    print g.getWeight('3,5')
+    print g.getWeight([3, 5])
+    print g.getNodeWithPriority(0)
+    print g.getNodesWithPriority(0, 1)
     #g.showWeights(True, True)
     g.averageWeights(20)
-    g.showWeights(True, True)
-
-    """
-    matrix = []
-    for row in range(g.getSize()):
-        colList = []
-        for col in range(g.getSize()):
-            colList.append(100 - g.getWeight(str(row) + ',' + str(col)))
-        matrix.append(colList)
-    print matrix
-    print gaussian_filter(matrix, sigma=0.9)
-    """
+    g.showPath([0, 0], [0, 10])
+    #g.showWeights(True, True)
