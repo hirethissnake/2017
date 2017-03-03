@@ -17,7 +17,7 @@ class Board:
 
     Has the following public methods:
 
-## OPERATORS ##
+## OPERATORS ##     ## RETURN ##
 
 __init__                void        Board initialization
 averageWeights          void        Balance weight values using heat equation
@@ -36,7 +36,7 @@ getNodesWithPriority    [string]    Return array of vertexes with priority
 getSize                 [int, int]  Get board size as an x, y array
 getWeight               int/float   Return the weight of a node u
 isNodeWeightUnique      boolean     Check if node weight exists in board twice
-countNodeWeightCopies   int         Get the number of copies of some node
+countNodeWeightCopies   int         Get the number of copies a specific weight
 optimumPath             [string]    Get the best path between two nodes
 
 ## SETTERS ##
@@ -49,7 +49,6 @@ setWeights              void        Set incoming edges of array of vertexes to
 ## DISPLAY ##
 showWeights             void        Opens visualiation of weights of all nodes
 showPath                void        Display graphic of best path between nodes
-showCombiner            void        Visualize the weights of all nodes by color
     """
 
 
