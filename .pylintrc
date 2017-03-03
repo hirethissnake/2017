@@ -20,7 +20,7 @@ confidence=
 # default disable:
 #   disable=import-star-module-level,old-octal-literal,oct-method,print-statement,unpacking-in-except,parameter-unpacking,backtick,old-raise-syntax,old-ne-operator,long-suffix,dict-view-method,dict-iter-method,metaclass-assignment,next-method-called,raising-string,indexing-exception,raw_input-builtin,long-builtin,file-builtin,execfile-builtin,coerce-builtin,cmp-builtin,buffer-builtin,basestring-builtin,apply-builtin,filter-builtin-not-iterating,using-cmp-argument,useless-suppression,range-builtin-not-iterating,suppressed-message,no-absolute-import,old-division,cmp-method,reload-builtin,zip-builtin-not-iterating,intern-builtin,unichr-builtin,reduce-builtin,standarderror-builtin,unicode-builtin,xrange-builtin,coerce-method,delslice-method,getslice-method,setslice-method,input-builtin,round-builtin,hex-method,nonzero-method,map-builtin-not-iterating
 # our disable:
-disable=C0330,C1001,C0103,E1136,R0904,R0902,R0101,R0912,R0914
+disable=C0330,C1001,C0103,1136,R0904,R0902,R0101,R0912,R0914
 
 [REPORTS]
 
@@ -41,7 +41,7 @@ evaluation=10.0 - ((float(5 * error + warning + refactor + convention) / stateme
 [BASIC]
 
 # Good variable names which should always be accepted, separated by a comma
-good-names=i,j,k,ex,Run,_
+good-names=i,j,k,ex,Run,__init__
 
 # Bad variable names which should always be refused, separated by a comma
 bad-names=foo,bar,baz,toto,tutu,tata
@@ -72,10 +72,10 @@ const-rgx=[A-Z][A-Za-z0-9]{1,30}
 const-name-hint=[A-Z][A-Za-z0-9]{1,30}
 
 # Regular expression matching correct attribute names
-attr-rgx=[a-z_][a-z0-9_]{2,30}$
+attr-rgx=_?[a-z][A-Za-z0-9]{1,30}$
 
 # Naming hint for attribute names
-attr-name-hint=[a-z_][a-z0-9_]{2,30}$
+attr-name-hint=_?[a-z][A-Za-z0-9]{1,30}$
 
 # Regular expression matching correct argument names
 argument-rgx=_?[a-z][A-Za-z0-9]{1,30}$
@@ -96,16 +96,16 @@ inlinevar-rgx=_?[a-z][A-Za-z0-9]{1,30}$
 inlinevar-name-hint=_?[a-z][A-Za-z0-9]{1,30}$
 
 # Regular expression matching correct class names
-class-rgx=_?[a-z][A-Za-z0-9]{1,30}
+class-rgx=_?[a-z]*[A-Za-z0-9]*
 
 # Naming hint for class names
-class-name-hint=_?[a-z][A-Za-z0-9]{1,30}
+class-name-hint=_?[a-z]*[A-Za-z0-9]*
 
 # Regular expression matching correct module names
-module-rgx=_?[a-z][A-Za-z0-9]{1,30}
+module-rgx=_?[a-z]*[A-Za-z0-9]*
 
 # Naming hint for module names
-module-name-hint=_?[a-z][A-Za-z0-9]{1,30}
+module-name-hint=_?[a-z]*[A-Za-z0-9]*
 
 # Regular expression matching correct method names
 method-rgx=_?_?[a-z][A-Za-z0-9]{1,30}$
