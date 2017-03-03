@@ -14,6 +14,7 @@ class Game:
         #TODO
         #Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
         self.weightGrid = Board(data['width'],data['height'])
+        self.snakes = {}
         #Init snakes
 
     def update(self, snakesData, foodPositions):
@@ -44,13 +45,19 @@ class Game:
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
+        for s in self.snakes:
+            positions = s.getAllPositions()
+            for x in positions:
+                for y in positions[x]:
+                    pos = x+','+y
+                    self.weightGrid.setWeight(pos,0)
         #TODO
-            #Weight self as 0
-            #Are we getting food this move? (Do we need to weight our tail 0)
-            #Weight other snakes as 0
-            #Are they getting food this move? (Do we need to weigh their tails 0)
-            #Are they dying this move?
-            #How big are they? Don't block heads of small snakes
+        #Weight self as 0
+        #Are we getting food this move? (Do we need to weight our tail 0)
+        #Weight other snakes as 0
+        #Are they getting food this move? (Do we need to weigh their tails 0)
+        #Are they dying this move?
+        #How big are they? Don't block heads of small snakes
 
     def weightFood(self):
         """Weight grid with food necessity"""
