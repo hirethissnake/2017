@@ -1,17 +1,20 @@
 """Process all game data. Handles getting in new board states, analyzing snake
 health, and providing Main with the best next move."""
 from Snake import Snake
+from Board import Board
+
+
 
 class Game:
     """Allow for several Battlesnake games to be played at once by providing
     several different Game objects."""
 
-    def __init__(self, size):
+    def __init__(self, data):
         """Initialize the Game class"""
         #TODO
-            #Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
-            #Init snakes
-            #Init move number (how many since start of game)
+        #Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
+        self.weightGrid = Board(data['width'],data['height'])
+        #Init snakes
 
     def update(self, snakesData, foodPositions):
         """Update game with current board from server"""
@@ -39,21 +42,15 @@ class Game:
             #Return decision
 
 
-    def weightNotHitSelf(self):
-        """Weight grid to avoid snake hitting itself"""
+    def weightNotHitSnakes(self):
+        """Weight grid to avoid snake hitting other snakes and it self"""
         #TODO
             #Weight self as 0
             #Are we getting food this move? (Do we need to weight our tail 0)
-
-
-    def weightNotHitOthers(self):
-        """Weight grid to avoid snake hitting other snakes"""
-        #TODO
             #Weight other snakes as 0
             #Are they getting food this move? (Do we need to weigh their tails 0)
             #Are they dying this move?
             #How big are they? Don't block heads of small snakes
-
 
     def weightFood(self):
         """Weight grid with food necessity"""
