@@ -1,7 +1,6 @@
 """Process all game data. Handles getting in new board states, analyzing snake
 health, and providing Main with the best next move."""
 
-
 from Snake import Snake
 from Board import Board
 
@@ -15,7 +14,7 @@ class Game:
     width           (int)       - Board width
     height          (int)       - Board height
     you             (string)    - UUID representing what our snake's ID is
-    foodPositions   (array)     - array of coord arrays
+    food   (array)     - array of coord arrays
     turn            (int)       - 0-indexed int representing completed turns
     dead_snakes     (array)     - array of Snake objects that no longer compete"""
 
@@ -30,7 +29,7 @@ class Game:
 
         self.snakes = {}
         self.you = ''
-        self.foodPositions = []
+        self.food = []
         self.turn = 0
         self.dead_snakes = []
 
@@ -39,19 +38,24 @@ class Game:
 
         param1: dictionary - all data from response. See Battlesnake docs
         for more info."""
-        for snake in data['snakes']:
-            if snake['id'] in self.snakes:
-                self.snakes[snake['id']].update(data)
+        for snake_data in data['snakes']:
+            if snake_data['id'] in self.snakes:
+                self.snakes[snake_data['id']].update(snake_data)
             else:
-                self.snakes[snake['id']] = Snake(data)
+                self.snakes[snake_data['id']] = Snake(snake_data)
 
-        self.foodPositions = data['food']
-        self.dead_snakes = data['dead_snakes']
+        self.food = data['food']
         self.you = data['you']
+        if 'dead_snakes' in data:
+            self.dead_snakes = data['dead_snakes']
 
 
     def getNextMove(self):
-        """"Use all algorithms to determine the next best move for our snake"""
+        """"Use all algorithms to determine the next best move for our snake."""
+        bestNode = self.weightGrid.getNodeWithPriority(1)
+
+        return bestNode
+
         #TODO
             #Run each algorithm to make decisions
             #Find best route to desired square
@@ -123,3 +127,10 @@ class Game:
             #How much traversal room are we leaving them?
             #Do they need food? Do they have it in the trapped location?
             #How long are we? Can we effectively block them for long enough?
+
+# Example code testing
+if __name__ == '__main__':
+    initData = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
+    b = Game(initData)
+    b.weightGrid.showCombiner(b.getNextMove(), True, False)
+    print b.getNextMove()

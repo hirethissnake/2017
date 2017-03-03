@@ -28,8 +28,6 @@ class Snake:
         Raises: ValueError
             if: size not int.
         """
-
-        print data
         # comment out for
         # vv SPEED
         self.isString(data['id'], 'id')
@@ -66,6 +64,9 @@ class Snake:
         self.health_points = health_points
 
         self.coords = data['coords']
+
+        if 'taunt' in data:
+            self.taunt = data['taunt']
 
         self.old_coords.insert(0, self.coords)
 
