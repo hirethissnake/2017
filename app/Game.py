@@ -15,6 +15,12 @@ class Game:
         #Init weight grid, init grid graph ** not 100% sure about relationship here, maybe graph should have grid as a child to make pathing decisions **
         self.weightGrid = Board(data['width'],data['height'])
         self.snakes = {}
+        self.you = data['you']
+        self.foodPositions = data['food']
+        self.width = data['width']
+        self.height = data['height']
+        self.turn = data['turn']
+        
         #Init snakes
 
     def update(self, snakesData, foodPositions):
@@ -45,6 +51,11 @@ class Game:
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
+        us = 0
+        for s in self.snakes:
+            if(s.identifier == self.you):
+                us = s
+
         for s in self.snakes:
             positions = s.getAllPositions()
             for x in positions:
