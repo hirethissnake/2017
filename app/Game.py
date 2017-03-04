@@ -1,6 +1,7 @@
 """Process all game data. Handles getting in new board states, analyzing snake
 health, and providing Main with the best next move."""
 
+import sys
 from Snake import Snake
 from Board import Board
 
@@ -16,7 +17,8 @@ class Game:
     you             (string)    - UUID representing what our snake's ID is
     food   (array)     - array of coord arrays
     turn            (int)       - 0-indexed int representing completed turns
-    dead_snakes     (array)     - array of Snake objects that no longer compete"""
+    snakes          (dict)      - dict of Snake objects currently in play
+    deadSnakes      (dict)      - dict of Snake objects that no longer compete"""
 
     def __init__(self, data):
         """Initialize the Game class.
@@ -48,22 +50,36 @@ class Game:
         self.you = data['you']
         if 'dead_snakes' in data:
             self.deadSnakes = data['dead_snakes']
+            for snake in self.deadSnakes:
+                if snake['id'] in self.snakes:
+                    del self.snakes[snake['id']]
 
 
     def getNextMove(self):
         """"Use all algorithms to determine the next best move for our snake."""
-        bestNode = self.weightGrid.getNodeWithPriority(1)
 
-        return bestNode
+        # RUN WEIGHTING ALGORITHMS HERE
 
-        #TODO
-            #Run each algorithm to make decisions
-            #Find best route to desired square
-            #Ensure boundary is not selected (shouldn't be an issue since we
-            # would only head towards positively weighted squares anyway and
-            # boundary square do not exist according to algorithm)
-            #If several candidates, pick one at random
-            #Return decision
+        self.weightNotHitSnakes()
+
+        # RUN WEIGHTING ALGORITHMS HERE
+
+        topPriorityNode = self.weightGrid.getNodeWithPriority(0)
+        if self.weightGrid.isNodeWeightUnique(topPriorityNode):
+            return self.convertNodeToDirection(topPriorityNode, self.you)
+
+        numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
+
+        duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
+        closestLen = sys.maxint
+        closestPos = []
+        for node in duplicateNodes:
+            tempLen = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), node)
+            if tempLen < closestLen:
+                closestLen = tempLen
+                closestPos = node
+
+        return self.convertNodeToDirection(closestPos, self.you)
 
 
     def weightNotHitSnakes(self):
@@ -76,10 +92,11 @@ class Game:
 
         for s in self.snakes:
             positions = s.getAllPositions()
-            for x in positions:
+            self.weightGrid.setWeights(positions, 0)
+            """for x in positions:
                 for y in positions[x]:
                     pos = x+','+y
-                    self.weightGrid.setWeight(pos, 0)
+                    self.weightGrid.setWeight(pos, 0)"""
         #TODO
         #Weight self as 0
         #Are we getting food this move? (Do we need to weight our tail 0)
@@ -89,6 +106,7 @@ class Game:
         #Are they dying this move?
         #How big are they? Don't block heads of small snakes
 
+
     def weightFood(self):
         """Weight grid with food necessity"""
         #TODO
@@ -96,7 +114,7 @@ class Game:
             #Goes through all food and returns the closest according to optimumPath
         foodCoord = 0
         pathLength = 500
-        shortestPath = float("inf")
+        shortestPath = sys.maxint
         closestFoodCoord = 0
         oursnake = self.snakes[self.you]
         head = oursnake.getHeadPosition()
@@ -108,15 +126,13 @@ class Game:
                 closestFoodCoord = foodCoord
 
             foodCoord += 1
-            foodWeight = 100 - health - pathLength # this will change based on how much health we lose each turn
-            self.weightGrid.setWeight(foodCoords,foodWeight)
+            foodWeight = 100 - health - pathLength # this will change based on
+                                                   # health decrementation
+            self.weightGrid.setWeight(foodCoords, foodWeight)
         if health > 30:
             return False
 
-
         return self.weightGrid.optimumPath(head, self.food[closestFoodCoord])
-
-
 
 
     def weightSmallSnakes(self):
@@ -151,9 +167,36 @@ class Game:
             #Do they need food? Do they have it in the trapped location?
             #How long are we? Can we effectively block them for long enough?
 
+
+    def convertNodeToDirection(self, node, identifer):
+        """
+        Convert a coord array into an up, down, left, right direction.
+        param1: [int,int] - x,y coords of a node.
+        param2: string - id of some snake in the game (ie, in snakes{})
+
+        Raises: ValueError
+            if: node is not adjacent to the snakes head
+
+        return: string - direction to go
+        """
+
+        snake = self.snakes[identifer]
+        head = snake.getHeadPosition()
+
+        if node[0] == (head[0] + 1):
+            return 'right'
+        if node[0] == (head[0] - 1):
+            return 'left'
+        if node[1] == (head[1] + 1):
+            return 'up'
+        if node[1] == (head[1] - 1):
+            return 'down'
+        else:
+            raise ValueError('node must be adjacent')
+
 # Example code testing
 if __name__ == '__main__':
     INITDATA = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
     b = Game(INITDATA)
-    b.weightGrid.showCombiner(b.getNextMove(), True, False)
+    b.weightGrid.showWeights(True, True)
     print b.getNextMove()
