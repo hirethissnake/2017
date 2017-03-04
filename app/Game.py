@@ -99,6 +99,10 @@ class Game:
 
         return self.convertNodeToDirection(target[1], self.you)
 
+    def getTaunt(self):
+        """Return taunt for the \move request"""
+
+        return "Do you have any non-GMO food?"
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
