@@ -141,6 +141,36 @@ class Game:
             #Compare size
             #How long will it take to get to the snake?
             #How much food is around for the snake to grow?
+        oursnake = self.snakes[self.you]
+        ourSize = oursnake.Snake.getSize()
+        for otherSnake in self.snakes:
+            if self.snakes[otherSnake].Snake.getSize() < ourSize:
+                self.weightGrid.setWeight(self.snakes[otherSnake].Snake.getHeadPosition(), 0)
+
+    def headArea(self, snek):
+        """Return an area around the head so that it can be weighted
+        param1: snake whose head area needs to be evaluated"""
+
+        #TODO
+            #find head
+            #find area
+            #find body
+            #return coordinates
+        head = snek.Snake.getHeadPosition()
+        xCoord = head[0]
+        yCoord = head[1]
+        newCoordinates = []
+        #goes through a 4x4 grid around the snake and creates an array of those coordinates
+        for xCoordNew in range(xCoord-2, xCoord+2):
+            for yCoordNew in range(yCoord-2, yCoord+2):
+                newCoordinates.append([xCoordNew, yCoordNew])
+        #removes any body segments from the grid
+        for bodySegment in snek.Snake.getAllPositions():
+            newCoordinates.remove(bodySegment)
+        #return new bodyless coordinates
+        return newCoordinates
+
+
 
 
     def weightLargeSnakes(self):
