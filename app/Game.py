@@ -33,7 +33,8 @@ class Game:
         self.you = ''
         self.food = []
         self.turn = 0
-        self.deadSnakes = []
+        self.deadSnakes = {}
+        self.newDead = 'False'      #Stores new deaths as id so must be string
 
     def update(self, data):
         """Update game with current board from server.
@@ -48,11 +49,21 @@ class Game:
 
         self.food = data['food']
         self.you = data['you']
+        self.turn = data['turn']
+
+        for deadData in data['dead_snakes']:
+            if deadData['id'] in self.snakes:
+                del self.snakes[deadData['id']]
+                self.deadSnakes[deadData['id']] = deadData
+                newDead = deadData['id']
+
+        """
         if 'dead_snakes' in data:
             self.deadSnakes = data['dead_snakes']
             for snake in self.deadSnakes:
                 if snake['id'] in self.snakes:
                     del self.snakes[snake['id']]
+        """
 
     def showBoard(self):
         """Use to show board with weight and colours """
@@ -101,8 +112,17 @@ class Game:
 
     def getTaunt(self):
         """Return taunt for the \move request"""
+            tauntDict = {'GMO':'Do you have any non-GMO food?'}
+            nextTaunt = ''
 
-        return "Do you have any non-GMO food?"
+            if newDead != 'False':
+                deadData = deadSnakes['newDead']
+                nextTaunt = 'RIP '+deadData['name']+', turn 0 - turn '+self.turn-1
+                newDead = 'False'
+            else:
+                nextTaunt = tauntDict['GMO']
+
+        return nextTaunt
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
