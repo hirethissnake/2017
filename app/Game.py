@@ -2,6 +2,7 @@
 health, and providing Main with the best next move."""
 
 import sys
+import random
 from Snake import Snake
 from Board import Board
 
@@ -35,6 +36,9 @@ class Game:
         self.turn = 0
         self.deadSnakes = {}
         self.newDead = 'False'      #Stores new deaths as id so must be string
+
+
+        self.tauntDict = {'GMO':'Do you have any non-GMO food?', 'rdm':'UP'}
 
     def update(self, data):
         """Update game with current board from server.
@@ -105,16 +109,18 @@ class Game:
 
     def getTaunt(self):
         """Return taunt for the \move request"""
-            tauntDict = {'GMO':'Do you have any non-GMO food?'}
-            nextTaunt = ''
+        nextTaunt = ''
 
-            #If a snake died last turn, taunt them and clear the newDead variable
-            if newDead != 'False':
-                deadData = deadSnakes['newDead']
-                nextTaunt = 'RIP '+deadData['name']+', turn 0 - turn '+self.turn-1
-                newDead = 'False'
-            else:
-                nextTaunt = tauntDict['GMO']
+        #If a snake died last turn, taunt them and clear the newDead variable
+        if newDead != 'False':
+            deadData = deadSnakes['newDead']
+            nextTaunt = 'RIP '+deadData['name']+', turn 0 - turn '+self.turn-1
+            newDead = 'False'
+        else:
+            #Create random direction
+            directions = ['GOING UP', 'GOING DOWN', 'GOING LEFT', 'GOING RIGHT']
+            self.tauntDict['rdm'] = random.choice(directions)
+            nextTaunt = random.choice(self.tauntDict.items())
 
         return nextTaunt
 
