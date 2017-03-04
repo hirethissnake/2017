@@ -186,7 +186,7 @@ class Game:
                 #closestFoodCoord = foodCoords
 
 
-            foodCoord += 1
+            #foodCoord += 1
             foodWeight = 100# - health - pathLength # this will change based on
 
                                                    # health decrementation
