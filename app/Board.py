@@ -6,7 +6,10 @@ Includes vertices and edges.
 import re
 import igraph
 import colorsys
-from appJar import gui
+try:
+    from appJar import gui
+except ImportError:
+    pass
 from sortedcollections import ValueSortedDict
 #from scipy.ndimage.filters import gaussian_filter
 
