@@ -153,9 +153,17 @@ class Game:
             #How much food is around for the snake to grow?
         oursnake = self.snakes[self.you]
         ourSize = oursnake.Snake.getSize()
+        weightAdd = 7
         for otherSnake in self.snakes:
-            if self.snakes[otherSnake].Snake.getSize() < ourSize:
-                self.weightGrid.setWeight(self.snakes[otherSnake].Snake.getHeadPosition(), 0)
+            otherSnakeSize = self.snakes[otherSnake].Snake.getSize()
+            headA = otherSnake.headArea(otherSnake)
+            if  otherSnakeSize < ourSize:
+                weightAdd += 8
+            for headCoord in headA:
+                self.weightGrid.addWeight(headCoord, weightAdd)
+            #if len(self.snakes[otherSnake].weightFood()) < 3 && otherSnakeSize + 1 < ourSize:
+            #instead of setWeights use addWeight to loop through each coordinate and add it
+            #self.weightGrid.setWeights(self.headArea(otherSnake), )
 
     def headArea(self, snek):
         """Return an area around the head so that it can be weighted
