@@ -298,7 +298,7 @@ class Game:
                 n.append([headX, headY-1])
             self.weightGrid.setWeights(n, 0)
             #self.weightGrid.showWeights(True,True)
-        ourHead = ourSnake.getHeadPosition
+        ourHead = ourSnake.getHeadPosition()
         path = self.weightGrid.optimumPath(ourHead, u) #Current goal
         otherOptions = []
         ourHeadX = ourHead[0]
