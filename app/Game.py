@@ -51,19 +51,12 @@ class Game:
         self.you = data['you']
         self.turn = data['turn']
 
+        #Checks if there are any new dead snakes, and removes them from snakes{}
         for deadData in data['dead_snakes']:
             if deadData['id'] in self.snakes:
                 del self.snakes[deadData['id']]
                 self.deadSnakes[deadData['id']] = deadData
                 newDead = deadData['id']
-
-        """
-        if 'dead_snakes' in data:
-            self.deadSnakes = data['dead_snakes']
-            for snake in self.deadSnakes:
-                if snake['id'] in self.snakes:
-                    del self.snakes[snake['id']]
-        """
 
     def showBoard(self):
         """Use to show board with weight and colours """
@@ -115,6 +108,7 @@ class Game:
             tauntDict = {'GMO':'Do you have any non-GMO food?'}
             nextTaunt = ''
 
+            #If a snake died last turn, taunt them and clear the newDead variable
             if newDead != 'False':
                 deadData = deadSnakes['newDead']
                 nextTaunt = 'RIP '+deadData['name']+', turn 0 - turn '+self.turn-1
