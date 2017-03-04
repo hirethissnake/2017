@@ -48,6 +48,9 @@ class Game:
         self.you = data['you']
         if 'dead_snakes' in data:
             self.deadSnakes = data['dead_snakes']
+            for snake in self.deadSnakes:
+                if snake['id'] in self.snakes:
+                    del self.snakes[snake['id']]
 
 
     def getNextMove(self):
