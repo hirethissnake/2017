@@ -12,8 +12,8 @@ from Game import Game
 
 numCases = 0
 currentCase = 0
-# URL = 'http://localhost:8080'
-URL = 'https://sneaky-snake-tester.herokuapp.com'
+URL = 'http://localhost:8080'
+# URL = 'https://sneaky-snake-tester.herokuapp.com'
 # remove global errors
 # pylint: disable=W0603
 
@@ -158,12 +158,39 @@ def gameTest1():
     testCase(exSnake.healthPoints, exSnakeData['health_points'], 'update health 1')
 
 def gameTest2():
-    """Test update functionality for faulty data.
-    This test suite has 0 tests.
+    """Test functionality for helper functions.
+    This test suite has 6 tests.
     """
-    print "This faulty data test suite is not complete."
+    print "Testing helper methods"
     global numCases
-    numCases += 0
+    numCases += 6
+
+    initParams = {"width": 20, "height": 20, "game_id": "some-new-uuid"}
+
+    # Just so we're all aware, this is absolutely terrible code.
+    # Just a big old no-no. This sort of putting your hands in and messing
+    # around isn't even acceptable when writing tests. I am in a rush, so I
+    # write this, however I hope to come back and write this properly.
+    g2 = Game(initParams)
+    g2.you = 'this-id'
+    g2.snakes = {'this-id':Snake({'id':'this-id', 'coords':[[1, 1], [1, 2]], 'health_points':75})}
+    g2.snakes['new-id'] = Snake({'id':'new-id', 'coords':[[15, 15], [15, 25]], 'health_points':75})
+
+    # Valid nodes
+    testCase(g2.convertNodeToDirection([1, 2], 'this-id'), 'up', 'converting node to dir')
+    testCase(g2.convertNodeToDirection([1, 0], 'this-id'), 'down', 'converting node to dir')
+    testCase(g2.convertNodeToDirection([0, 1], 'this-id'), 'left', 'converting node to dir')
+    testCase(g2.convertNodeToDirection([2, 1], 'this-id'), 'right', 'converting node to dir')
+
+    # Invalid node
+    try:
+        g2.convertNodeToDirection([5, 1], 'this-id')
+        testCase('test', 'failed', 'catch invalid node conversion')
+    except ValueError:
+        testCase(1, 1, 'catch invalid node conversion')
+
+    # Valid node for different snake
+    testCase(g2.convertNodeToDirection([15, 16], 'new-id'), 'up', 'converting node for diff snakes')
 
 def mainTest1():
     """Test update functionality for game starting.
@@ -256,12 +283,13 @@ if __name__ == '__main__':
     try:
         print '-- Testing Game.py --'
         gameTest1()
-        print '-- Testing Snake.py --'
-        snakeTest1()
-        snakeTest2()
-        print '-- Testing Main.py --'
-        mainTest1()
-        mainTest2()
+        gameTest2()
+        # print '-- Testing Snake.py --'
+        # snakeTest1()
+        # snakeTest2()
+        # print '-- Testing Main.py --'
+        # mainTest1()
+        # mainTest2()
         print "Test completed successfully."
     except ValueError as failure:
         print failure
