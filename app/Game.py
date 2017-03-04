@@ -62,10 +62,10 @@ class Game:
 
         topPriorityNode = self.weightGrid.getNodeWithPriority(0)
         if self.weightGrid.isNodeWeightUnique(topPriorityNode):
-            return self.convertNodeToDirection(topPriorityNode)
+            return self.convertNodeToDirection(topPriorityNode, self.you)
 
         topPriorityWeight = self.weightGrid.getWeight(topPriorityNode)
-        numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityWeight)
+        numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
 
         duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
         closestLen = sys.maxint
@@ -76,7 +76,7 @@ class Game:
                 closestLen = tempLen
                 closestPos = node
 
-        return self.convertNodeToDirection(closestPos)
+        return self.convertNodeToDirection(closestPos, self.you)
 
 
     def weightNotHitSnakes(self):
@@ -169,5 +169,5 @@ class Game:
 if __name__ == '__main__':
     INITDATA = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
     b = Game(INITDATA)
-    b.weightGrid.showCombiner(b.getNextMove(), True, False)
+    b.weightGrid.showWeights(True, True)
     print b.getNextMove()
