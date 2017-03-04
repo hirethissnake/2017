@@ -76,6 +76,7 @@ class Game:
         closestPos = []
         for node in duplicateNodes:
             tempLen = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), node)
+            print tempLen
             if tempLen < closestLen:
                 closestLen = tempLen
                 closestPos = node
