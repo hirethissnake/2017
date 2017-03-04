@@ -58,11 +58,16 @@ class Game:
     def getNextMove(self):
         """"Use all algorithms to determine the next best move for our snake."""
 
+        self.weightGrid.resetWeights()
+
         # RUN WEIGHTING ALGORITHMS HERE
 
         self.weightNotHitSnakes()
+        self.weightFood()
 
         # RUN WEIGHTING ALGORITHMS HERE
+
+        self.weightGrid.setEdges()
 
         target = []
 
@@ -133,7 +138,7 @@ class Game:
                 closestFoodCoord = foodCoord
 
             foodCoord += 1
-            foodWeight = 100 - health - pathLength # this will change based on
+            foodWeight = 100# - health - pathLength # this will change based on
                                                    # health decrementation
             self.weightGrid.setWeight(foodCoords, foodWeight)
         if health > 30:

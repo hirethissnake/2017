@@ -92,6 +92,9 @@ showPath                void        Display graphic of best path between nodes
             for col in range(width):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
+        self.fiftyDict = self.dictionary
+
+
         self.edges = dict()
         for row in range(height):  # save edges incident to each vertex
             for col in range(width):
@@ -206,11 +209,26 @@ showPath                void        Display graphic of best path between nodes
 
         nodeName = self.nodeAsString(u)
 
-        for edge in self.edges[nodeName]:  # 100 - weight is to unsure higher weights
-                                    # correlate to shorter paths when traversing
-            edge['weight'] = 100 - float(weight)
-
         self.dictionary[nodeName] = 100 - float(weight)  # ensure front is highest
+
+
+    def resetWeights(self):
+        """
+        Reset all weights to 50.
+        """
+
+        self.dictionary = self.fiftyDict
+
+
+    def setEdges(self):
+        """
+        Set edge weights from dictionary.
+        """
+        for node in self.dictionary:
+            weight = self.dictionary[node]
+            for edge in self.edges[node]:  # 100 - weight is to unsure higher weights
+                                        # correlate to shorter paths when traversing
+                edge['weight'] = 100 - float(weight)
 
 
     def setWeights(self, nodes, value):
@@ -597,7 +615,7 @@ showPath                void        Display graphic of best path between nodes
         """
         Print dictionary.
         """
-        
+
         print self.dictionary
 
 
