@@ -120,6 +120,7 @@ class Game:
             #Create random direction
             directions = ['GOING UP', 'GOING DOWN', 'GOING LEFT', 'GOING RIGHT']
             self.tauntDict['rdm'] = random.choice(directions)
+            #Pick random taunt from taunt dictionary
             nextTaunt = random.choice(self.tauntDict.items())
 
         return nextTaunt
