@@ -81,7 +81,7 @@ class Game:
                     closestLen = tempLen
                     closestPos = node
                 print node
-            print closestPos
+            print "pos:" + closestPos
             target = self.weightGrid.optimumPath(closestPos, self.you)[0]
 
         return self.convertNodeToDirection(target, self.snakes[self.you])
