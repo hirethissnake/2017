@@ -278,7 +278,7 @@ class Game:
             if(headY-1>=0):
                 n.append({headX, headY-1})
             self.weightGrid.setWeights(n, 0)
-            self.weightGrid.showWeights(True,True)
+            #self.weightGrid.showWeights(True,True)
         ourHead = ourSnake.getHeadPosition
         path = self.weightGrid.optimumPath(ourHead, u)
         otherOptions = []
@@ -294,11 +294,16 @@ class Game:
             n.append({ourHeadX, ourHeadY-1})
         otherOptions.remove(path[1]) #Remove from other options our current option
         otherOptions.remove(ourSnake.getAllPositions[1]) # Remove our 'neck' from other otherOptions
+        for ot in otherOptions:
+            if(self.weightGrid.getWeight(ot) == 0):
+                otherOptions.remove(ot)
         dont = False
         for other_opt in otherOptions:
             if self.weightGrid.optimumPathLength(other_opt, u) == float('inf'):
                 dont = True
-
+        if dont:
+            return otherOptions[0]
+        self.weightGrid.setWeights(n, 1)
         #set other snak eotpions to 1
 
 
