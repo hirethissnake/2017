@@ -12,9 +12,7 @@ from Game import Game
 
 numCases = 0
 currentCase = 0
-URL = 'http://ec2-54-152-25-2.compute-1.amazonaws.com:8080'
-# URL = 'http://localhost:8080'
-# URL = 'https://sneaky-snake-tester.herokuapp.com'
+URL = 'http://localhost:8080'
 # remove global errors
 # pylint: disable=W0603
 
@@ -159,11 +157,14 @@ def gameTest1():
     testCase(exSnake.healthPoints, exSnakeData['health_points'], 'update health 1')
 
 def gameTest2():
-    """Test functionality for helper functions.
-    This test suite has 6 tests.
+    """Test update functionality for faulty data.
+    This test suite has 0 tests.
     """
-    print "Testing helper methods"
+    print "This faulty data test suite is not complete."
     global numCases
+<<<<<<< HEAD
+    numCases += 0
+=======
     numCases += 6
 
     initParams = {"width": 20, "height": 20, "game_id": "some-new-uuid"}
@@ -214,6 +215,7 @@ def gameTest2():
     g3.weightSmallSnakes()
     g3.showBoard()
 """
+>>>>>>> origin/master
 
 def mainTest1():
     """Test update functionality for game starting.
@@ -285,7 +287,32 @@ def mainTest2():
     testCase('move' in responseData, True, 'main returns move')
     testCase('taunt' in responseData, True, 'main returns new taunt')
 
-    testCase(responseData['move'], 'right', 'valid move')
+    testCase(responseData['move'], 'up' or 'down' or 'left' or 'right', 'valid move')
+
+def dangerousMoveTest1():
+    """Test functions that prevent dangerous moves (ie going into caves).
+    This test suite has 0 tests.
+    """
+    print "Testing main /move."
+    global numCases
+    numCases += 2
+
+    initParams = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
+    g1 = Game(initParams)
+
+    updateParams = {"snakes": [{"taunt": "git gud", "name": "my-snake",
+    "id": "my-id", "health_points": 93, "coords":
+    [[13, 9], [13, 10]]}, {"taunt": "cash me outside", "name":
+    "surround-snake", "id": "surround-uuid",
+    "health_points": 93, "coords": [[11, 5], [11, 4], [11, 3], [12, 3], [13, 3],
+    [14, 3], [15, 3], [15, 4], [15, 5], [15, 6], [15, 7], [14, 7], [13, 7],
+    [12, 7], [11, 7], [11, 6]]}],
+    "height":20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa",
+    "food":[[13, 5], [1, 16]], "you":"my-id"}
+
+    g1.update(updateParams)
+    g1.getNextMove()
+
 
 def testCase(var1, var2, testIdent):
     """Run comparison tests, and if they fail, will raise an exception."""
@@ -304,6 +331,19 @@ if __name__ == '__main__':
     numCases = 0
     # Snake.py tests
     try:
+<<<<<<< HEAD
+        # print '-- Testing Game.py --'
+        # gameTest1()
+        # print '-- Testing Snake.py --'
+        # snakeTest1()
+        # snakeTest2()
+        # print '-- Testing Main.py --'
+        # mainTest1()
+        # mainTest2()
+        print '-- Skipping main tests --'
+        print '-- Testing dangerous functions --'
+        dangerousMoveTest1()
+=======
         print '-- Testing Game.py --'
         gameTest1()
         gameTest2()
@@ -314,6 +354,7 @@ if __name__ == '__main__':
         print '-- Testing Main.py --'
         mainTest1()
         mainTest2()
+>>>>>>> origin/master
         print "Test completed successfully."
     except ValueError as failure:
         print failure
