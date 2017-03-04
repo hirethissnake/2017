@@ -34,7 +34,7 @@ class Game:
         self.you = ''
         self.food = []
         self.turn = 0
-        self.deadS`nakes = {}
+        self.deadSnakes = {}
         self.newDead = 'False'      #Stores new deaths as id so must be string
 
 

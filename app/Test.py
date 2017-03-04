@@ -162,9 +162,6 @@ def gameTest2():
     """
     print "This faulty data test suite is not complete."
     global numCases
-<<<<<<< HEAD
-    numCases += 0
-=======
     numCases += 6
 
     initParams = {"width": 20, "height": 20, "game_id": "some-new-uuid"}
@@ -196,7 +193,7 @@ def gameTest2():
 """def gameTest3():
     Test functionality for helper functions.
     This test suite has  tests.
-    
+
     print "Testing game foodWeight, weigthSmallSnakes, and headArea functions"
     global numCases
     numCases += 3
@@ -215,7 +212,7 @@ def gameTest2():
     g3.weightSmallSnakes()
     g3.showBoard()
 """
->>>>>>> origin/master
+
 
 def mainTest1():
     """Test update functionality for game starting.
@@ -291,11 +288,11 @@ def mainTest2():
 
 def dangerousMoveTest1():
     """Test functions that prevent dangerous moves (ie going into caves).
-    This test suite has 0 tests.
+    This test suite has 1 tests.
     """
     print "Testing main /move."
     global numCases
-    numCases += 2
+    numCases += 1
 
     initParams = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
     g1 = Game(initParams)
@@ -312,6 +309,33 @@ def dangerousMoveTest1():
 
     g1.update(updateParams)
     g1.getNextMove()
+    print 'Please check GUI for test case'
+    testCase(1,1,'visual test case')
+
+def dangerousMoveTest2():
+    """Test functions that prevent dangerous moves (ie going into caves).
+    This test suite has 1 tests.
+    """
+    print "Testing main /move."
+    global numCases
+    numCases += 1
+
+    initParams = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
+    g1 = Game(initParams)
+
+    updateParams = {"snakes": [{"taunt": "git gud", "name": "my-snake",
+    "id": "my-id", "health_points": 93, "coords":
+    [[19, 9], [18, 9], [17, 9], [16, 9], [15, 9]]}, {"taunt": "cash me outside", "name":
+    "surround-snake", "id": "surround-uuid",
+    "health_points": 93, "coords": [[19, 5], [18, 5], [17, 5], [16, 5], [15, 5],
+    [15, 6], [15, 7], [15, 8], [16, 8], [17, 8]]}],
+    "height":20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa",
+    "food":[[18, 7], [14, 17]], "you":"my-id"}
+
+    g1.update(updateParams)
+    g1.getNextMove()
+    print 'Please check GUI for test case'
+    testCase(1,1,'visual test case')
 
 
 def testCase(var1, var2, testIdent):
@@ -331,7 +355,6 @@ if __name__ == '__main__':
     numCases = 0
     # Snake.py tests
     try:
-<<<<<<< HEAD
         # print '-- Testing Game.py --'
         # gameTest1()
         # print '-- Testing Snake.py --'
@@ -343,18 +366,7 @@ if __name__ == '__main__':
         print '-- Skipping main tests --'
         print '-- Testing dangerous functions --'
         dangerousMoveTest1()
-=======
-        print '-- Testing Game.py --'
-        gameTest1()
-        gameTest2()
-        #gameTest3()
-        print '-- Testing Snake.py --'
-        snakeTest1()
-        snakeTest2()
-        print '-- Testing Main.py --'
-        mainTest1()
-        mainTest2()
->>>>>>> origin/master
+        dangerousMoveTest2()
         print "Test completed successfully."
     except ValueError as failure:
         print failure
