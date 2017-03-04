@@ -79,7 +79,7 @@ def move():
         nextMove = battle.getNextMove()
         print("--- %s seconds ---" % (time.time() - start))
     else:
-        #print 'ERROR: Received request for game that does not exist'
+        print 'ERROR: Received request for game that does not exist'
         #print '  To avoid collateral damage to other games, responding with \
         #default move'
         nextMove = 'up'
