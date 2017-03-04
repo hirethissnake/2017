@@ -78,7 +78,7 @@ def move():
     else:
         #print 'ERROR: Received request for game that does not exist'
         #print '  To avoid collateral damage to other games, responding with \
-default move'
+        #default move'
         nextMove = 'up'
 
     # taunt should be replaced by variable
