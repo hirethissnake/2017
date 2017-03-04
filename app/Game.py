@@ -190,7 +190,7 @@ class Game:
                 #closestFoodCoord = foodCoords
 
 
-            foodCoord += 1
+            #foodCoord += 1
             foodWeight = 100# - health - pathLength # this will change based on
 
                                                    # health decrementation
@@ -249,7 +249,8 @@ class Game:
                 newCoordinates.append([xCoordNew, yCoordNew])
         #removes any body segments from the grid
         for bodySegment in snek.getAllPositions():
-            newCoordinates.remove(bodySegment)
+            if bodySegment in newCoordinates:
+                newCoordinates.remove(bodySegment)
         #return new bodyless coordinates
         return newCoordinates
 
@@ -280,10 +281,10 @@ class Game:
         """Negatively weight enclosed spaces to prevent us from going in."""
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
-            if snk.identifier == us_id:
-                ourSnake = snk
+            if self.snakes[snk].getIdentifier() == us_id:
+                ourSnake = self.snakes[snk]
                 continue
-            headPos = snk.getHeadPosition()
+            headPos = self.snakes[snk].getHeadPosition()
             headX = headPos[0]
             headY = headPos[1]
             n = []
@@ -319,10 +320,11 @@ class Game:
         for other_opt in otherOptions:
             if self.weightGrid.optimumPathLength(other_opt, u) == float('inf'):
                 dont = True
+        self.weightGrid.setWeights(n, 1)
         if dont:
             print "Switched directions from weightEnclosedSpaces"
             return otherOptions[0]
-        self.weightGrid.setWeights(n, 1)
+        return u
         #set other snak eotpions to 1
 
 
