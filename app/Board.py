@@ -504,7 +504,7 @@ showPath                void        Display graphic of best path between nodes
 
         ids = self.graph.get_shortest_paths(self.nodeAsString(u),
                                                   to=self.nodeAsString(v),
-                                                  weights='weight', mode='OUT',
+                                                  weights='weight', mode='IN',
                                                   output='vpath')[0]
                                              # generate list of Ids in path
         return [self.stringAsNode(self.graph.vs.find(x)['name']) for x in ids]
@@ -522,6 +522,19 @@ showPath                void        Display graphic of best path between nodes
 
         self.checkNode(u)
         self.checkNode(v)
+
+
+    def optimumPathLength(self, u, v):
+        """
+        Return length of optimal path between 2 nodes.
+
+        param1,2: [int, int] - node in the form [x, y]
+        return: float - length of path
+        """
+
+        return self.graph.shortest_paths(self.nodeAsString(u),
+                                         self.nodeAsString(v), \
+                                         'weight', 'IN')[0][0]
 
 
     def showWeights(self, colours, numbers):
@@ -621,6 +634,11 @@ showPath                void        Display graphic of best path between nodes
 
 if __name__ == '__main__':
     g = Board(20, 20)
+    g.setWeights([[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0]], 0)
+    g.setEdges()
+    print g.optimumPath([3, 3], [1, 1])
+    print g.optimumPathLength([3, 3], [1, 1]) == float("inf")
+    g.showWeights(True, True)
     """g.setWeight([0, 5], 0)
     g.setWeight([1, 5], 0)
     g.setWeight([2, 5], 0)
@@ -647,4 +665,4 @@ if __name__ == '__main__':
     g.showPath([0, 0], [0, 10])
     #g.showWeights(True, True)"""
     #print g.optimumPath([11, 7], [0, 0])
-    print g.graph
+    #print g.graph

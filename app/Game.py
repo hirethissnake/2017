@@ -2,6 +2,7 @@
 health, and providing Main with the best next move."""
 
 import sys
+import random
 from Snake import Snake
 from Board import Board
 
@@ -33,7 +34,11 @@ class Game:
         self.you = ''
         self.food = []
         self.turn = 0
-        self.deadSnakes = []
+        self.deadSnakes = {}
+        self.newDead = 'False'      #Stores new deaths as id so must be string
+
+
+        self.tauntDict = {'GMO':'Do you have any non-GMO food?', 'rdm':'UP'}
 
     def update(self, data):
         """Update game with current board from server.
@@ -48,11 +53,18 @@ class Game:
 
         self.food = data['food']
         self.you = data['you']
-        if 'dead_snakes' in data:
-            self.deadSnakes = data['dead_snakes']
-            for snake in self.deadSnakes:
-                if snake['id'] in self.snakes:
-                    del self.snakes[snake['id']]
+        self.turn = data['turn']
+
+        #Checks if there are any new dead snakes, and removes them from snakes{}
+        for deadData in data['dead_snakes']:
+            if deadData['id'] in self.snakes:
+                del self.snakes[deadData['id']]
+                self.deadSnakes[deadData['id']] = deadData
+                newDead = deadData['id']
+
+    def showBoard(self):
+        """Use to show board with weight and colours """
+        self.weightGrid.showWeights(True, True)
 
 
     def getNextMove(self):
@@ -72,36 +84,65 @@ class Game:
         target = []
         usSnake = self.snakes[self.you]
 
-        topPriorityNode = self.weightGrid.getNodeWithPriority(0)
-        if self.weightGrid.isNodeWeightUnique(topPriorityNode):
-            target = self.weightGrid.optimumPath(usSnake.getHeadPosition(),
-                                                 topPriorityNode)
-        else:
-            numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
-            duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
-            closestLen = sys.maxint
-            closestPos = []
+        priorityTarget = 0
+        nodeValid = False
 
-            for node in duplicateNodes:
-                tempLen = len(self.weightGrid.optimumPath(usSnake.getHeadPosition(), node))
+        while not nodeValid:
+            topPriorityNode = self.weightGrid.getNodeWithPriority(priorityTarget)
+            if self.weightGrid.isNodeWeightUnique(topPriorityNode):
+                target = topPriorityNode
+                priorityTarget += 1
+            else:
+                numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
+                duplicateNodes = self.weightGrid.getNodesWithPriority(priorityTarget, priorityTarget + numDuplicates - 1)
+                closestLen = sys.maxint
+                closestPos = []
 
-                if tempLen < closestLen:
-                    closestLen = tempLen
-                    closestPos = node
+                for node in duplicateNodes:
+                    tempPath = self.weightGrid.optimumPath(usSnake.getHeadPosition(), node)
+                    tempLen = len(tempPath)
 
-            target = self.weightGrid.optimumPath(usSnake.getHeadPosition(), closestPos)
+                    if tempLen < closestLen and self.weightGrid.optimumPathLength(usSnake.getHeadPosition(), node) != float('inf'):
+                        closestLen = tempLen
+                        closestPos = node
+
+                priorityTarget += numDuplicates
+
+                target = closestPos
+
+            if target == []:
+                nodeValid = False
+            elif self.weightGrid.optimumPathLength(usSnake.getHeadPosition(), closestPos) != float('inf'):
+                nodeValid = True
 
         print "Following path: " + str(target)
 
-        return self.convertNodeToDirection(target[1], self.you)
+        nextMove = self.weightEnclosedSpaces(target)
+        return self.convertNodeToDirection(nextMove, self.you)
 
+    def getTaunt(self):
+        """Return taunt for the \move request"""
+        nextTaunt = ''
+
+        #If a snake died last turn, taunt them and clear the newDead variable
+        if newDead != 'False':
+            deadData = deadSnakes['newDead']
+            nextTaunt = 'RIP '+deadData['name']+', turn 0 - turn '+self.turn-1
+            newDead = 'False'
+        else:
+            #Create random direction
+            directions = ['GOING UP', 'GOING DOWN', 'GOING LEFT', 'GOING RIGHT']
+            self.tauntDict['rdm'] = random.choice(directions)
+            nextTaunt = random.choice(self.tauntDict.items())
+
+        return nextTaunt
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
 
         us = self.snakes[self.you] #Represents our snakes
         ourSnakePos = us.getAllPositions()
-        ourTail = ourSnakePos[-1] #[[x, y],[x,y]]=
+        ourTail = ourSnakePos[-1]
         ourTailX = ourTail[0]
         ourTailY = ourTail[1]
 
@@ -142,11 +183,9 @@ class Game:
                 closestFoodCoord = foodCoord
 
             foodCoord += 1
-            foodWeight = 100# - health - pathLength # this will change based on
+            foodWeight = 100 - health - pathLength # this will change based on
                                                    # health decrementation
             self.weightGrid.setWeight(foodCoords, foodWeight)
-        if health > 30:
-            return False
 
         return self.weightGrid.optimumPath(head, self.food[closestFoodCoord])
 
@@ -202,9 +241,42 @@ class Game:
         #TODO
             #Compare size
             #Can we get food and grow bigger?
+        ourSnake = self.snakes[self.you]
+        ourSize = ourSnake.Snake.getSize()
+        weightSubtract = 7
+        distanceToFood = ourSnake.weightFood()
+        for otherSnake in self.snakes:
+            otherSnakeSize = self.snakes[otherSnake].Snake.getSize()
+            headA = otherSnake.headArea(otherSnake)
+            if  otherSnakeSize > ourSize:
+                weightSubtract += 8
+            for headCoord in headA:
+                self.weightGrid.subtractWeight(headCoord, weightSubtract)
+            #ourSnake.weightFood()
+            #otherSnake.weightFood()
 
 
     def weightEnclosedSpaces(self):
+        us = self.you
+        for snk in self.snakes:
+            if snk.identifier == us:
+                continue
+            headPos = snk.getHeadPosition()
+            headX = headPos[0]
+            headY = headPos[1]
+            n = []
+            if(headX-1>=0):
+                n.append({headX-1, headY})
+            if(headX+1<self.width):
+                n.append({headX+1, headY})
+            if(headY+1<self.height):
+                n.append({headX, headY+1})
+            if(headY-1>=0):
+                n.append({headX, headY-1})
+            self.weightGrid.setWeights(n, 0)
+            self.weightGrid.showWeights(True,True)
+
+
         """Do not kill ourselves by picking a corner where we trap ourselves"""
         #TODO
             #How long are we?

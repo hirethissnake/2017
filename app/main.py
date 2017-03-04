@@ -13,6 +13,7 @@ gameDic = dict()
 
 print "main.py is now running"
 
+
 @bottle.route('/static/<path:path>')
 def static(path):
     """???."""
@@ -48,7 +49,7 @@ def start():
         'color': '#FFEBD0',
         'taunt': 'SSssssSSSsSSsssS',
         'head_url': head_url,
-        'name': 'sneak',
+        'name': 'Sneakysnake',
         'head_type': 'tongue',
         'tail_type': 'curled'
     }
@@ -80,17 +81,18 @@ def move():
         battle.update(data)
         #Request next best move
         nextMove = battle.getNextMove()
+        nextTaunt = battle.getTaunt()
         print("--- %s seconds ---" % (time.time() - start))
     else:
         print 'ERROR: Received request for game that does not exist'
         print '  To avoid collateral damage to other games, responding with \
         default move'
         nextMove = 'up'
+        nextTaunt = 'yeaboi'
 
-    # taunt should be replaced by variable
     sendingData = {
         'move': nextMove,
-        'taunt': 'battlesnake-python!'
+        'taunt': nextTaunt
     }
 
     # log and return

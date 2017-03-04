@@ -162,7 +162,60 @@ def gameTest2():
     """
     print "This faulty data test suite is not complete."
     global numCases
+<<<<<<< HEAD
     numCases += 0
+=======
+    numCases += 6
+
+    initParams = {"width": 20, "height": 20, "game_id": "some-new-uuid"}
+
+    # Just so we're all aware, this is absolutely terrible code.
+    # Just a big old no-no. This sort of putting your hands in and messing
+    # around isn't even acceptable when writing tests. I am in a rush, so I
+    # write this, however I hope to come back and write this properly.
+    g2 = Game(initParams)
+    g2.you = 'this-id'
+    g2.snakes = {'this-id':Snake({'id':'this-id', 'coords':[[1, 1], [1, 2]], 'health_points':75})}
+    g2.snakes['new-id'] = Snake({'id':'new-id', 'coords':[[15, 15], [15, 25]], 'health_points':75})
+
+    # Valid nodes
+    testCase(g2.convertNodeToDirection([1, 2], 'this-id'), 'up', 'converting node to dir')
+    testCase(g2.convertNodeToDirection([1, 0], 'this-id'), 'down', 'converting node to dir')
+    testCase(g2.convertNodeToDirection([0, 1], 'this-id'), 'left', 'converting node to dir')
+    testCase(g2.convertNodeToDirection([2, 1], 'this-id'), 'right', 'converting node to dir')
+
+    # Invalid node
+    try:
+        g2.convertNodeToDirection([5, 1], 'this-id')
+        testCase('test', 'failed', 'catch invalid node conversion')
+    except ValueError:
+        testCase(1, 1, 'catch invalid node conversion')
+
+    # Valid node for different snake
+    testCase(g2.convertNodeToDirection([15, 16], 'new-id'), 'up', 'converting node for diff snakes')
+"""def gameTest3():
+    Test functionality for helper functions.
+    This test suite has  tests.
+    
+    print "Testing game foodWeight, weigthSmallSnakes, and headArea functions"
+    global numCases
+    numCases += 3
+
+    initParams = {"width": 20, "height": 20, "game_id": "some-new-uuid", "food":{[0, 1], [19, 19], [5, 5], [3, 2]}}
+
+    g3 = Game(initParams)
+    g3.you = 'this-id'
+    g3.snakes = {'this-id':Snake({'id':'this-id', 'coords':[[1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8]], 'health_points':75})}
+    g3.snakes['new-id'] = Snake({'id':'new-id', 'coords':[[15, 15], [15, 16], [15, 17], [15, 18], [15, 19]], 'health_points':62})
+    g3.snakes['other-id'] = Snake({'id':'other-id', 'coords':[[17, 15], [17, 16], [17, 17], [17, 18], [17, 19]], 'health_points':62})
+
+    testCase(g3.snakes['new-id'].headArea('coords'), [[13, 13], [13, 14], [13, 15], [13, 16], [13, 17], [14, 13], [14, 14], [14, 15], [14, 16], [14, 17], [15, 13], [15, 14], [16, 13], [16, 14], [16, 15], [16, 16], [16, 17], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17]], 'finding area around snake head excluding snake itself')
+    #testCase(g3.snakes['other-id'].headArea('coords'))
+    g3.weightFood()
+    g3.weightSmallSnakes()
+    g3.showBoard()
+"""
+>>>>>>> origin/master
 
 def mainTest1():
     """Test update functionality for game starting.
@@ -278,6 +331,7 @@ if __name__ == '__main__':
     numCases = 0
     # Snake.py tests
     try:
+<<<<<<< HEAD
         # print '-- Testing Game.py --'
         # gameTest1()
         # print '-- Testing Snake.py --'
@@ -289,6 +343,18 @@ if __name__ == '__main__':
         print '-- Skipping main tests --'
         print '-- Testing dangerous functions --'
         dangerousMoveTest1()
+=======
+        print '-- Testing Game.py --'
+        gameTest1()
+        gameTest2()
+        #gameTest3()
+        print '-- Testing Snake.py --'
+        snakeTest1()
+        snakeTest2()
+        print '-- Testing Main.py --'
+        mainTest1()
+        mainTest2()
+>>>>>>> origin/master
         print "Test completed successfully."
     except ValueError as failure:
         print failure
