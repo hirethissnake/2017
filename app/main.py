@@ -27,8 +27,8 @@ def start():
 
     data = bottle.request.json
 
-    #print 'We have begun a new game!'
-    #print data
+    print 'We have begun a new game!'
+    print data
 
     #Create a game object with the data given
     game_id = data['game_id']
@@ -50,7 +50,7 @@ def start():
     }
 
     # log and return
-    #print sendingData
+    print sendingData
     return sendingData
 
 @bottle.post('/move')
@@ -65,10 +65,8 @@ def move():
     # get game_id
     if 'game_id' in data:
         curGame = data['game_id']
-    #else:
-        #print 'Data missing game_id'
-    #print curGame
-    #print gameDic
+    else:
+        print 'Data missing game_id'
     # get curGame from gameDic
     if curGame in gameDic:
         battle = gameDic[curGame]
@@ -80,8 +78,8 @@ def move():
         print("--- %s seconds ---" % (time.time() - start))
     else:
         print 'ERROR: Received request for game that does not exist'
-        #print '  To avoid collateral damage to other games, responding with \
-        #default move'
+        print '  To avoid collateral damage to other games, responding with \
+        default move'
         nextMove = 'up'
 
     # taunt should be replaced by variable
