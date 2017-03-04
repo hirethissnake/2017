@@ -217,7 +217,7 @@ showPath                void        Display graphic of best path between nodes
         Reset all weights to 50.
         """
 
-        self.dictionary = self.fiftyDict
+        self.dictionary.update(self.fiftyDict)
 
 
     def setEdges(self):
