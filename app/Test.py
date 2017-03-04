@@ -12,7 +12,8 @@ from Game import Game
 
 numCases = 0
 currentCase = 0
-URL = 'http://localhost:8080'
+# URL = 'http://localhost:8080'
+URL = 'https://sneaky-snake-tester.herokuapp.com'
 # remove global errors
 # pylint: disable=W0603
 
