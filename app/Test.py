@@ -190,7 +190,7 @@ def gameTest2():
 
     # Valid node for different snake
     testCase(g2.convertNodeToDirection([15, 16], 'new-id'), 'up', 'converting node for diff snakes')
-<<<<<<< HEAD
+
 def gameTest3():
     """Test functionality for helper functions."""
 

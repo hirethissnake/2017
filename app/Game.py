@@ -34,7 +34,7 @@ class Game:
         self.you = ''
         self.food = []
         self.turn = 0
-        self.deadS`nakes = {}
+        self.deadSnakes = {}
         self.newDead = 'False'      #Stores new deaths as id so must be string
 
 
@@ -186,7 +186,6 @@ class Game:
                 #closestFoodCoord = foodCoords
 
 
-            foodCoord += 1
             foodWeight = 100# - health - pathLength # this will change based on
 
                                                    # health decrementation
@@ -245,7 +244,8 @@ class Game:
                 newCoordinates.append([xCoordNew, yCoordNew])
         #removes any body segments from the grid
         for bodySegment in snek.getAllPositions():
-            newCoordinates.remove(bodySegment)
+            if bodySegment in newCoordinates:
+                newCoordinates.remove(bodySegment)
         #return new bodyless coordinates
         return newCoordinates
 
