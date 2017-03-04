@@ -66,7 +66,8 @@ def move():
         curGame = data['game_id']
     else:
         print 'Data missing game_id'
-
+    print curGame
+    print gameDic
     # get curGame from gameDic
     if curGame in gameDic:
         battle = gameDic[curGame]
