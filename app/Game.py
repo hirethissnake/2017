@@ -146,11 +146,9 @@ class Game:
                 closestFoodCoord = foodCoord
 
             foodCoord += 1
-            foodWeight = 100# - health - pathLength # this will change based on
+            foodWeight = 100 - health - pathLength # this will change based on
                                                    # health decrementation
             self.weightGrid.setWeight(foodCoords, foodWeight)
-        if health > 30:
-            return False
 
         return self.weightGrid.optimumPath(head, self.food[closestFoodCoord])
 
@@ -206,6 +204,19 @@ class Game:
         #TODO
             #Compare size
             #Can we get food and grow bigger?
+        ourSnake = self.snakes[self.you]
+        ourSize = ourSnake.Snake.getSize()
+        weightSubtract = 7
+        distanceToFood = ourSnake.weightFood()
+        for otherSnake in self.snakes:
+            otherSnakeSize = self.snakes[otherSnake].Snake.getSize()
+            headA = otherSnake.headArea(otherSnake)
+            if  otherSnakeSize > ourSize:
+                weightSubtract += 8
+            for headCoord in headA:
+                self.weightGrid.subtractWeight(headCoord, weightSubtract)
+            #ourSnake.weightFood()
+            #otherSnake.weightFood()
 
 
     def weightEnclosedSpaces(self):
