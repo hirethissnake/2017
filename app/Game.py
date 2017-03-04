@@ -109,7 +109,7 @@ class Game:
 
     def weightFood(self):
         """Weight grid with food necessity"""
-        #TODO
+                #TODO
             #How desperately do we need food
             #Goes through all food and returns the closest according to optimumPath
         foodCoord = 0
