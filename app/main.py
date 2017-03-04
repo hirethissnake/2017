@@ -23,9 +23,12 @@ def start():
     # E1136 Value 'data' is insubscriptable
     # pylint: disable=E1136
 
-    print 'We have begun a new game!'
 
     data = bottle.request.json
+
+    print 'We have begun a new game!'
+    print data
+
     #Create a game object with the data given
     game_id = data['game_id']
     battle = Game(data)
@@ -38,12 +41,16 @@ def start():
         bottle.request.urlparts.netloc
     )
 
-    return {
+    sendingData = {
         'color': '#00FF00',
         'taunt': 'SSssssSSSsSSsssS',
         'head_url': head_url,
         'name': 'sneak'
     }
+
+    # log and return
+    print sendingData
+    return sendingData
 
 @bottle.post('/move')
 def move():
@@ -73,10 +80,15 @@ def move():
 default move'
         nextMove = 'up'
 
-    return {
+    # taunt should be replaced by variable
+    sendingData = {
         'move': nextMove,
         'taunt': 'battlesnake-python!'
     }
+
+    # log and return
+    print sendingData
+    return sendingData
 
 
 # Expose WSGI app (so gunicorn can find it)
