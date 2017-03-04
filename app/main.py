@@ -91,7 +91,7 @@ def move():
     }
 
     # log and return
-    #print sendingData
+    print sendingData
     return sendingData
 
 
