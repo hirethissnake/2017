@@ -84,28 +84,41 @@ class Game:
         target = []
         usSnake = self.snakes[self.you]
 
-        topPriorityNode = self.weightGrid.getNodeWithPriority(0)
-        if self.weightGrid.isNodeWeightUnique(topPriorityNode):
-            target = self.weightGrid.optimumPath(usSnake.getHeadPosition(),
-                                                 topPriorityNode)
-        else:
-            numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
-            duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
-            closestLen = sys.maxint
-            closestPos = []
+        priorityTarget = 0
+        nodeValid = False
 
-            for node in duplicateNodes:
-                tempLen = len(self.weightGrid.optimumPath(usSnake.getHeadPosition(), node))
+        while not nodeValid:
+            topPriorityNode = self.weightGrid.getNodeWithPriority(priorityTarget)
+            if self.weightGrid.isNodeWeightUnique(topPriorityNode):
+                target = topPriorityNode
+                priorityTarget += 1
+            else:
+                numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
+                duplicateNodes = self.weightGrid.getNodesWithPriority(priorityTarget, priorityTarget + numDuplicates - 1)
+                closestLen = sys.maxint
+                closestPos = []
 
-                if tempLen < closestLen:
-                    closestLen = tempLen
-                    closestPos = node
+                for node in duplicateNodes:
+                    tempPath = self.weightGrid.optimumPath(usSnake.getHeadPosition(), node)
+                    tempLen = len(tempPath)
 
-            target = self.weightGrid.optimumPath(usSnake.getHeadPosition(), closestPos)
+                    if tempLen < closestLen and self.weightGrid.optimumPathLength(usSnake.getHeadPosition(), node) != float('inf'):
+                        closestLen = tempLen
+                        closestPos = node
+
+                priorityTarget += numDuplicates
+
+                target = closestPos
+
+            if target == []:
+                nodeValid = False
+            elif self.weightGrid.optimumPathLength(usSnake.getHeadPosition(), closestPos) != float('inf'):
+                nodeValid = True
 
         print "Following path: " + str(target)
 
-        return self.convertNodeToDirection(target[1], self.you)
+        nextMove = self.weightEnclosedSpaces(target)
+        return self.convertNodeToDirection(nextMove, self.you)
 
     def getTaunt(self):
         """Return taunt for the \move request"""

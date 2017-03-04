@@ -225,7 +225,6 @@ showPath                void        Display graphic of best path between nodes
         """
         for node in self.dictionary:
             weight = self.dictionary[node]
-            print str(node) + ' ' + str(weight)
             for edge in self.edges[node]:  # 100 - weight is to unsure higher weights
                                         # correlate to shorter paths when traversing
                 edge['weight'] = float(weight)
@@ -534,7 +533,7 @@ showPath                void        Display graphic of best path between nodes
         """
 
         return self.graph.shortest_paths(self.nodeAsString(u),
-                                         self.nodeAsString(v),
+                                         self.nodeAsString(v), \
                                          'weight', 'IN')[0][0]
 
 
@@ -638,7 +637,7 @@ if __name__ == '__main__':
     g.setWeights([[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0]], 0)
     g.setEdges()
     print g.optimumPath([3, 3], [1, 1])
-    print g.optimumPathLength([3, 3], [1, 1])[0][0] == float("inf")
+    print g.optimumPathLength([3, 3], [1, 1]) == float("inf")
     g.showWeights(True, True)
     """g.setWeight([0, 5], 0)
     g.setWeight([1, 5], 0)
