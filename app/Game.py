@@ -85,7 +85,7 @@ class Game:
             print "pos:" + str(closestPos)
             target = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), closestPos)[0]
 
-        return self.convertNodeToDirection(target, self.snakes[self.you])
+        return self.convertNodeToDirection(target, self.you)
 
 
     def weightNotHitSnakes(self):
