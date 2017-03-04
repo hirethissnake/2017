@@ -92,11 +92,6 @@ showPath                void        Display graphic of best path between nodes
             for col in range(width):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
-        self.fiftyDict = ValueSortedDict()
-        self.fiftyDict.update(self.dictionary)
-        print self.fiftyDict
-
-
         self.edges = dict()
         for row in range(height):  # save edges incident to each vertex
             for col in range(width):
@@ -104,6 +99,7 @@ showPath                void        Display graphic of best path between nodes
                 edges = self.graph.incident(vertexId) # list of edges
                 edges = [self.graph.es.find(edge) for edge in edges]
                 self.edges[str(row) + ',' + str(col)] = edges
+
 
     def initErrorCheck(self, width, height):
         """
@@ -221,7 +217,6 @@ showPath                void        Display graphic of best path between nodes
 
         for key in self.dictionary:
             self.dictionary[key] = 50.0
-            print self.dictionary[key]
 
 
     def setEdges(self):
