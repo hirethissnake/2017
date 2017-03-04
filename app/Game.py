@@ -79,7 +79,7 @@ class Game:
             if tempLen < closestLen:
                 closestLen = tempLen
                 closestPos = node
-                print node
+            print node
         print closestPos
         return self.convertNodeToDirection(closestPos, self.you)
 
