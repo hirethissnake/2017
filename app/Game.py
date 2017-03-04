@@ -34,7 +34,7 @@ class Game:
         self.you = ''
         self.food = []
         self.turn = 0
-        self.deadSnakes = {}
+        self.deadS`nakes = {}
         self.newDead = 'False'      #Stores new deaths as id so must be string
 
 
@@ -53,14 +53,16 @@ class Game:
 
         self.food = data['food']
         self.you = data['you']
-        self.turn = data['turn']
+        if 'turn' in data:
+            self.turn = data['turn']
 
         #Checks if there are any new dead snakes, and removes them from snakes{}
-        for deadData in data['dead_snakes']:
-            if deadData['id'] in self.snakes:
-                del self.snakes[deadData['id']]
-                self.deadSnakes[deadData['id']] = deadData
-                newDead = deadData['id']
+        if 'dead_snakes' in data:
+            for deadData in data['dead_snakes']:
+                if deadData['id'] in self.snakes:
+                    del self.snakes[deadData['id']]
+                    self.deadSnakes[deadData['id']] = deadData
+                    newDead = deadData['id']
 
     def showBoard(self):
         """Use to show board with weight and colours """
