@@ -270,13 +270,13 @@ class Game:
             headY = headPos[1]
             n = []
             if(headX-1>=0):
-                n.append({headX-1, headY})
+                n.append([headX-1, headY])
             if(headX+1<self.width):
-                n.append({headX+1, headY})
+                n.append([headX+1, headY])
             if(headY+1<self.height):
-                n.append({headX, headY+1})
+                n.append([headX, headY+1])
             if(headY-1>=0):
-                n.append({headX, headY-1})
+                n.append([headX, headY-1])
             self.weightGrid.setWeights(n, 0)
             #self.weightGrid.showWeights(True,True)
         ourHead = ourSnake.getHeadPosition
