@@ -6,6 +6,7 @@
 
 import os
 import bottle
+import time
 from Game import Game
 
 gameDic = dict()
@@ -61,6 +62,7 @@ def move():
     # E1136 Value 'data' is insubscriptable
     # pylint: disable=E1135, E1136
     data = bottle.request.json
+    print data
     #Store the id of this game and then access the matching object in GameDict
 
     # get game_id
@@ -68,18 +70,19 @@ def move():
         curGame = data['game_id']
     else:
         print 'Data missing game_id'
-
     # get curGame from gameDic
     if curGame in gameDic:
         battle = gameDic[curGame]
         #Update the game with new gamestate
+        start = time.time()
         battle.update(data)
         #Request next best move
         nextMove = battle.getNextMove()
+        print("--- %s seconds ---" % (time.time() - start))
     else:
         print 'ERROR: Received request for game that does not exist'
         print '  To avoid collateral damage to other games, responding with \
-default move'
+        default move'
         nextMove = 'up'
 
     # taunt should be replaced by variable
