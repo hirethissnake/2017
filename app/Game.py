@@ -186,6 +186,7 @@ class Game:
                 #closestFoodCoord = foodCoords
 
 
+            #foodCoord += 1
             foodWeight = 100# - health - pathLength # this will change based on
 
                                                    # health decrementation
@@ -314,10 +315,11 @@ class Game:
         for other_opt in otherOptions:
             if self.weightGrid.optimumPathLength(other_opt, u) == float('inf'):
                 dont = True
+        self.weightGrid.setWeights(n, 1)
         if dont:
             print "Switched directions from weightEnclosedSpaces"
             return otherOptions[0]
-        self.weightGrid.setWeights(n, 1)
+        return u
         #set other snak eotpions to 1
 
 
