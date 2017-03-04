@@ -101,7 +101,7 @@ class Game:
 
         us = self.snakes[self.you] #Represents our snakes
         ourSnakePos = us.getAllPositions()
-        ourTail = ourSnakePos[-1] #[[x, y],[x,y]]=
+        ourTail = ourSnakePos[-1]
         ourTailX = ourTail[0]
         ourTailY = ourTail[1]
 
