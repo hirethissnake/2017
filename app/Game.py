@@ -73,7 +73,7 @@ class Game:
 
         topPriorityNode = self.weightGrid.getNodeWithPriority(0)
         if self.weightGrid.isNodeWeightUnique(topPriorityNode):
-            target = self.weightGrid.optimumPath(topPriorityNode, self.you)[1]
+            target = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), topPriorityNode)[1]
         else:
             numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
             duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
