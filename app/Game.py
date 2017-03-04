@@ -1,6 +1,7 @@
 """Process all game data. Handles getting in new board states, analyzing snake
 health, and providing Main with the best next move."""
 
+import sys
 from Snake import Snake
 from Board import Board
 
@@ -56,18 +57,26 @@ class Game:
 
     def getNextMove(self):
         """"Use all algorithms to determine the next best move for our snake."""
-        bestNode = self.weightGrid.getNodeWithPriority(1)
 
-        return bestNode
+        # RUN WEIGHTING ALGORITHMS HERE
 
-        #TODO
-            #Run each algorithm to make decisions
-            #Find best route to desired square
-            #Ensure boundary is not selected (shouldn't be an issue since we
-            # would only head towards positively weighted squares anyway and
-            # boundary square do not exist according to algorithm)
-            #If several candidates, pick one at random
-            #Return decision
+        topPriorityNode = self.weightGrid.getNodeWithPriority(0)
+        if self.weightGrid.isNodeWeightUnique(topPriorityNode):
+            return topPriorityNode
+
+        topPriorityWeight = self.weightGrid.getWeight(topPriorityNode)
+        numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityWeight)
+
+        duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
+        closestLen = sys.maxint
+        closestPos = []
+        for node in duplicateNodes:
+            tempLen = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), node)
+            if tempLen < closestLen:
+                closestLen = tempLen
+                closestPos = node
+
+        return closestPos
 
 
     def weightNotHitSnakes(self):
@@ -100,7 +109,7 @@ class Game:
             #Goes through all food and returns the closest according to optimumPath
         foodCoord = 0
         pathLength = 500
-        shortestPath = float("inf")
+        shortestPath = sys.maxint
         closestFoodCoord = 0
         oursnake = self.snakes[self.you]
         head = oursnake.getHeadPosition()
@@ -112,8 +121,9 @@ class Game:
                 closestFoodCoord = foodCoord
 
             foodCoord += 1
-            foodWeight = 100 - health - pathLength # this will change based on how much health we lose each turn
-            self.weightGrid.setWeight(foodCoords,foodWeight)
+            foodWeight = 100 - health - pathLength # this will change based on
+                                                   # health decrementation
+            self.weightGrid.setWeight(foodCoords, foodWeight)
         if health > 30:
             return False
 

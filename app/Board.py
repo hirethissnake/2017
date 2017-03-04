@@ -116,7 +116,8 @@ showPath                void        Display graphic of best path between nodes
             raise ValueError('height must be greater than 1')
 
 
-    def nodeAsString(self, u):
+    @staticmethod
+    def nodeAsString(u):
         """
         Return a node as a string
 
@@ -127,7 +128,8 @@ showPath                void        Display graphic of best path between nodes
         return str(u[0]) + ',' + str(u[1])
 
 
-    def stringAsNode(self, u):
+    @staticmethod
+    def stringAsNode(u):
         """
         Return a string as a node
 
