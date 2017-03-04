@@ -94,24 +94,27 @@ class Game:
         #TODO
             #How desperately do we need food
             #Goes through all food and returns the closest according to optimumPath
-        j = 0
-        y = 500
-        d = 0
+        foodCoord = 0
+        pathLength = 500
+        shortestPath = 0
+        closestFoodCoord = 0
         oursnake = self.snakes[self.you]
         head = oursnake.getHeadPosition()
         health = oursnake.getHealth()
-        self.weightGrid.setWeights(self.food, 100)
         for foodCoords in self.food:
-            if len(self.weightGrid.optimumPath(head, foodCoords)) < y:
-                y = len(self.weightGrid.optimumPath(head, foodCoords))
-                d = j
+            pathLength = len(self.weightGrid.optimumPath(head, foodCoords))
+            if pathLength < shortestPath:
+                shortestPath = pathLength
+                closestFoodCoord = foodCoord
 
-            j += 1
+            foodCoord += 1
+            foodWeight = 100 - health - pathLength
+            self.weightGrid.setWeight(foodCoords,foodWeight)
         if health > 30:
             return False
 
 
-        return self.weightGrid.optimumPath(head, self.food[d])
+        return self.weightGrid.optimumPath(head, self.food[closestFoodCoord])
 
 
 
