@@ -261,7 +261,7 @@ class Game:
 
     def weightEnclosedSpaces(self, u):
         us_id = self.you
-        for snk in self.snakes:
+        for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
             if snk.identifier == us_id:
                 ourSnake = snk
                 continue
@@ -280,7 +280,7 @@ class Game:
             self.weightGrid.setWeights(n, 0)
             #self.weightGrid.showWeights(True,True)
         ourHead = ourSnake.getHeadPosition
-        path = self.weightGrid.optimumPath(ourHead, u)
+        path = self.weightGrid.optimumPath(ourHead, u) #Current goal
         otherOptions = []
         ourHeadX = ourHead[0]
         ourHeadY = ourHead[1]
@@ -302,6 +302,7 @@ class Game:
             if self.weightGrid.optimumPathLength(other_opt, u) == float('inf'):
                 dont = True
         if dont:
+            print "Switched directions from weightEnclosedSpaces"
             return otherOptions[0]
         self.weightGrid.setWeights(n, 1)
         #set other snak eotpions to 1
