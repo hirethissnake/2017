@@ -60,6 +60,7 @@ def move():
     # E1136 Value 'data' is insubscriptable
     # pylint: disable=E1135, E1136
     data = bottle.request.json
+    print data
     #Store the id of this game and then access the matching object in GameDict
 
     # get game_id
