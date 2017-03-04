@@ -11,6 +11,8 @@ from Game import Game
 
 gameDic = dict()
 
+print "game load?"
+
 @bottle.route('/static/<path:path>')
 def static(path):
     """???."""
