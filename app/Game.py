@@ -244,6 +244,26 @@ class Game:
 
 
     def weightEnclosedSpaces(self):
+        us = self.you
+        for snk in self.snakes:
+            if snk.identifier == us:
+                continue
+            headPos = snk.getHeadPosition()
+            headX = headPos[0]
+            headY = headPos[1]
+            n = []
+            if(headX-1>=0):
+                n.append({headX-1, headY})
+            if(headX+1<self.width):
+                n.append({headX+1, headY})
+            if(headY+1<self.height):
+                n.append({headX, headY+1})
+            if(headY-1>=0):
+                n.append({headX, headY-1})
+            self.weightGrid.setWeights(n, 0)
+            self.weightGrid.showWeights(True,True)
+
+
         """Do not kill ourselves by picking a corner where we trap ourselves"""
         #TODO
             #How long are we?
