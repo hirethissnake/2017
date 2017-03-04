@@ -12,7 +12,8 @@ from Game import Game
 
 numCases = 0
 currentCase = 0
-URL = 'http://localhost:8080'
+URL = 'http://ec2-54-152-25-2.compute-1.amazonaws.com:8080'
+# URL = 'http://localhost:8080'
 # URL = 'https://sneaky-snake-tester.herokuapp.com'
 # remove global errors
 # pylint: disable=W0603
@@ -262,7 +263,7 @@ def mainTest2():
     testCase('move' in responseData, True, 'main returns move')
     testCase('taunt' in responseData, True, 'main returns new taunt')
 
-    testCase(responseData['move'], 'up' or 'down' or 'left' or 'right', 'valid move')
+    testCase(responseData['move'], 'right', 'valid move')
 
 def testCase(var1, var2, testIdent):
     """Run comparison tests, and if they fail, will raise an exception."""
@@ -284,12 +285,12 @@ if __name__ == '__main__':
         print '-- Testing Game.py --'
         gameTest1()
         gameTest2()
-        # print '-- Testing Snake.py --'
-        # snakeTest1()
-        # snakeTest2()
-        # print '-- Testing Main.py --'
-        # mainTest1()
-        # mainTest2()
+        print '-- Testing Snake.py --'
+        snakeTest1()
+        snakeTest2()
+        print '-- Testing Main.py --'
+        mainTest1()
+        mainTest2()
         print "Test completed successfully."
     except ValueError as failure:
         print failure
