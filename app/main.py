@@ -81,7 +81,7 @@ def move():
         battle.update(data)
         #Request next best move
         nextMove = battle.getNextMove()
-        nextTaunt = battle.getTaunt
+        nextTaunt = battle.getTaunt()
         print("--- %s seconds ---" % (time.time() - start))
     else:
         print 'ERROR: Received request for game that does not exist'
