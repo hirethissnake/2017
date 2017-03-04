@@ -276,7 +276,7 @@ class Game:
     def weightEnclosedSpaces(self, u):
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
-            if snk.identifier == us_id:
+            if snk.getIdentifier() == us_id:
                 ourSnake = snk
                 continue
             headPos = snk.getHeadPosition()
