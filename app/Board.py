@@ -68,23 +68,24 @@ showPath                void        Display graphic of best path between nodes
         self.height = height
 
         self.graph = igraph.Graph(directed=True)  # declare graph
-        for row in range(height + 1):  # create vertices
-            for col in range(width + 1):
+        for row in range(height):  # create vertices
+            for col in range(width):
                 self.graph.add_vertex(name=str(row) + ',' + str(col))
 
         for row in range(height):  # create 1/2 edges
             for col in range(width):
-                self.graph.add_edge(str(row) + ',' + str(col),
-                                    str(row) + ',' + str(col + 1), weight=50.0)
-                self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
-                                    ',' + str(col), weight=50.0)
-
-        for row in range(1, height + 1):  # create other 1/2 edges
-            for col in range(1, width + 1):
-                self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
-                                    str(col - 1), weight=50.0)
-                self.graph.add_edge(str(row) + ',' + str(col), str(row - 1) +
-                                    ',' + str(col), weight=50.0)
+                if col < self.width - 1:
+                    self.graph.add_edge(str(row) + ',' + str(col),
+                                        str(row) + ',' + str(col + 1), weight=50.0)
+                if col > 0:
+                    self.graph.add_edge(str(row) + ',' + str(col), str(row) + ',' +
+                                        str(col - 1), weight=50.0)
+                if row < self.height - 1:
+                    self.graph.add_edge(str(row) + ',' + str(col), str(row + 1) +
+                                        ',' + str(col), weight=50.0)
+                if row > 0:
+                    self.graph.add_edge(str(row) + ',' + str(col), str(row - 1) +
+                                        ',' + str(col), weight=50.0)
 
         self.dictionary = ValueSortedDict()
         for row in range(height):  # populate dictionary
@@ -595,7 +596,7 @@ showPath                void        Display graphic of best path between nodes
 
 if __name__ == '__main__':
     g = Board(20, 20)
-    g.setWeight([0, 5], 0)
+    """g.setWeight([0, 5], 0)
     g.setWeight([1, 5], 0)
     g.setWeight([2, 5], 0)
     g.setWeight([3, 5], 0)
@@ -619,4 +620,6 @@ if __name__ == '__main__':
     #g.showWeights(True, True)
     g.averageWeights(20)
     g.showPath([0, 0], [0, 10])
-    #g.showWeights(True, True)
+    #g.showWeights(True, True)"""
+    #print g.optimumPath([11, 7], [0, 0])
+    print g.graph
