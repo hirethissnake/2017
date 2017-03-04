@@ -46,9 +46,9 @@ def start():
         'color': '#FFEBD0',
         'taunt': 'SSssssSSSsSSsssS',
         'head_url': head_url,
-        'name': 'sneak'
-        'head_type' : 'tongue'
-        'tail_type' : 'curled'
+        'name': 'sneak',
+        'head_type': 'tongue',
+        'tail_type': 'curled'
     }
 
     # log and return
