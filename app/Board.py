@@ -221,6 +221,7 @@ showPath                void        Display graphic of best path between nodes
 
         for key in self.dictionary:
             self.dictionary[key] = 50.0
+            print self.dictionary[key]
 
 
     def setEdges(self):
