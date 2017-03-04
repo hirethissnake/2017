@@ -503,7 +503,6 @@ showPath                void        Display graphic of best path between nodes
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
 
-        self.getWeight()
         ids = self.graph.get_shortest_paths(self.nodeAsString(u),
                                                   to=self.nodeAsString(v),
                                                   weights='weight', mode='OUT',
