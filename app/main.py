@@ -69,6 +69,7 @@ def move():
     print curGame
     print gameDic
     # get curGame from gameDic
+    nextMove = ''
     if curGame in gameDic:
         battle = gameDic[curGame]
         #Update the game with new gamestate
