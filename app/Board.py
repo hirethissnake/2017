@@ -208,71 +208,52 @@ showPath                void        Display graphic of best path between nodes
         self.dictionary[nodeName] = 100 - float(weight)  # ensure front is highest
 
 
-    def setWeights(self, nodes, values):
+    def setWeights(self, nodes, value):
         """
         Modify a list of node weights.
 
         param1: [[int, int]] - array of nodes in the form [<integer>,<integer>]
-        param2: [float/int] - array of weights corresponding to nodes
+        param2: float/int - weight to set
         """
-
-        self.setWeightsErrorCheck(nodes, values)  # comment for speed
 
         tempLen = len(nodes)
 
         for nodeIndex in range(tempLen):
-            self.setWeight(nodes[nodeIndex], values[nodeIndex])
+            self.setWeight(nodes[nodeIndex], value)
 
 
-    @staticmethod
-    def setWeightsErrorCheck(nodes, values):
-        """
-        Check setWeights() method for errors.
-
-        param2: [[int, int]] - array of nodes to check
-        param3: [float/int] - array of weights to check
-        """
-
-        if len(nodes) != len(values):
-            raise ValueError('lists must be the same length')
-
-
-    def modifyWeights(self, operator, nodes, values):
+    def modifyWeights(self, operator, nodes, value):
         """
         Modify a list of node weights.
 
         param1: string - operator ('*', '/', '+', '-')
         param2: [[int, int]] - array of nodes in the form <integer>,<integer>
-        param3: [float/int] - array of weights corresponding to nodes
+        param3: float/int - value to modify by
         """
 
-        self.modifyWeightsErrorCheck(operator, nodes, values)  # comment speed
+        self.modifyWeightsErrorCheck(operator)  # comment speed
 
         tempLen = len(nodes)
 
         for nodeIndex in range(tempLen):
             if operator == "*":
-                self.multiplyWeight(nodes[nodeIndex], values[nodeIndex])
+                self.multiplyWeight(nodes[nodeIndex], value)
             elif operator == "/":
-                self.divideWeight(nodes[nodeIndex], values[nodeIndex])
+                self.divideWeight(nodes[nodeIndex], value)
             elif operator == "+":
-                self.addWeight(nodes[nodeIndex], values[nodeIndex])
+                self.addWeight(nodes[nodeIndex], value)
             elif operator == "-":
-                self.subtractWeight(nodes[nodeIndex], values[nodeIndex])
+                self.subtractWeight(nodes[nodeIndex], value)
 
 
     @staticmethod
-    def modifyWeightsErrorCheck(operator, nodes, values):
+    def modifyWeightsErrorCheck(operator):
         """
         Check modifyWeights() method for errors.
 
         param1: string - operator to check
-        param2: [[int, int]] - array of nodes to check
-        param3: [float/int] - array of weights to check
         """
 
-        if len(nodes) != len(values):
-            raise ValueError('lists must be the same length')
         if operator != '*' and operator != '/' and operator != '+' \
                     and operator != '-':
             raise ValueError('invalid operator')
