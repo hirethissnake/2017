@@ -56,6 +56,7 @@ class Game:
 
     def showBoard(self):
         """Use to show board with weight and colours """
+        print "Running showBoard"
         self.weightGrid.showWeights(True, True)
 
 
@@ -132,10 +133,8 @@ class Game:
         #TODO
             #How desperately do we need food
             #Goes through all food and returns the closest according to optimumPath
-        foodCoord = 0
         pathLength = 500
         shortestPath = sys.maxint
-        closestFoodCoord = 0
         oursnake = self.snakes[self.you]
         head = oursnake.getHeadPosition()
         health = oursnake.getHealth()
@@ -143,14 +142,13 @@ class Game:
             pathLength = len(self.weightGrid.optimumPath(head, foodCoords))
             if pathLength < shortestPath:
                 shortestPath = pathLength
-                closestFoodCoord = foodCoord
+                #closestFoodCoord = foodCoords
 
-            foodCoord += 1
+
             foodWeight = 100 - health - pathLength # this will change based on
                                                    # health decrementation
             self.weightGrid.setWeight(foodCoords, foodWeight)
 
-        return self.weightGrid.optimumPath(head, self.food[closestFoodCoord])
 
 
     def weightSmallSnakes(self):
@@ -160,11 +158,11 @@ class Game:
             #How long will it take to get to the snake?
             #How much food is around for the snake to grow?
         oursnake = self.snakes[self.you]
-        ourSize = oursnake.Snake.getSize()
+        ourSize = oursnake.getSize()
         weightAdd = 7
         for otherSnake in self.snakes:
-            otherSnakeSize = self.snakes[otherSnake].Snake.getSize()
-            headA = otherSnake.headArea(otherSnake)
+            otherSnakeSize = self.snakes[otherSnake].getSize()
+            headA = self.headArea(self.snakes[otherSnake])
             if  otherSnakeSize < ourSize:
                 weightAdd += 8
             for headCoord in headA:
@@ -182,16 +180,28 @@ class Game:
             #find area
             #find body
             #return coordinates
-        head = snek.Snake.getHeadPosition()
+        head = snek.getHeadPosition()
         xCoord = head[0]
         yCoord = head[1]
+        upperBoundX = xCoord+2
+        upperBoundY = yCoord+2
+        lowerBoundX = xCoord-2
+        lowerBoundY = yCoord-2
         newCoordinates = []
+        if upperBoundY > self.height:
+            upperBoundY = self.height-1
+        if upperBoundX > self.width:
+            upperBoundX = self.width-1
+        if lowerBoundY < 0:
+            lowerBoundY = 0
+        if lowerBoundX < 0:
+            lowerBoundX = 0
         #goes through a 4x4 grid around the snake and creates an array of those coordinates
-        for xCoordNew in range(xCoord-2, xCoord+2):
-            for yCoordNew in range(yCoord-2, yCoord+2):
+        for xCoordNew in range(lowerBoundX, upperBoundX):
+            for yCoordNew in range(lowerBoundY, upperBoundY):
                 newCoordinates.append([xCoordNew, yCoordNew])
         #removes any body segments from the grid
-        for bodySegment in snek.Snake.getAllPositions():
+        for bodySegment in snek.getAllPositions():
             newCoordinates.remove(bodySegment)
         #return new bodyless coordinates
         return newCoordinates
