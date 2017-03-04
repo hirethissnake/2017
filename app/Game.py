@@ -117,7 +117,8 @@ class Game:
             elif self.weightGrid.optimumPathLength(usSnake.getHeadPosition(), closestPos) != float('inf'):
                 nodeValid = True
 
-        print "Following path: " + str(target)
+        #self.weightGrid.showWeights(True, True)
+        print "Following path: " + str(self.weightGrid.optimumPath(usSnake.getHeadPosition(), target))
 
         nextMove = self.weightEnclosedSpaces(target)
         return self.convertNodeToDirection(nextMove, self.you)
@@ -186,7 +187,7 @@ class Game:
                 closestFoodCoord = foodCoord
 
             foodCoord += 1
-            foodWeight = 100 - health - pathLength # this will change based on
+            foodWeight = 100# - health - pathLength # this will change based on
                                                    # health decrementation
             self.weightGrid.setWeight(foodCoords, foodWeight)
 

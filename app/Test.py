@@ -162,9 +162,6 @@ def gameTest2():
     """
     print "This faulty data test suite is not complete."
     global numCases
-<<<<<<< HEAD
-    numCases += 0
-=======
     numCases += 6
 
     initParams = {"width": 20, "height": 20, "game_id": "some-new-uuid"}
@@ -196,7 +193,7 @@ def gameTest2():
 """def gameTest3():
     Test functionality for helper functions.
     This test suite has  tests.
-    
+
     print "Testing game foodWeight, weigthSmallSnakes, and headArea functions"
     global numCases
     numCases += 3
@@ -215,7 +212,6 @@ def gameTest2():
     g3.weightSmallSnakes()
     g3.showBoard()
 """
->>>>>>> origin/master
 
 def mainTest1():
     """Test update functionality for game starting.
@@ -308,7 +304,7 @@ def dangerousMoveTest1():
     [14, 3], [15, 3], [15, 4], [15, 5], [15, 6], [15, 7], [14, 7], [13, 7],
     [12, 7], [11, 7], [11, 6]]}],
     "height":20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa",
-    "food":[[13, 5], [1, 16]], "you":"my-id"}
+    "food":[[13, 5], [1, 16]], "you":"my-id", "turn":0}
 
     g1.update(updateParams)
     g1.getNextMove()
@@ -331,20 +327,7 @@ if __name__ == '__main__':
     numCases = 0
     # Snake.py tests
     try:
-<<<<<<< HEAD
-        # print '-- Testing Game.py --'
-        # gameTest1()
-        # print '-- Testing Snake.py --'
-        # snakeTest1()
-        # snakeTest2()
-        # print '-- Testing Main.py --'
-        # mainTest1()
-        # mainTest2()
-        print '-- Skipping main tests --'
-        print '-- Testing dangerous functions --'
-        dangerousMoveTest1()
-=======
-        print '-- Testing Game.py --'
+        """print '-- Testing Game.py --'
         gameTest1()
         gameTest2()
         #gameTest3()
@@ -353,8 +336,10 @@ if __name__ == '__main__':
         snakeTest2()
         print '-- Testing Main.py --'
         mainTest1()
-        mainTest2()
->>>>>>> origin/master
+        mainTest2()"""
+        print '-- Skipping main tests --'
+        print '-- Testing dangerous functions --'
+        dangerousMoveTest1()
         print "Test completed successfully."
     except ValueError as failure:
         print failure
