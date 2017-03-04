@@ -225,6 +225,7 @@ showPath                void        Display graphic of best path between nodes
         """
         for node in self.dictionary:
             weight = self.dictionary[node]
+            print str(node) + ' ' + str(weight)
             for edge in self.edges[node]:  # 100 - weight is to unsure higher weights
                                         # correlate to shorter paths when traversing
                 edge['weight'] = float(weight)
@@ -504,7 +505,7 @@ showPath                void        Display graphic of best path between nodes
 
         ids = self.graph.get_shortest_paths(self.nodeAsString(u),
                                                   to=self.nodeAsString(v),
-                                                  weights='weight', mode='OUT',
+                                                  weights='weight', mode='IN',
                                                   output='vpath')[0]
                                              # generate list of Ids in path
         return [self.stringAsNode(self.graph.vs.find(x)['name']) for x in ids]

@@ -11,7 +11,8 @@ from Game import Game
 
 gameDic = dict()
 
-print "game load?"
+print "main.py is now running"
+
 
 @bottle.route('/static/<path:path>')
 def static(path):
@@ -48,7 +49,7 @@ def start():
         'color': '#FFEBD0',
         'taunt': 'SSssssSSSsSSsssS',
         'head_url': head_url,
-        'name': 'sneak',
+        'name': 'Sneakysnake',
         'head_type': 'tongue',
         'tail_type': 'curled'
     }
@@ -88,9 +89,11 @@ def move():
         nextMove = 'up'
 
     # taunt should be replaced by variable
+    tauntDict = {'GMO':'Do you have any non-GMO food?'}
+
     sendingData = {
         'move': nextMove,
-        'taunt': 'battlesnake-python!'
+        'taunt': tauntList['GMO']
     }
 
     # log and return

@@ -74,10 +74,12 @@ class Game:
         self.weightGrid.setEdges()
 
         target = []
+        usSnake = self.snakes[self.you]
 
         topPriorityNode = self.weightGrid.getNodeWithPriority(0)
         if self.weightGrid.isNodeWeightUnique(topPriorityNode):
-            target = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), topPriorityNode)[1]
+            target = self.weightGrid.optimumPath(usSnake.getHeadPosition(),
+                                                 topPriorityNode)
         else:
             numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
             duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
@@ -85,26 +87,30 @@ class Game:
             closestPos = []
 
             for node in duplicateNodes:
-                tempLen = len(self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), node))
+                tempLen = len(self.weightGrid.optimumPath(usSnake.getHeadPosition(), node))
 
                 if tempLen < closestLen:
                     closestLen = tempLen
                     closestPos = node
 
-            target = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), closestPos)[1]
+            target = self.weightGrid.optimumPath(usSnake.getHeadPosition(), closestPos)
 
-        return self.convertNodeToDirection(target, self.you)
+        print "Following path: " + str(target)
+
+        return self.convertNodeToDirection(target[1], self.you)
 
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
+
         us = self.snakes[self.you] #Represents our snakes
         ourSnakePos = us.getAllPositions()
-        ourTail = ourSnakePos[-1] #[[x, y],[x,y]]=
+        ourTail = ourSnakePos[-1]
         ourTailX = ourTail[0]
         ourTailY = ourTail[1]
 
         for s in self.snakes:
+            print s
             positions = self.snakes[s].getAllPositions()
             self.weightGrid.setWeights(positions, 0)
             """for x in positions:
@@ -240,9 +246,9 @@ class Game:
         if node[0] == (head[0] - 1):
             return 'left'
         if node[1] == (head[1] + 1):
-            return 'up'
-        if node[1] == (head[1] - 1):
             return 'down'
+        if node[1] == (head[1] - 1):
+            return 'up'
         else:
             raise ValueError('node must be adjacent')
 
