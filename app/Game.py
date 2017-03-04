@@ -77,11 +77,12 @@ class Game:
             for node in duplicateNodes:
                 tempLen = len(self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), node))
                 print tempLen
+                print "head: " + str(self.snakes[self.you].getHeadPosition())
                 if tempLen < closestLen:
                     closestLen = tempLen
                     closestPos = node
                 print node
-            print "pos:" + closestPos
+            print "pos:" + str(closestPos)
             target = self.weightGrid.optimumPath(closestPos, self.you)[0]
 
         return self.convertNodeToDirection(target, self.snakes[self.you])
