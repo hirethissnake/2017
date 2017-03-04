@@ -259,10 +259,11 @@ class Game:
             #otherSnake.weightFood()
 
 
-    def weightEnclosedSpaces(self):
-        us = self.you
+    def weightEnclosedSpaces(self, u):
+        us_id = self.you
         for snk in self.snakes:
-            if snk.identifier == us:
+            if snk.identifier == us_id:
+                ourSnake = snk
                 continue
             headPos = snk.getHeadPosition()
             headX = headPos[0]
@@ -278,6 +279,32 @@ class Game:
                 n.append({headX, headY-1})
             self.weightGrid.setWeights(n, 0)
             self.weightGrid.showWeights(True,True)
+        ourHead = ourSnake.getHeadPosition
+        path = self.weightGrid.optimumPath(ourHead, u)
+        otherOptions = []
+        ourHeadX = ourHead[0]
+        ourHeadY = ourHead[1]
+        if(ourHeadX-1>=0):
+            otherOptions.append({ourHeadX-1, ourHeadY})
+        if(ourHeadX+1<self.width):
+            n.append({ourHeadX+1, ourHeadY})
+        if(ourHeadY+1<self.height):
+            n.append({ourHeadX, ourHeadY+1})
+        if(ourHeadY-1>=0):
+            n.append({ourHeadX, ourHeadY-1})
+        otherOptions.remove(path[1]) #Remove from other options our current option
+        otherOptions.remove(ourSnake.getAllPositions[1]) # Remove our 'neck' from other otherOptions
+        dont = False
+        for other_opt in otherOptions:
+            if self.weightGrid.optimumPathLength(other_opt, u) == float('inf'):
+                dont = True
+
+        #set other snak eotpions to 1
+
+
+
+
+
 
 
         """Do not kill ourselves by picking a corner where we trap ourselves"""
