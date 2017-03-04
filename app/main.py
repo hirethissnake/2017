@@ -6,6 +6,7 @@
 
 import os
 import bottle
+import time
 from Game import Game
 
 gameDic = dict()
@@ -72,9 +73,11 @@ def move():
     if curGame in gameDic:
         battle = gameDic[curGame]
         #Update the game with new gamestate
+        start = time.time()
         battle.update(data)
         #Request next best move
         nextMove = battle.getNextMove()
+        print("--- %s seconds ---" % (time.time() - start))
     else:
         #print 'ERROR: Received request for game that does not exist'
         #print '  To avoid collateral damage to other games, responding with \
