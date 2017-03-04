@@ -240,9 +240,9 @@ class Game:
         if node[0] == (head[0] - 1):
             return 'left'
         if node[1] == (head[1] + 1):
-            return 'up'
-        if node[1] == (head[1] - 1):
             return 'down'
+        if node[1] == (head[1] - 1):
+            return 'up'
         else:
             raise ValueError('node must be adjacent')
 
