@@ -96,7 +96,7 @@ class Game:
             #Goes through all food and returns the closest according to optimumPath
         foodCoord = 0
         pathLength = 500
-        shortestPath = 0
+        shortestPath = float("inf")
         closestFoodCoord = 0
         oursnake = self.snakes[self.you]
         head = oursnake.getHeadPosition()
@@ -108,7 +108,7 @@ class Game:
                 closestFoodCoord = foodCoord
 
             foodCoord += 1
-            foodWeight = 100 - health - pathLength
+            foodWeight = 100 - health - pathLength # this will change based on how much health we lose each turn
             self.weightGrid.setWeight(foodCoords,foodWeight)
         if health > 30:
             return False
