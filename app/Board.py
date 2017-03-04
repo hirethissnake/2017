@@ -205,6 +205,8 @@ showPath                void        Display graphic of best path between nodes
         elif weight > 100:
             weight = float(100)
 
+        print str(u) + ' ' + str(weight)
+
         nodeName = self.nodeAsString(u)
 
         self.dictionary[nodeName] = 100 - float(weight)  # ensure front is highest
