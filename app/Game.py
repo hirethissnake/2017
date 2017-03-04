@@ -276,9 +276,9 @@ class Game:
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
             if self.snakes[snk].getIdentifier() == us_id:
-                ourSnake = snk
+                ourSnake = self.snakes[snk]
                 continue
-            headPos = snk.getHeadPosition()
+            headPos = self.snakes[snk].getHeadPosition()
             headX = headPos[0]
             headY = headPos[1]
             n = []
