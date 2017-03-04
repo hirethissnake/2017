@@ -16,7 +16,8 @@ class Game:
     you             (string)    - UUID representing what our snake's ID is
     food   (array)     - array of coord arrays
     turn            (int)       - 0-indexed int representing completed turns
-    dead_snakes     (array)     - array of Snake objects that no longer compete"""
+    snakes          (dict)      - dict of Snake objects currently in play
+    deadSnakes      (dict)      - dict of Snake objects that no longer compete"""
 
     def __init__(self, data):
         """Initialize the Game class.
