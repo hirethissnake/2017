@@ -10,6 +10,7 @@ from Game import Game
 
 gameDic = dict()
 game = []
+print "initialized"
 
 @bottle.route('/static/<path:path>')
 def static(path):
