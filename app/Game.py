@@ -70,10 +70,12 @@ class Game:
         self.weightGrid.setEdges()
 
         target = []
+        usSnake = self.snakes[self.you]
 
         topPriorityNode = self.weightGrid.getNodeWithPriority(0)
         if self.weightGrid.isNodeWeightUnique(topPriorityNode):
-            target = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), topPriorityNode)[1]
+            target = self.weightGrid.optimumPath(usSnake.getHeadPosition(),
+                                                 topPriorityNode)
         else:
             numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
             duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
@@ -81,15 +83,17 @@ class Game:
             closestPos = []
 
             for node in duplicateNodes:
-                tempLen = len(self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), node))
+                tempLen = len(self.weightGrid.optimumPath(usSnake.getHeadPosition(), node))
 
                 if tempLen < closestLen:
                     closestLen = tempLen
                     closestPos = node
 
-            target = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), closestPos)[1]
+            target = self.weightGrid.optimumPath(usSnake.getHeadPosition(), closestPos)
 
-        return self.convertNodeToDirection(target, self.you)
+        print "Following path: " + str(target)
+
+        return self.convertNodeToDirection(target[1], self.you)
 
 
     def weightNotHitSnakes(self):
