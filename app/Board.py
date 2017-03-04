@@ -3,13 +3,13 @@ Calculate best path and path benefits.
 Includes vertices and edges.
 """
 
-import re
-import igraph
 import colorsys
+import igraph
 try:
     from appJar import gui
+    print 'Importing appJar'
 except ImportError:
-    pass
+    print 'Did not import appJar'
 from sortedcollections import ValueSortedDict
 
 
@@ -98,7 +98,6 @@ showPath                void        Display graphic of best path between nodes
                 edges = self.graph.incident(vertexId) # list of edges
                 edges = [self.graph.es.find(edge) for edge in edges]
                 self.edges[str(row) + ',' + str(col)] = edges
-
 
     def initErrorCheck(self, width, height):
         """
