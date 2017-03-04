@@ -593,6 +593,14 @@ showPath                void        Display graphic of best path between nodes
         app.go() # show window
 
 
+    def printDict(self):
+        """
+        Print dictionary.
+        """
+        
+        print self.dictionary
+
+
 
 if __name__ == '__main__':
     g = Board(20, 20)

@@ -84,6 +84,8 @@ class Game:
 
             target = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), closestPos)[1]
 
+        self.weightGrid.printDict();
+
         return self.convertNodeToDirection(target, self.you)
 
 
