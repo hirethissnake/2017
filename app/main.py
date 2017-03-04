@@ -26,6 +26,11 @@ def start():
     print 'We have begun a new game!'
 
     data = bottle.request.json
+
+    # TODO:
+        # REMOVE
+    print data
+
     #Create a game object with the data given
     game_id = data['game_id']
     battle = Game(data)
