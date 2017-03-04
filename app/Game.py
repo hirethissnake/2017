@@ -188,7 +188,8 @@ class Game:
 
         snake = self.snakes[identifer]
         head = snake.getHeadPosition()
-
+        print "head: " + str(head)
+        print "node: " + str(node)
         if node[0] == (head[0] + 1):
             return 'right'
         if node[0] == (head[0] - 1):
