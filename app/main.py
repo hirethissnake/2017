@@ -9,6 +9,7 @@ import bottle
 from Game import Game
 
 gameDic = dict()
+game = []
 
 @bottle.route('/static/<path:path>')
 def static(path):
@@ -31,9 +32,11 @@ def start():
 
     #Create a game object with the data given
     game_id = data['game_id']
-    battle = Game(data)
+    #battle = Game(data)
+    global game
+    game = Game(data)
     #Enter the game into the GameDictionary with the key value set to it's id
-    gameDic[game_id] = battle
+    #gameDic[game_id] = battle
 
     head_url = '%s://%s/static/head.png' % (
         # pylint: disable=E1101
@@ -67,11 +70,13 @@ def move():
     else:
         print 'Data missing game_id'
     print curGame
+    global game
+    print game
     print gameDic
     # get curGame from gameDic
     nextMove = ''
     if curGame in gameDic:
-        battle = gameDic[curGame]
+        battle = game
         #Update the game with new gamestate
         battle.update(data)
         #Request next best move
