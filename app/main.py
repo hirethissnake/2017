@@ -81,19 +81,18 @@ def move():
         battle.update(data)
         #Request next best move
         nextMove = battle.getNextMove()
+        nextTaunt = battle.getTaunt
         print("--- %s seconds ---" % (time.time() - start))
     else:
         print 'ERROR: Received request for game that does not exist'
         print '  To avoid collateral damage to other games, responding with \
         default move'
         nextMove = 'up'
-
-    # taunt should be replaced by variable
-    tauntDict = {'GMO':'Do you have any non-GMO food?'}
+        nextTaunt = 'yeaboi'
 
     sendingData = {
         'move': nextMove,
-        'taunt': tauntList['GMO']
+        'taunt': nextTaunt
     }
 
     # log and return
