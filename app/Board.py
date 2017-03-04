@@ -11,7 +11,6 @@ try:
 except ImportError:
     pass
 from sortedcollections import ValueSortedDict
-#from scipy.ndimage.filters import gaussian_filter
 
 
 class Board:
@@ -20,7 +19,7 @@ class Board:
 
     Has the following public methods:
 
-## OPERATORS ##
+## OPERATORS ##     ## RETURN ##
 
 __init__                void        Board initialization
 averageWeights          void        Balance weight values using heat equation
@@ -33,14 +32,14 @@ subtractWeight          void        Decrease weight of ndoe by subtrahend
 
 ## GETTERS ##
 
-getNodeWithPriority     string      Return vertex name with priority of some value
-getNodesWithPriority    [string]    Return array of vertexes with priority
+getNodeWithPriority     [x,y]       Return vertex name with priority of some value
+getNodesWithPriority    [[x, y]]    Return array of vertexes with priority
                                         between start and end
 getSize                 [int, int]  Get board size as an x, y array
 getWeight               int/float   Return the weight of a node u
 isNodeWeightUnique      boolean     Check if node weight exists in board twice
-countNodeWeightCopies   int         Get the number of copies of some node
-optimumPath             [string]    Get the best path between two nodes
+countNodeWeightCopies   int         Get the number of copies a specific weight
+optimumPath             [[x, y]]    Get the best path between two nodes
 
 ## SETTERS ##
 
@@ -52,7 +51,6 @@ setWeights              void        Set incoming edges of array of vertexes to
 ## DISPLAY ##
 showWeights             void        Opens visualiation of weights of all nodes
 showPath                void        Display graphic of best path between nodes
-showCombiner            void        Visualize the weights of all nodes by color
     """
 
 
@@ -119,19 +117,39 @@ showCombiner            void        Visualize the weights of all nodes by color
             raise ValueError('height must be greater than 1')
 
 
+    def nodeAsString(self, u):
+        """
+        Return a node as a string
+
+        param1: [[x, y]] - node to convert
+        return: string - node representation
+        """
+
+        return str(u[0]) + ',' + str(u[1])
+
+
+    def stringAsNode(self, u):
+        """
+        Return a string as a node
+
+        param1: [int, int] - node in form [x, y]
+        return: [[x, y]] - node representation
+        """
+
+        coords = u.split(',')
+        return [int(coords[0]), int(coords[1])]
+
+
     def checkNode(self, u):
         """
         Check if u is a valid node.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         """
 
-        match = re.match('^(\\d+),(\\d+)$', u)  # ensure a,b
-        if match is None:
-            raise ValueError('nodes should be in the form \'a,b\'')
-        one = int(match.group(1))  # get each of a and b
-        two = int(match.group(2))
-        if one >= self.height or one < 0 or two >= self.width or two < 0:
+        if len(u) != 2:
+            raise ValueError('nodes should be in the form [x, y]')
+        if u[0] >= self.height or u[0] < 0 or u[1] >= self.width or u[1] < 0:
             raise ValueError('node is out of bounds')
 
 
@@ -173,7 +191,7 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Set incoming edges of vertex u to weight.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - weight to set
         """
 
@@ -184,78 +202,61 @@ showCombiner            void        Visualize the weights of all nodes by color
         elif weight > 100:
             weight = float(100)
 
-        for edge in self.edges[u]:  # 100 - weight is to unsure higher weights
+        nodeName = self.nodeAsString(u)
+
+        for edge in self.edges[nodeName]:  # 100 - weight is to unsure higher weights
                                     # correlate to shorter paths when traversing
             edge['weight'] = 100 - float(weight)
 
-        self.dictionary[u] = 100 - float(weight)  # ensure front is highest
+        self.dictionary[nodeName] = 100 - float(weight)  # ensure front is highest
 
 
-    def setWeights(self, nodes, values):
+    def setWeights(self, nodes, value):
         """
         Modify a list of node weights.
 
-        param1: [string] - array of nodes in the form <integer>,<integer>
-        param2: [float/int] - array of weights corresponding to nodes
+        param1: [[int, int]] - array of nodes in the form [<integer>,<integer>]
+        param2: float/int - weight to set
         """
-
-        self.setWeightsErrorCheck(nodes, values)  # comment for speed
 
         tempLen = len(nodes)
 
         for nodeIndex in range(tempLen):
-            self.setWeight(nodes[nodeIndex], values[nodeIndex])
+            self.setWeight(nodes[nodeIndex], value)
 
 
-    @staticmethod
-    def setWeightsErrorCheck(nodes, values):
-        """
-        Check setWeights() method for errors.
-
-        param2: [string] - array of nodes to check
-        param3: [float/int] - array of weights to check
-        """
-
-        if len(nodes) != len(values):
-            raise ValueError('lists must be the same length')
-
-
-    def modifyWeights(self, operator, nodes, values):
+    def modifyWeights(self, operator, nodes, value):
         """
         Modify a list of node weights.
 
         param1: string - operator ('*', '/', '+', '-')
-        param2: [string] - array of nodes in the form <integer>,<integer>
-        param3: [float/int] - array of weights corresponding to nodes
+        param2: [[int, int]] - array of nodes in the form <integer>,<integer>
+        param3: float/int - value to modify by
         """
 
-        self.modifyWeightsErrorCheck(operator, nodes, values)  # comment speed
+        self.modifyWeightsErrorCheck(operator)  # comment speed
 
         tempLen = len(nodes)
 
         for nodeIndex in range(tempLen):
             if operator == "*":
-                self.multiplyWeight(nodes[nodeIndex], values[nodeIndex])
+                self.multiplyWeight(nodes[nodeIndex], value)
             elif operator == "/":
-                self.divideWeight(nodes[nodeIndex], values[nodeIndex])
+                self.divideWeight(nodes[nodeIndex], value)
             elif operator == "+":
-                self.addWeight(nodes[nodeIndex], values[nodeIndex])
+                self.addWeight(nodes[nodeIndex], value)
             elif operator == "-":
-                self.subtractWeight(nodes[nodeIndex], values[nodeIndex])
+                self.subtractWeight(nodes[nodeIndex], value)
 
 
     @staticmethod
-    def modifyWeightsErrorCheck(operator, nodes, values):
+    def modifyWeightsErrorCheck(operator):
         """
         Check modifyWeights() method for errors.
 
         param1: string - operator to check
-        param2: [string] - array of nodes to check
-        param3: [float/int] - array of weights to check
         """
 
-        if len(nodes) != len(values):
-            raise ValueError('lists must be the same length')
         if operator != '*' and operator != '/' and operator != '+' \
                     and operator != '-':
             raise ValueError('invalid operator')
@@ -265,7 +266,7 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Multiply weight of node u by multiplier.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - number to multiply weight by
         """
 
@@ -279,7 +280,7 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Divide weight of node u by divisor.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - number to divide weight by
         """
 
@@ -293,7 +294,7 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Increase weight of node u by addend.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - number to add to weight
         """
 
@@ -307,7 +308,7 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Decrease weight of node u by subtrahend.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         param2: integer/float - number to subtract from weight
         """
 
@@ -333,13 +334,13 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Return the weight of the node u from the dictionary.
 
-        param1: string - node in the form <integer>,<integer>
+        param1: [int, int] - node in the form [x, y]
         return: integer/float - weight of node u
         """
 
         self.checkNode(u)  # comment this out for speed
 
-        weight = 100 - self.dictionary[u]
+        weight = 100 - self.dictionary[self.nodeAsString(u)]
         if weight == -float('inf'):
             weight = 0
 
@@ -353,43 +354,53 @@ showCombiner            void        Visualize the weights of all nodes by color
         param1: int - number of iterations to perform
         """
 
-        tempGrid = []
         toReset = []
-        for row in range(self.height - 1):  # loop through every node
+        gridOld = []
+        for row in range(self.height):  # loop through every node
             tempRow = []
-            for col in range(self.width - 1):
-                currentWeight = self.getWeight(str(row) + ',' + str(col))
+            for col in range(self.width):
+                currentWeight = self.getWeight([row, col])
+                tempRow.append(currentWeight)
                 if currentWeight != 50:
-                    toReset.append(str(row) + ',' + str(col))
-                toAverage = []
-                if row > 0:
-                    toAverage.append(str(row - 1) + ',' + str(col))
-                if row < self.height - 1:
-                    toAverage.append(str(row + 1) + ',' + str(col))
-                if col > 0:
-                    toAverage.append(str(row) + ',' + str(col - 1))
-                if col < self.width - 1:
-                    toAverage.append(str(row) + ',' + str(col + 1))
+                    toReset.append([row, col])
+            gridOld.append(tempRow)
 
-                tempSum = currentWeight
-                count = 1
-                for node in toAverage:
-                    tempWeight = self.getWeight(node)
-                    if tempWeight != 50:
-                        tempSum += tempWeight
-                        count += 1
-                average = float(tempSum / count)
-                tempRow.append(average)
+        while iterations > 0:  # average grid iterations times
+            tempGrid = []
+            for row in range(self.height):  # loop through every node
+                tempRow = []
+                for col in range(self.width):
+                    currentWeight = gridOld[row][col]
+                    if [row, col] not in toReset:
+                        toAverage = []
+                        if row > 0:  #store surrounding nodes
+                            toAverage.append([row - 1, col])
+                        if row < self.height - 1:
+                            toAverage.append([row + 1, col])
+                        if col > 0:
+                            toAverage.append([row, col - 1])
+                        if col < self.width - 1:
+                            toAverage.append([row, col + 1])
 
-            tempGrid.append(tempRow)
+                        tempSum = currentWeight
+                        count = 1
+                        for node in toAverage:  # sum weights
+                            tempWeight = gridOld[node[0]][node[1]]
+                            if tempWeight != 50:
+                                tempSum += tempWeight
+                                count += 1
+                        average = float(tempSum / count)
+                        tempRow.append(average)
+                    else:
+                        tempRow.append(currentWeight)
 
-        for row in range(self.height - 1):
-            for col in range(self.width - 1):
-                nodeName = str(row) + ',' + str(col)
-                if not nodeName in toReset:
-                    self.setWeight(nodeName, tempGrid[row][col])
+                tempGrid.append(tempRow)
+            gridOld = tempGrid
+            iterations -= 1  # decrement counter
 
-        print toReset
+        for row in range(self.height):  # add weights back to graph
+            for col in range(self.width):
+                self.setWeight([row, col], gridOld[row][col])
 
 
     def getNodeWithPriority(self, index):
@@ -397,12 +408,13 @@ showCombiner            void        Visualize the weights of all nodes by color
         Return vertex name with priority index.
 
         param1: int - index to return priority (can be negative)
-        return: string - node name with priority index
+        return: [int, int] - node name with priority index
         """
 
         self.checkInt(index)  # comment this out for speed
 
-        return self.dictionary.iloc[index:5]
+        nodeString = self.dictionary.iloc[index]
+        return [int(x) for x in nodeString.split(',')]
 
 
     def getNodesWithPriority(self, start, end):
@@ -411,12 +423,15 @@ showCombiner            void        Visualize the weights of all nodes by color
 
         param1: int - start index to return priority
         param2: int - end index to return priority
-        return: [string] - node names with priority from start-end
+        return: [[int, int]] - node names with priority from start-end
         """
 
         self.getNodesWithPriorityErrorCheck(start, end)  # comment for speed
 
-        return self.dictionary.iloc[start : end + 1]
+        nodesString = self.dictionary.iloc[start : end + 1]
+        nodesArray = [self.stringAsNode(x) for x in nodesString]
+
+        return nodesArray
 
 
     def getNodesWithPriorityErrorCheck(self, start, end):
@@ -435,7 +450,7 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Return False if weight appears more than once in the graph.
 
-        param1: string - node to check for duplicate weights
+        param1: [int, int] - node in the form [x, y]
         return: boolean - True if weight is unique, Fale otherwise
         """
 
@@ -448,7 +463,7 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Return False if weight appears more than once in the graph.
 
-        param1: string - node to check for duplicate weights
+        param1: [int, int] - node in the form [x, y]
         return: int - Returns number of other nodes with same weight
         """
 
@@ -462,16 +477,18 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Return shortest path between nodes u and v.
 
-        param1,2: string - node in the form <integer>,<integer>
-        return: [string] - node names in the optimum path from u to v
+        param1,2: [int, int] - node in the form [x, y]
+        return: [[int, int]] - node names in the optimum path from u to v
         """
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
 
-        vertexIds = self.graph.get_shortest_paths(u, to=v, weights='weight',
-                                             mode='OUT', output='vpath')[0]
+        ids = self.graph.get_shortest_paths(self.nodeAsString(u),
+                                                  to=self.nodeAsString(v),
+                                                  weights='weight', mode='OUT',
+                                                  output='vpath')[0]
                                              # generate list of Ids in path
-        return [self.graph.vs.find(x)['name'] for x in vertexIds]  # readable
+        return [self.stringAsNode(self.graph.vs.find(x)['name']) for x in ids]
 
 
     def optimumPathErrorCheck(self, u, v):
@@ -520,7 +537,7 @@ showCombiner            void        Visualize the weights of all nodes by color
         """
         Visualize path between nodes u and v.
 
-        param1,2: string - node in the form <integer>,<integer>
+        param1,2: [int, int] - node in the form [x, y]
         """
 
         self.optimumPathErrorCheck(u, v)  # comment this out for speed
@@ -545,7 +562,7 @@ showCombiner            void        Visualize the weights of all nodes by color
             for col in range(self.width):
 
                 nodeName = str(row) + ',' + str(col)
-                weight = self.getWeight(nodeName)
+                weight = self.getWeight([row, col])
 
                 # interpolate square value from gridValue into HSV value
                 # between red and green, convert to RGB, convert to hex
@@ -559,7 +576,7 @@ showCombiner            void        Visualize the weights of all nodes by color
                 if weight > 100 or (weight != float('-inf') and weight < 0):
                     # color invalid entries grey
                     hexCode = '#616161'
-                if nodeName in pathValues:
+                if [row, col] in pathValues:
                     # color path values cyan
                     hexCode = '#66ffff'
 
@@ -577,37 +594,28 @@ showCombiner            void        Visualize the weights of all nodes by color
 
 if __name__ == '__main__':
     g = Board(20, 20)
-    g.setWeight('0,5', 0)
-    g.setWeight('1,5', 0)
-    g.setWeight('2,5', 0)
-    g.setWeight('3,5', 0)
-    g.setWeight('1,3', 99.9)
-    g.setWeight('4,5', 100)
-    g.setWeights(['1,1', '2,1'], [0.2, 0.2])
-    #print g.optimumPath('0,0', '6,4')
+    g.setWeight([0, 5], 0)
+    g.setWeight([1, 5], 0)
+    g.setWeight([2, 5], 0)
+    g.setWeight([3, 5], 0)
+    g.setWeight([1, 3], 99.9)
+    g.setWeight([4, 5], 100)
+    g.setWeights([[1, 1], [2, 1]], [0.2, 0.2])
+    print g.optimumPath([0, 0], [6, 4])
     #print g.getNodesWithPriority(0, 1)
-    #print g.isNodeWeightUnique('0,2')
-    #print g.countNodeWeightCopies('2,2')
-    #g.showPath('0,0', '0,10')
+    #print g.isNodeWeightUnique([0, 2])
+    #print g.countNodeWeightCopies([2, 2])
     #g.showWeights(True, False)
-    #print g.getWeight('0,1')
-    #g.multiplyWeight('2,0', 1)
-    #print g.getWeight('2,0')
+    #print g.getWeight([0, 1])
+    #g.multiplyWeight([2, 0], 1)
+    #print g.getWeight([2, 0])
     #g.sortNames()
     #print g.dictionary
     #g.show(True, True)
-    print g.getWeight('3,5')
+    print g.getWeight([3, 5])
+    print g.getNodeWithPriority(0)
+    print g.getNodesWithPriority(0, 1)
     #g.showWeights(True, True)
-    g.averageWeights(1)
-    g.showWeights(True, True)
-
-    """
-    matrix = []
-    for row in range(g.getSize()):
-        colList = []
-        for col in range(g.getSize()):
-            colList.append(100 - g.getWeight(str(row) + ',' + str(col)))
-        matrix.append(colList)
-    print matrix
-    print gaussian_filter(matrix, sigma=0.9)
-    """
+    g.averageWeights(20)
+    g.showPath([0, 0], [0, 10])
+    #g.showWeights(True, True)

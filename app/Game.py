@@ -92,8 +92,31 @@ class Game:
     def weightFood(self):
         """Weight grid with food necessity"""
         #TODO
-            #How desperately do we need food?
-            #How long do we have to get there?
+            #How desperately do we need food
+            #Goes through all food and returns the closest according to optimumPath
+        foodCoord = 0
+        pathLength = 500
+        shortestPath = float("inf")
+        closestFoodCoord = 0
+        oursnake = self.snakes[self.you]
+        head = oursnake.getHeadPosition()
+        health = oursnake.getHealth()
+        for foodCoords in self.food:
+            pathLength = len(self.weightGrid.optimumPath(head, foodCoords))
+            if pathLength < shortestPath:
+                shortestPath = pathLength
+                closestFoodCoord = foodCoord
+
+            foodCoord += 1
+            foodWeight = 100 - health - pathLength # this will change based on how much health we lose each turn
+            self.weightGrid.setWeight(foodCoords,foodWeight)
+        if health > 30:
+            return False
+
+
+        return self.weightGrid.optimumPath(head, self.food[closestFoodCoord])
+
+
 
 
     def weightSmallSnakes(self):

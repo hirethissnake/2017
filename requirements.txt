@@ -4,3 +4,5 @@ greenlet==0.4.9
 gunicorn==19.4.5
 appJar==0.42
 sortedcollections==0.4.2
+python-igraph
+requests
