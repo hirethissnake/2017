@@ -92,7 +92,8 @@ showPath                void        Display graphic of best path between nodes
             for col in range(width):
                 self.dictionary[str(row) + ',' + str(col)] = 50.0
 
-        self.fiftyDict = self.dictionary
+        self.fiftyDict.update(self.dictionary)
+        print self.fiftyDict
 
 
         self.edges = dict()
