@@ -11,7 +11,7 @@ from Game import Game
 
 gameDic = dict()
 
-print "game load?"
+print "main.py is now running"
 
 @bottle.route('/static/<path:path>')
 def static(path):
