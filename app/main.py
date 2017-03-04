@@ -70,7 +70,7 @@ def move():
     print gameDic
     # get curGame from gameDic
     if curGame in gameDic:
-        battle = game
+        battle = gameDic[curGame]
         #Update the game with new gamestate
         battle.update(data)
         #Request next best move
