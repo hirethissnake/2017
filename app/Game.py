@@ -68,6 +68,7 @@ class Game:
         if self.weightGrid.isNodeWeightUnique(topPriorityNode):
             return self.convertNodeToDirection(topPriorityNode, self.you)
 
+
         numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
 
         duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
@@ -75,6 +76,7 @@ class Game:
         closestPos = []
         for node in duplicateNodes:
             tempLen = self.weightGrid.optimumPath(self.snakes[self.you].getHeadPosition(), node)
+            print
             if tempLen < closestLen:
                 closestLen = tempLen
                 closestPos = node
@@ -91,7 +93,7 @@ class Game:
         ourTailY = ourTail[1]
 
         for s in self.snakes:
-            positions = s.getAllPositions()
+            positions = self.snakes[s].getAllPositions()
             self.weightGrid.setWeights(positions, 0)
             """for x in positions:
                 for y in positions[x]:
@@ -109,7 +111,7 @@ class Game:
 
     def weightFood(self):
         """Weight grid with food necessity"""
-                #TODO
+        #TODO
             #How desperately do we need food
             #Goes through all food and returns the closest according to optimumPath
         foodCoord = 0
