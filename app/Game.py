@@ -54,6 +54,10 @@ class Game:
                 if snake['id'] in self.snakes:
                     del self.snakes[snake['id']]
 
+    def showBoard(self):
+        """Use to show board with weight and colours """
+        self.weightGrid.showWeights(True, True)
+
 
     def getNextMove(self):
         """"Use all algorithms to determine the next best move for our snake."""

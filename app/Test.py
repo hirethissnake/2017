@@ -192,6 +192,28 @@ def gameTest2():
 
     # Valid node for different snake
     testCase(g2.convertNodeToDirection([15, 16], 'new-id'), 'up', 'converting node for diff snakes')
+"""def gameTest3():
+    Test functionality for helper functions.
+    This test suite has  tests.
+    
+    print "Testing game foodWeight, weigthSmallSnakes, and headArea functions"
+    global numCases
+    numCases += 3
+
+    initParams = {"width": 20, "height": 20, "game_id": "some-new-uuid", "food":{[0, 1], [19, 19], [5, 5], [3, 2]}}
+
+    g3 = Game(initParams)
+    g3.you = 'this-id'
+    g3.snakes = {'this-id':Snake({'id':'this-id', 'coords':[[1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8]], 'health_points':75})}
+    g3.snakes['new-id'] = Snake({'id':'new-id', 'coords':[[15, 15], [15, 16], [15, 17], [15, 18], [15, 19]], 'health_points':62})
+    g3.snakes['other-id'] = Snake({'id':'other-id', 'coords':[[17, 15], [17, 16], [17, 17], [17, 18], [17, 19]], 'health_points':62})
+
+    testCase(g3.snakes['new-id'].headArea('coords'), [[13, 13], [13, 14], [13, 15], [13, 16], [13, 17], [14, 13], [14, 14], [14, 15], [14, 16], [14, 17], [15, 13], [15, 14], [16, 13], [16, 14], [16, 15], [16, 16], [16, 17], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17]], 'finding area around snake head excluding snake itself')
+    #testCase(g3.snakes['other-id'].headArea('coords'))
+    g3.weightFood()
+    g3.weightSmallSnakes()
+    g3.showBoard()
+"""
 
 def mainTest1():
     """Test update functionality for game starting.
@@ -285,6 +307,7 @@ if __name__ == '__main__':
         print '-- Testing Game.py --'
         gameTest1()
         gameTest2()
+        #gameTest3()
         print '-- Testing Snake.py --'
         snakeTest1()
         snakeTest2()
