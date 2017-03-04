@@ -60,11 +60,14 @@ class Game:
 
         # RUN WEIGHTING ALGORITHMS HERE
 
+        self.weightNotHitSnakes()
+
+        # RUN WEIGHTING ALGORITHMS HERE
+
         topPriorityNode = self.weightGrid.getNodeWithPriority(0)
         if self.weightGrid.isNodeWeightUnique(topPriorityNode):
             return self.convertNodeToDirection(topPriorityNode, self.you)
 
-        topPriorityWeight = self.weightGrid.getWeight(topPriorityNode)
         numDuplicates = self.weightGrid.countNodeWeightCopies(topPriorityNode)
 
         duplicateNodes = self.weightGrid.getNodesWithPriority(0, numDuplicates - 1)
@@ -79,8 +82,6 @@ class Game:
         return self.convertNodeToDirection(closestPos, self.you)
 
 
-
-
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
         us = self.snakes[self.you] #Represents our snakes
@@ -91,10 +92,11 @@ class Game:
 
         for s in self.snakes:
             positions = s.getAllPositions()
-            for x in positions:
+            self.weightGrid.setWeights(positions, 0)
+            """for x in positions:
                 for y in positions[x]:
                     pos = x+','+y
-                    self.weightGrid.setWeight(pos, 0)
+                    self.weightGrid.setWeight(pos, 0)"""
         #TODO
         #Weight self as 0
         #Are we getting food this move? (Do we need to weight our tail 0)
@@ -103,6 +105,7 @@ class Game:
         #Are they getting food this move? (Do we need to weigh their tails 0)
         #Are they dying this move?
         #How big are they? Don't block heads of small snakes
+
 
     def weightFood(self):
         """Weight grid with food necessity"""
@@ -129,10 +132,7 @@ class Game:
         if health > 30:
             return False
 
-
         return self.weightGrid.optimumPath(head, self.food[closestFoodCoord])
-
-
 
 
     def weightSmallSnakes(self):
