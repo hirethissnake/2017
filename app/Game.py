@@ -280,7 +280,15 @@ class Game:
     def weightEnclosedSpaces(self, u):
         """Negatively weight enclosed spaces to prevent us from going in."""
 
-        if self.weightGrid.optimumPathLength(u, self.snakes[self.you].getTailPosition()) != float('inf'):
+        # print self.snakes[self.you].getAllPositions()[-1]
+        # print u
+        #self.weightGrid.showWeights(True, True)
+        tailPos = self.snakes[self.you].getTailPosition()
+        h = self.snakes[self.you].getAllPositions()[0]
+        path = self.weightGrid.optimumPath(h, u) #Current goal
+        self.weightGrid.setWeight(tailPos, 1)
+        self.weightGrid.setEdges()
+        if self.weightGrid.optimumPathLength(u, tailPos) != float('inf'):
             print "Did not run weightEnclosedSpaces"
             return u
         us_id = self.you
