@@ -79,6 +79,7 @@ class Game:
         self.weightNotHitSnakes()
         self.weightFood()
         self.weightSmallSnakes()
+        self.weightLargeSnakes()
 
         # RUN WEIGHTING ALGORITHMS HERE
 
