@@ -146,30 +146,30 @@ class Game:
         return nextTaunt
 
     def weightNotHitSnakes(self):
-        """Weight grid to avoid snake hitting other snakes and it self"""
-
-        us = self.snakes[self.you] #Represents our snakes
-        ourSnakePos = us.getAllPositions()
-        ourTail = ourSnakePos[-1]
-        ourTailX = ourTail[0]
-        ourTailY = ourTail[1]
+        """Weight grid to avoid snake hitting other snakes and itself."""
+        # pylint: disable=E1121
 
         for s in self.snakes:
             print s
             positions = self.snakes[s].getAllPositions()
+            head = positions[0]
+            tail = positions[-1]
             self.weightGrid.setWeights(positions, 0)
-            """for x in positions:
-                for y in positions[x]:
-                    pos = x+','+y
-                    self.weightGrid.setWeight(pos, 0)"""
-        #TODO
-        #Weight self as 0
-        #Are we getting food this move? (Do we need to weight our tail 0)
-            #Check if head position is in old food positions.
-        #Weight other snakes as 0
-        #Are they getting food this move? (Do we need to weigh their tails 0)
-        #Are they dying this move?
-        #How big are they? Don't block heads of small snakes
+            self.weightGrid.setWeight(tail[0], 50)
+
+            # if snake could eat food, avoid the tail
+            # above by 1
+            if self.weightGrid.getWeight(head[0], head[1] - 1) > 90:
+                self.weightGrid.setWeight(tail, 0)
+            # left by 1
+            if self.weightGrid.getWeight(head[0] + 1, head[1]) > 90:
+                self.weightGrid.setWeight(tail, 0)
+            # right by 1
+            if self.weightGrid.getWeight(head[0] - 1, head[1]) > 90:
+                self.weightGrid.setWeight(tail, 0)
+            # below
+            if self.weightGrid.getWeight(head[0], head[1] + 1) > 90:
+                self.weightGrid.setWeight(tail, 0)
 
 
     def weightFood(self):
@@ -279,19 +279,10 @@ class Game:
 
     def weightEnclosedSpaces(self, u):
         """Negatively weight enclosed spaces to prevent us from going in."""
-        print self.snakes[self.you].getAllPositions()[-1]
-        print u
-        #self.weightGrid.showWeights(True, True)
-        tailPos = self.snakes[self.you].getTailPosition()
-        h = self.snakes[self.you].getAllPositions[0]
-        path = self.weightGrid.optimumPath(h, u) #Current goal
-        self.weightGrid.setWeight(tailPos, 1)
-        self.weightGrid.setEdges()
-        if self.weightGrid.optimumPathLength(u, tailPos) != float('inf'):
+
+        if self.weightGrid.optimumPathLength(u, self.snakes[self.you].getTailPosition()) != float('inf'):
             print "Did not run weightEnclosedSpaces"
-            self.weightGrid.setWeight(tailPos, 0)
-            return path[1]
-        self.weightGrid.setWeight(tailPos, 0)
+            return u
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
             if self.snakes[snk].getIdentifier() == us_id:
@@ -312,6 +303,7 @@ class Game:
             self.weightGrid.setWeights(n, 0)
             #self.weightGrid.showWeights(True,True)
         ourHead = ourSnake.getHeadPosition()
+        path = self.weightGrid.optimumPath(ourHead, u) #Current goal
         otherOptions = []
         ourHeadX = ourHead[0]
         ourHeadY = ourHead[1]
