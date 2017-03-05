@@ -128,7 +128,7 @@ class Game:
 
         nextMove = self.weightEnclosedSpaces(target)
         #print "Following path: " + str(self.weightGrid.optimumPath(usSnake.getHeadPosition(),\
-        # nextMove))
+        nextMove))
         return self.convertNodeToDirection(nextMove, self.you)
 
     def getTaunt(self):
