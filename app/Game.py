@@ -319,7 +319,7 @@ class Game:
         if (ourHeadY - 1) >= 0:
             n.append([ourHeadX, ourHeadY-1])
         otherOptions.remove(path[1]) #Remove from other options our current option
-        otherOptions.remove(ourSnake.getAllPositions[1]) # Remove our 'neck' from other otherOptions
+        otherOptions.remove(ourSnake.getAllPositions()[1]) # Remove our 'neck' from other otherOptions
         for ot in otherOptions:
             if self.weightGrid.getWeight(ot) == 0:
                 otherOptions.remove(ot)
