@@ -255,9 +255,10 @@ class Game:
             for yCoordNew in range(lowerBoundY, upperBoundY+1):
                 newCoordinates.append([xCoordNew, yCoordNew])
         #removes any body segments from the grid
-        for bodySegment in snek.getAllPositions():
-            if bodySegment in newCoordinates:
-                newCoordinates.remove(bodySegment)
+        for otherSnakes in self.snakes:
+            for bodySegment in otherSnakes.getAllPositions():
+                if bodySegment in newCoordinates:
+                    newCoordinates.remove(bodySegment)
         #return new bodyless coordinates
         return newCoordinates
 
