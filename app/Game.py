@@ -129,10 +129,11 @@ class Game:
                 nodeValid = True
 
         #self.weightGrid.showWeights(True, True)
-        print "Following path: " + str(self.weightGrid.optimumPath(usSnake.getHeadPosition(),\
-        target))
+
 
         nextMove = self.weightEnclosedSpaces(target)
+        print "Following path: " + str(self.weightGrid.optimumPath(usSnake.getHeadPosition(),\
+        nextMove))
         return self.convertNodeToDirection(nextMove, self.you)
 
     def getTaunt(self):
