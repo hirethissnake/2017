@@ -311,7 +311,7 @@ class Game:
         self.weightGrid.setEdges()
         if self.weightGrid.optimumPathLength(u, tailPos) != float('inf'):
             print "Did not run weightEnclosedSpaces"
-            return u
+            return path[1]
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
             if self.snakes[snk].getIdentifier() == us_id:
