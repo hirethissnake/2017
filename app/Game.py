@@ -286,12 +286,14 @@ class Game:
         print u
         #self.weightGrid.showWeights(True, True)
         tailPos = self.snakes[self.you].getTailPosition()
+        h = self.snakes[self.you].getAllPositions[0]
+        path = self.weightGrid.optimumPath(h, u) #Current goal
         self.weightGrid.setWeight(tailPos, 1)
         self.weightGrid.setEdges()
         if self.weightGrid.optimumPathLength(u, tailPos) != float('inf'):
             print "Did not run weightEnclosedSpaces"
             self.weightGrid.setWeight(tailPos, 0)
-            return u
+            return path[1]
         self.weightGrid.setWeight(tailPos, 0)
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
@@ -313,7 +315,6 @@ class Game:
             self.weightGrid.setWeights(n, 0)
             #self.weightGrid.showWeights(True,True)
         ourHead = ourSnake.getHeadPosition()
-        path = self.weightGrid.optimumPath(ourHead, u) #Current goal
         otherOptions = []
         ourHeadX = ourHead[0]
         ourHeadY = ourHead[1]
