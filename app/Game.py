@@ -218,9 +218,7 @@ class Game:
                 weightAdd = 12
             for headCoord in headA:
                 self.weightGrid.addWeight(headCoord, weightAdd)
-            #if len(self.snakes[otherSnake].weightFood()) < 3 && otherSnakeSize + 1 < ourSize:
-            #instead of setWeights use addWeight to loop through each coordinate and add it
-            #self.weightGrid.setWeights(self.headArea(otherSnake), )
+
 
     def headArea(self, snek):
         """Return an area around the head so that it can be weighted
@@ -268,16 +266,35 @@ class Game:
             #Compare size
             #Can we get food and grow bigger?
         ourSnake = self.snakes[self.you]
-        ourSize = ourSnake.Snake.getSize()
+        ourSize = ourSnake.getSize()
+        up = 0
+        down = 0
+        left = 0
+        right = 0
         weightSubtract = 7
-        distanceToFood = ourSnake.weightFood()
         for otherSnake in self.snakes:
-            otherSnakeSize = self.snakes[otherSnake].Snake.getSize()
-            headA = otherSnake.headArea(otherSnake)
-            if  otherSnakeSize > ourSize:
-                weightSubtract += 8
-            for headCoord in headA:
-                self.weightGrid.subtractWeight(headCoord, weightSubtract)
+            if otherSnake != self.you:
+                otherSnakeSize = self.snakes[otherSnake].Snake.getSize()
+                if  otherSnakeSize >= ourSize:
+                    weightSubtract = 0
+                    headCoords = self.snakes[otherSnake].getHeadPosition()
+                    x = headCoords[0]
+                    y = headCoords[1]
+                    if x >= 1:
+                        if x<= self.width-1:
+                            self.weightGrid.setWeights([[x+1,y],[x-1,y]], 0)
+                        else:
+                            self.weightGrid.setWeights([[x-1,y]], 0)
+                    else:
+                        self.weightGrid.setWeights([[x+1,y]], 0)
+                    if y >= 1:
+                        if y<= self.height-1:
+                            self.weightGrid.setWeights([[x,y+1],[x,y-1]], 0)
+                        else:
+                            self.weightGrid.setWeights([[x,y-1]], 0)
+                    else:
+                        self.weightGrid.setWeights([[x,y+1]], 0)
+
             #ourSnake.weightFood()
             #otherSnake.weightFood()
 
