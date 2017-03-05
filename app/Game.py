@@ -77,10 +77,12 @@ class Game:
 
         self.weightNotHitSnakes()
         self.weightFood()
+        self.weightSmallSnakes()
 
         # RUN WEIGHTING ALGORITHMS HERE
 
         self.weightGrid.setEdges()
+        self.weightGrid.averageWeights(5)
 
         target = []
         usSnake = self.snakes[self.you]
@@ -115,7 +117,7 @@ class Game:
 
             if target == []:
                 nodeValid = False
-            elif self.weightGrid.optimumPathLength(usSnake.getHeadPosition(), closestPos) != \
+            elif self.weightGrid.optimumPathLength(usSnake.getHeadPosition(), target) != \
             float('inf'):
                 nodeValid = True
 
@@ -151,7 +153,7 @@ class Game:
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
 
-        us = self.snakes[self.you] #Represents our snakes
+        us = self.snakes[self.you] # Represents our snakes
         ourSnakePos = us.getAllPositions()
         ourTail = ourSnakePos[-1]
         ourTailX = ourTail[0]
@@ -251,7 +253,7 @@ class Game:
                 newCoordinates.append([xCoordNew, yCoordNew])
         #removes any body segments from the grid
         for otherSnakes in self.snakes:
-            for bodySegment in otherSnakes.getAllPositions():
+            for bodySegment in self.snakes[otherSnakes].getAllPositions():
                 if bodySegment in newCoordinates:
                     newCoordinates.remove(bodySegment)
         #return new bodyless coordinates
