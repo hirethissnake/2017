@@ -72,7 +72,7 @@ def move():
     if 'game_id' in data:
         curGame = data['game_id']
     else:
-        #print 'Data missing game_id'
+        print 'Data missing game_id'
     # get curGame from gameDic
     if curGame in gameDic:
         battle = gameDic[curGame]
@@ -86,7 +86,7 @@ def move():
     else:
         #print 'ERROR: Received request for game that does not exist'
         #print '  To avoid collateral damage to other games, responding with \
-        default move'
+        #default move'
         nextMove = 'up'
         #nextTaunt = 'yeaboi'
 
