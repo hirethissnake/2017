@@ -329,7 +329,7 @@ class Game:
                 otherOptions.remove(ot)
         dont = False
         for other_opt in otherOptions:
-            if self.weightGrid.optimumPathLength(other_opt, u) != float('inf'):
+            if self.weightGrid.optimumPathLength(other_opt, u) == float('inf'):
                 dont = True
         self.weightGrid.setWeights(n, 1)
         if dont:
