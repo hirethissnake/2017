@@ -84,7 +84,7 @@ class Game:
         # RUN WEIGHTING ALGORITHMS HERE
 
         self.weightGrid.setEdges()
-        self.weightGrid.averageWeights(5)
+        # self.weightGrid.averageWeights(5)
 
         target = []
         usSnake = self.snakes[self.you]
