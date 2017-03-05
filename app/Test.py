@@ -401,9 +401,10 @@ def dangerousMoveTest3():
     "health_points": 93, "coords": [[19, 5], [18, 5], [17, 5], [16, 5], [15, 5],
     [15, 6], [15, 7], [15, 8], [16, 8], [17, 8]]}],
     "height":20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa",
-    "food":[[19, 11], [14, 17]], "you":"my-id"}
+    "food":[[19, 10], [14, 17]], "you":"my-id"}
 
     g1.update(updateParams)
+    print g1.weightNotHitSnakes()
     g1.getNextMove()
     print 'Please check GUI for test case'
     testCase(1, 1, 'visual test case')
@@ -440,8 +441,8 @@ if __name__ == '__main__':
         # mainTest2()
         print '-- Skipping main tests --'
         print '-- Testing dangerous functions --'
-        dangerousMoveTest1()
-        dangerousMoveTest2()
+        # dangerousMoveTest1()
+        # dangerousMoveTest2()
         dangerousMoveTest3()
         print "Test completed successfully."
     except ValueError as failure:
