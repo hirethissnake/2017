@@ -34,11 +34,18 @@ class Game:
         self.you = ''
         self.food = []
         self.turn = 0
-        self.deadS`nakes = {}
+        self.deadSnakes = {}
         self.newDead = 'False'      #Stores new deaths as id so must be string
 
 
-        self.tauntDict = {'GMO':'Do you have any non-GMO food?', 'rdm':'UP'}
+        self.tauntDict = {
+            'GMO':'Do you have any non-GMO food?',
+            'war':'War. War never changes',
+            'Slither':'Sssssslithering',
+            'Snakes' : 'Snakes? I hate snakes',
+            'Hungry' : 'Where can a snake get a bite to eat around here',
+            'rdm':'UP'
+        }
 
     def update(self, data):
         """Update game with current board from server.
