@@ -9,7 +9,7 @@ try:
     from appJar import gui
     #print 'Importing appJar'
 except ImportError:
-    #print 'Did not import appJar'
+    print 'Did not import appJar'
 from sortedcollections import ValueSortedDict
 
 
@@ -623,12 +623,12 @@ showPath                void        Display graphic of best path between nodes
         app.go() # show window
 
 
-    def #printDict(self):
+    def printDict(self):
         """
         #print dictionary.
         """
 
-        #print self.dictionary
+        print self.dictionary
 
 
 
