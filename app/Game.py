@@ -37,16 +37,6 @@ class Game:
         self.deadSnakes = {}
         self.newDead = 'False'      #Stores new deaths as id so must be string
 
-
-        self.tauntDict = {
-            'GMO':'Do you have any non-GMO food?',
-            'war':'War. War never changes',
-            'Slither':'Sssssslithering',
-            'Snakes' : 'Snakes? I hate snakes',
-            'Hungry' : 'Where can a snake get a bite to eat around here',
-            'rdm':'UP'
-        }
-
     def update(self, data):
         """Update game with current board from server.
 
@@ -65,11 +55,12 @@ class Game:
 
         #Checks if there are any new dead snakes, and removes them from snakes{}
         if 'dead_snakes' in data:
-            for deadData in data['dead_snakes']:
-                if deadData['id'] in self.snakes:
-                    del self.snakes[deadData['id']]
-                    self.deadSnakes[deadData['id']] = deadData
-                    self.newDead = deadData['id']
+            for deadSnake in data['dead_snakes']:
+                snakeId = deadSnake['id']
+                if snakeId in self.snakes and snakeId not in self.deadSnakes:
+                    del self.snakes[deadSnake['id']]
+                    self.deadSnakes[deadSnake['id']] = deadSnake
+                    self.newDead = deadSnake['id']
 
     def showBoard(self):
         """Use to show board with weight and colours """
@@ -136,22 +127,25 @@ class Game:
         return self.convertNodeToDirection(nextMove, self.you)
 
     def getTaunt(self):
-        """Return taunt for the move request"""
-        nextTaunt = ''
+        """Return taunt for the move request."""
 
-        #If a snake died last turn, taunt them and clear the newDead variable
-        if self.newDead != 'False':
-            deadData = self.deadSnakes['newDead']
-            nextTaunt = 'RIP '+deadData['name']+', turn 0 - turn '+self.turn-1
-            self.newDead = 'False'
-        else:
-            #Create random direction
-            directions = ['GOING UP', 'GOING DOWN', 'GOING LEFT', 'GOING RIGHT']
-            self.tauntDict['rdm'] = random.choice(directions)
-            #Pick random taunt from taunt dictionary
-            nextTaunt = random.choice(self.tauntDict.items())
+        taunts = ['Do you have any non-GMO food?', 'War. War never changes', 'Sssssslithering',\
+         'Snakes? I hate snakes', 'Where can a snake get a bite to eat around here', 'up', 'down',\
+          'left', 'right', 'Trying to catch garter snakes']
 
-        return nextTaunt
+        # #If a snake died last turn, taunt them and clear the newDead variable
+        # if self.newDead != 'False':
+        #     deadData = self.deadSnakes['newDead']
+        #     nextTaunt = 'RIP '+deadData['name']+', turn 0 - turn '+self.turn-1
+        #     self.newDead = 'False'
+        # else:
+        #     #Create random direction
+        #     directions = ['GOING UP', 'GOING DOWN', 'GOING LEFT', 'GOING RIGHT']
+        #     self.tauntDict['rdm'] = random.choice(directions)
+        #     #Pick random taunt from taunt dictionary
+        #     nextTaunt = random.choice(self.tauntDict.items())
+
+        return 'temp'
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
