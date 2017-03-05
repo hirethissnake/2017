@@ -266,33 +266,27 @@ class Game:
             #Can we get food and grow bigger?
         ourSnake = self.snakes[self.you]
         ourSize = ourSnake.getSize()
-        up = 0
-        down = 0
-        left = 0
-        right = 0
-        weightSubtract = 7
         for otherSnake in self.snakes:
             if otherSnake != self.you:
                 otherSnakeSize = self.snakes[otherSnake].getSize()
                 if  otherSnakeSize >= ourSize:
-                    weightSubtract = 0
                     headCoords = self.snakes[otherSnake].getHeadPosition()
                     x = headCoords[0]
                     y = headCoords[1]
                     if x >= 1:
-                        if x< self.width-1:
-                            self.weightGrid.setWeights([[x+1,y],[x-1,y]], 0)
+                        if x < self.width-1:
+                            self.weightGrid.setWeights([[x+1, y], [x-1, y]], 0)
                         else:
-                            self.weightGrid.setWeights([[x-1,y]], 0)
+                            self.weightGrid.setWeights([[x-1, y]], 0)
                     else:
-                        self.weightGrid.setWeights([[x+1,y]], 0)
+                        self.weightGrid.setWeights([[x+1, y]], 0)
                     if y >= 1:
                         if y < self.height-1:
-                            self.weightGrid.setWeights([[x,y+1],[x,y-1]], 0)
+                            self.weightGrid.setWeights([[x, y+1], [x, y-1]], 0)
                         else:
-                            self.weightGrid.setWeights([[x,y-1]], 0)
+                            self.weightGrid.setWeights([[x, y-1]], 0)
                     else:
-                        self.weightGrid.setWeights([[x,y+1]], 0)
+                        self.weightGrid.setWeights([[x, y+1]], 0)
 
             #ourSnake.weightFood()
             #otherSnake.weightFood()
@@ -346,7 +340,7 @@ class Game:
             otherOptions.append([ourHeadX, ourHeadY-1])
 
         otherOptions.remove(path[1]) #Remove from other options our current option
-        if(len(ourSnake.getAllPositions())>1 and ourSnake.getAllPositions()[1] in otherOptions):
+        if len(ourSnake.getAllPositions()) > 1 and ourSnake.getAllPositions()[1] in otherOptions:
             otherOptions.remove(ourSnake.getAllPositions()[1]) # Remove our 'neck' from other otherOptions
         for ot in otherOptions:
             if self.weightGrid.getWeight(ot) == 0:
