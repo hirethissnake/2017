@@ -220,6 +220,7 @@ def gameTest3():
     g3.showBoard()
     print "Testing weightFood"
     g3.weightFood()
+    g3.weightNotHitSnakes()
     g3.showBoard()
     print "Testing weightSmallSnakes"
     g3.weightSmallSnakes()
