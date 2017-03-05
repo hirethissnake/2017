@@ -287,6 +287,7 @@ class Game:
 
     def weightEnclosedSpaces(self, u):
         """Negatively weight enclosed spaces to prevent us from going in."""
+
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
             if self.snakes[snk].getIdentifier() == us_id:
@@ -328,7 +329,7 @@ class Game:
                 otherOptions.remove(ot)
         dont = False
         for other_opt in otherOptions:
-            if self.weightGrid.optimumPathLength(other_opt, u) == float('inf'):
+            if self.weightGrid.optimumPathLength(other_opt, u) != float('inf'):
                 dont = True
         self.weightGrid.setWeights(n, 1)
         if dont:
