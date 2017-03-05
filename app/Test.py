@@ -232,6 +232,7 @@ def gameTest3():
     g3.showBoard()
     print "Testing weightFood"
     g3.weightFood()
+    g3.weightNotHitSnakes()
     g3.showBoard()
     print "Testing weightSmallSnakes"
     g3.weightSmallSnakes()
@@ -357,7 +358,7 @@ def dangerousMoveTest2():
     "food":[[18, 7], [14, 17]], "you":"my-id"}
 
     g1.update(updateParams)
-    g1.getNextMove()
+    print g1.getNextMove()
     print 'Please check GUI for test case'
     testCase(1, 1, 'visual test case')
 
@@ -385,6 +386,7 @@ def dangerousMoveTest3():
     g1.getNextMove()
     print 'Please check GUI for test case'
     testCase(1, 1, 'visual test case')
+
 
 
 def testCase(var1, var2, testIdent):

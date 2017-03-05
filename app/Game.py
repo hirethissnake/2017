@@ -120,10 +120,11 @@ class Game:
                 nodeValid = True
 
         #self.weightGrid.showWeights(True, True)
-        print "Following path: " + str(self.weightGrid.optimumPath(usSnake.getHeadPosition(),\
-        target))
+
 
         nextMove = self.weightEnclosedSpaces(target)
+        print "Following path: " + str(self.weightGrid.optimumPath(usSnake.getHeadPosition(),\
+        nextMove))
         return self.convertNodeToDirection(nextMove, self.you)
 
     def getTaunt(self):
@@ -212,7 +213,7 @@ class Game:
             otherSnakeSize = self.snakes[otherSnake].getSize()
             headA = self.headArea(self.snakes[otherSnake])
             if  otherSnakeSize < ourSize:
-                weightAdd += 8
+                weightAdd = 12
             for headCoord in headA:
                 self.weightGrid.addWeight(headCoord, weightAdd)
             #if len(self.snakes[otherSnake].weightFood()) < 3 && otherSnakeSize + 1 < ourSize:
@@ -245,13 +246,14 @@ class Game:
         if lowerBoundX < 0:
             lowerBoundX = 0
         #goes through a 4x4 grid around the snake and creates an array of those coordinates
-        for xCoordNew in range(lowerBoundX, upperBoundX):
-            for yCoordNew in range(lowerBoundY, upperBoundY):
+        for xCoordNew in range(lowerBoundX, upperBoundX+1):
+            for yCoordNew in range(lowerBoundY, upperBoundY+1):
                 newCoordinates.append([xCoordNew, yCoordNew])
         #removes any body segments from the grid
-        for bodySegment in snek.getAllPositions():
-            if bodySegment in newCoordinates:
-                newCoordinates.remove(bodySegment)
+        for otherSnakes in self.snakes:
+            for bodySegment in otherSnakes.getAllPositions():
+                if bodySegment in newCoordinates:
+                    newCoordinates.remove(bodySegment)
         #return new bodyless coordinates
         return newCoordinates
 
@@ -280,6 +282,10 @@ class Game:
 
     def weightEnclosedSpaces(self, u):
         """Negatively weight enclosed spaces to prevent us from going in."""
+
+        if self.weightGrid.optimumPathLength(u, self.snakes[self.you].getTailPosition()) != float('inf'):
+            print "Did not run weightEnclosedSpaces"
+            return u
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
             if self.snakes[snk].getIdentifier() == us_id:
@@ -314,7 +320,8 @@ class Game:
             otherOptions.append([ourHeadX, ourHeadY-1])
 
         otherOptions.remove(path[1]) #Remove from other options our current option
-        otherOptions.remove(ourSnake.getAllPositions()[1]) # Remove our 'neck' from other otherOptions
+        if(len(ourSnake.getAllPositions())>1 and ourSnake.getAllPositions()[1] in otherOptions):
+            otherOptions.remove(ourSnake.getAllPositions()[1]) # Remove our 'neck' from other otherOptions
         for ot in otherOptions:
             if self.weightGrid.getWeight(ot) == 0:
                 otherOptions.remove(ot)
@@ -326,7 +333,7 @@ class Game:
         if dont:
             print "Switched directions from weightEnclosedSpaces"
             return otherOptions[0]
-        return u
+        return path[1]
         #set other snak eotpions to 1
 
 
