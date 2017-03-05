@@ -239,9 +239,9 @@ class Game:
         lowerBoundX = xCoord-2
         lowerBoundY = yCoord-2
         newCoordinates = []
-        if upperBoundY > self.height:
+        if upperBoundY >= self.height:
             upperBoundY = self.height-1
-        if upperBoundX > self.width:
+        if upperBoundX >= self.width:
             upperBoundX = self.width-1
         if lowerBoundY < 0:
             lowerBoundY = 0
