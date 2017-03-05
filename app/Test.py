@@ -189,9 +189,21 @@ def gameTest2():
         testCase(1, 1, 'catch invalid node conversion')
 
     # Valid node for different snake
-    # testCase(g2.convertNodeToDirection([15, 16], 'new-id'), 'up', 'converting node for diff snakes')
+# testCase(g2.convertNodeToDirection([15, 16], 'new-id'), 'up', 'converting node for diff snakes')
 
     # check dead snake updates
+    # first add living snake
+    updateParams = {"snakes": [{"taunt": "git gud", "name": "my-snake",
+        "id": "25229082-f0d7-4315-8c52-6b0ff23fb1fb", "health_points": 93, "coords":
+        [[0, 0], [0, 1], [0, 2]]}, {"taunt": "dead", "name": "sad-snakes",
+        "id": "sadly", "health_points": 00, "coords": [[8, 8], [8, 7], [8, 6]]},
+        {"taunt": "cash me outside", "name": "angry-whitegirl", "id": "ex-uuid",
+        "health_points": 93, "coords": [[15, 14], [15, 13], [15, 12]]}],
+        "height":20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa",
+        "food":[[4, 5], [8, 9]], "you":"25229082-f0d7-4315-8c52-6b0ff23fb1fb",
+        "dead_snakes": [], 'turn':0}
+    g2.update(updateParams)
+
     updateParams = {"snakes": [{"taunt": "git gud", "name": "my-snake",
         "id": "25229082-f0d7-4315-8c52-6b0ff23fb1fb", "health_points": 93, "coords":
         [[0, 0], [0, 1], [0, 2]]}, {"taunt": "cash me outside", "name":
@@ -200,9 +212,18 @@ def gameTest2():
         "height":20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa",
         "food":[[4, 5], [8, 9]], "you":"25229082-f0d7-4315-8c52-6b0ff23fb1fb",
         "dead_snakes": [{"taunt": "dead", "name": "sad-snakes",
-        "id": "sadly", "health_points": 00, "coords": [[8, 8], [8, 7], [8, 6]]}]}
+        "id": "sadly", "health_points": 00, "coords": [[8, 8], [8, 7], [8, 6]]}], 'turn':4}
     g2.update(updateParams)
-    print g2.deadSnakes
+    updateParams = {"snakes": [{"taunt": "git gud", "name": "my-snake",
+        "id": "25229082-f0d7-4315-8c52-6b0ff23fb1fb", "health_points": 93, "coords":
+        [[0, 0], [0, 1], [0, 2]]}, {"taunt": "cash me outside", "name":
+        "angry-whitegirl", "id": "ex-uuid",
+        "health_points": 93, "coords": [[15, 14], [15, 13], [15, 12]]}],
+        "height":20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa",
+        "food":[[4, 5], [8, 9]], "you":"25229082-f0d7-4315-8c52-6b0ff23fb1fb",
+        "dead_snakes": [{"taunt": "dead", "name": "sad-snakes",
+        "id": "sadly", "health_points": 00, "coords": [[8, 8], [8, 7], [8, 6]]}], 'turn':5}
+    g2.update(updateParams)
 
 def gameTest3():
     """Test functionality for helper functions.
@@ -407,8 +428,8 @@ if __name__ == '__main__':
     # Snake.py tests
     try:
         print '-- Testing Game.py --'
-        # gameTest1()
-        # gameTest2()
+        gameTest1()
+        gameTest2()
         # gameTest3()
 
         print '-- Testing Snake.py --'

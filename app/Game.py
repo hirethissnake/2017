@@ -54,6 +54,7 @@ class Game:
             self.turn = data['turn']
 
         #Checks if there are any new dead snakes, and removes them from snakes{}
+        self.newDead = False
         if 'dead_snakes' in data:
             for deadSnake in data['dead_snakes']:
                 snakeId = deadSnake['id']
@@ -134,19 +135,15 @@ class Game:
          'Snakes? I hate snakes', 'Where can a snake get a bite to eat around here', 'up', 'down',\
           'left', 'right', 'Trying to catch garter snakes']
 
-        # #If a snake died last turn, taunt them and clear the newDead variable
-        # if self.newDead != 'False':
-        #     deadData = self.deadSnakes['newDead']
-        #     nextTaunt = 'RIP '+deadData['name']+', turn 0 - turn '+self.turn-1
-        #     self.newDead = 'False'
-        # else:
-        #     #Create random direction
-        #     directions = ['GOING UP', 'GOING DOWN', 'GOING LEFT', 'GOING RIGHT']
-        #     self.tauntDict['rdm'] = random.choice(directions)
-        #     #Pick random taunt from taunt dictionary
-        #     nextTaunt = random.choice(self.tauntDict.items())
+        nextTaunt = random.choice(taunts)
 
-        return 'temp'
+        #If a snake died last turn, taunt them and clear the newDead variable
+        if self.newDead != False:
+            deadSnake = self.deadSnakes[self.newDead]
+            nextTaunt = 'RIP ' + deadSnake['name'] + ', turn 0 -> turn ' + str(self.turn - 1)
+            self.newDead = False
+
+        return nextTaunt
 
     def weightNotHitSnakes(self):
         """Weight grid to avoid snake hitting other snakes and it self"""
