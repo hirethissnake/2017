@@ -346,9 +346,10 @@ def dangerousMoveTest2():
     "food":[[18, 7], [14, 17]], "you":"my-id"}
 
     g1.update(updateParams)
-    g1.getNextMove()
+    print g1.getNextMove()
     print 'Please check GUI for test case'
     testCase(1, 1, 'visual test case')
+
 
 
 def testCase(var1, var2, testIdent):
@@ -368,20 +369,21 @@ if __name__ == '__main__':
     numCases = 0
     # Snake.py tests
     try:
-        print '-- Testing Game.py --'
-        gameTest1()
-        gameTest3()
-        gameTest2()
-
-        print '-- Testing Snake.py --'
-        snakeTest1()
-        snakeTest2()
-        print '-- Testing Main.py --'
-        mainTest1()
-        mainTest2()
-        print '-- Skipping main tests --'
+        # print '-- Testing Game.py --'
+        # gameTest1()
+        # gameTest3()
+        # gameTest2()
+        #
+        # print '-- Testing Snake.py --'
+        # snakeTest1()
+        # snakeTest2()
+        # print '-- Testing Main.py --'
+        # mainTest1()
+        # mainTest2()
+        # print '-- Skipping main tests --'
         print '-- Testing dangerous functions --'
         dangerousMoveTest1()
+        dangerousMoveTest2()
         print "Test completed successfully."
     except ValueError as failure:
         print failure
