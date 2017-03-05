@@ -333,7 +333,7 @@ class Game:
         if dont:
             print "Switched directions from weightEnclosedSpaces"
             return otherOptions[0]
-        return u
+        return path[1]
         #set other snak eotpions to 1
 
 
