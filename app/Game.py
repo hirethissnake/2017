@@ -286,7 +286,7 @@ class Game:
         print u
         #self.weightGrid.showWeights(True, True)
         tailPos = self.snakes[self.you].getTailPosition()
-        h = self.snakes[self.you].getAllPositions[0]
+        h = self.snakes[self.you].getAllPositions()[0]
         path = self.weightGrid.optimumPath(h, u) #Current goal
         self.weightGrid.setWeight(tailPos, 1)
         self.weightGrid.setEdges()
