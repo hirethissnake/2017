@@ -218,7 +218,7 @@ class Game:
             otherSnakeSize = self.snakes[otherSnake].getSize()
             headA = self.headArea(self.snakes[otherSnake])
             if  otherSnakeSize < ourSize:
-                weightAdd += 8
+                weightAdd = 12
             for headCoord in headA:
                 self.weightGrid.addWeight(headCoord, weightAdd)
             #if len(self.snakes[otherSnake].weightFood()) < 3 && otherSnakeSize + 1 < ourSize:
@@ -251,8 +251,8 @@ class Game:
         if lowerBoundX < 0:
             lowerBoundX = 0
         #goes through a 4x4 grid around the snake and creates an array of those coordinates
-        for xCoordNew in range(lowerBoundX, upperBoundX):
-            for yCoordNew in range(lowerBoundY, upperBoundY):
+        for xCoordNew in range(lowerBoundX, upperBoundX+1):
+            for yCoordNew in range(lowerBoundY, upperBoundY+1):
                 newCoordinates.append([xCoordNew, yCoordNew])
         #removes any body segments from the grid
         for bodySegment in snek.getAllPositions():
@@ -320,7 +320,7 @@ class Game:
             otherOptions.append([ourHeadX, ourHeadY-1])
 
         otherOptions.remove(path[1]) #Remove from other options our current option
-        if(len(ourSnake.getAllPositions())>1):
+        if(len(ourSnake.getAllPositions())>1 and ourSnake.getAllPositions()[1] in otherOptions):
             otherOptions.remove(ourSnake.getAllPositions()[1]) # Remove our 'neck' from other otherOptions
         for ot in otherOptions:
             if self.weightGrid.getWeight(ot) == 0:
@@ -333,7 +333,7 @@ class Game:
         if dont:
             print "Switched directions from weightEnclosedSpaces"
             return otherOptions[0]
-        return u
+        return path[1]
         #set other snak eotpions to 1
 
 
