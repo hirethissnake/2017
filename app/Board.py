@@ -7,9 +7,9 @@ import colorsys
 import igraph
 try:
     from appJar import gui
-    #print 'Importing appJar'
+    print 'Importing appJar'
 except ImportError:
-    #print 'Did not import appJar'
+    print 'Did not import appJar'
 from sortedcollections import ValueSortedDict
 
 
@@ -623,12 +623,12 @@ showPath                void        Display graphic of best path between nodes
         app.go() # show window
 
 
-    def #printDict(self):
+    def printDict(self):
         """
-        #print dictionary.
+        Print dictionary.
         """
 
-        #print self.dictionary
+        print self.dictionary
 
 
 
@@ -636,8 +636,8 @@ if __name__ == '__main__':
     g = Board(20, 20)
     g.setWeights([[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [2, 1], [2, 0], [1, 0]], 0)
     g.setEdges()
-    #print g.optimumPath([3, 3], [1, 1])
-    #print g.optimumPathLength([3, 3], [1, 1]) == float("inf")
+    print g.optimumPath([3, 3], [1, 1])
+    print g.optimumPathLength([3, 3], [1, 1]) == float("inf")
     g.showWeights(True, True)
     """g.setWeight([0, 5], 0)
     g.setWeight([1, 5], 0)
@@ -646,23 +646,23 @@ if __name__ == '__main__':
     g.setWeight([1, 3], 99.9)
     g.setWeight([4, 5], 100)
     g.setWeights([[1, 1], [2, 1]], [0.2, 0.2])
-    #print g.optimumPath([0, 0], [6, 4])
-    ##print g.getNodesWithPriority(0, 1)
-    ##print g.isNodeWeightUnique([0, 2])
-    ##print g.countNodeWeightCopies([2, 2])
-    #g.showWeights(True, False)
-    ##print g.getWeight([0, 1])
-    #g.multiplyWeight([2, 0], 1)
-    ##print g.getWeight([2, 0])
-    #g.sortNames()
-    ##print g.dictionary
-    #g.show(True, True)
-    #print g.getWeight([3, 5])
-    #print g.getNodeWithPriority(0)
+    print g.optimumPath([0, 0], [6, 4])
     #print g.getNodesWithPriority(0, 1)
+    #print g.isNodeWeightUnique([0, 2])
+    #print g.countNodeWeightCopies([2, 2])
+    #g.showWeights(True, False)
+    #print g.getWeight([0, 1])
+    #g.multiplyWeight([2, 0], 1)
+    #print g.getWeight([2, 0])
+    #g.sortNames()
+    #print g.dictionary
+    #g.show(True, True)
+    print g.getWeight([3, 5])
+    print g.getNodeWithPriority(0)
+    print g.getNodesWithPriority(0, 1)
     #g.showWeights(True, True)
     g.averageWeights(20)
     g.showPath([0, 0], [0, 10])
     #g.showWeights(True, True)"""
-    ##print g.optimumPath([11, 7], [0, 0])
-    ##print g.graph
+    #print g.optimumPath([11, 7], [0, 0])
+    #print g.graph
