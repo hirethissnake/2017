@@ -313,11 +313,12 @@ class Game:
         if (ourHeadX - 1) >= 0:
             otherOptions.append([ourHeadX-1, ourHeadY])
         if (ourHeadX + 1) < self.width:
-            n.append([ourHeadX+1, ourHeadY])
+            otherOptions.append([ourHeadX+1, ourHeadY])
         if (ourHeadY + 1) < self.height:
-            n.append([ourHeadX, ourHeadY+1])
+            otherOptions.append([ourHeadX, ourHeadY+1])
         if (ourHeadY - 1) >= 0:
-            n.append([ourHeadX, ourHeadY-1])
+            otherOptions.append([ourHeadX, ourHeadY-1])
+
         otherOptions.remove(path[1]) #Remove from other options our current option
         otherOptions.remove(ourSnake.getAllPositions()[1]) # Remove our 'neck' from other otherOptions
         for ot in otherOptions:
