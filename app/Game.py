@@ -273,7 +273,7 @@ class Game:
         weightSubtract = 7
         for otherSnake in self.snakes:
             if otherSnake != self.you:
-                otherSnakeSize = self.snakes[otherSnake].Snake.getSize()
+                otherSnakeSize = self.snakes[otherSnake].getSize()
                 if  otherSnakeSize >= ourSize:
                     weightSubtract = 0
                     headCoords = self.snakes[otherSnake].getHeadPosition()
