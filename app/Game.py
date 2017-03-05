@@ -290,6 +290,7 @@ class Game:
         """Negatively weight enclosed spaces to prevent us from going in."""
 
         if self.weightGrid.optimumPathLength(u, self.snakes[self.you].getTailPosition()) != float('inf'):
+            print "Did not run weightEnclosedSpaces"
             return u
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
