@@ -65,7 +65,7 @@ class Game:
 
     def showBoard(self):
         """Use to show board with weight and colours """
-        print "Running showBoard"
+        #print "Running showBoard"
         self.weightGrid.showWeights(True, True)
 
 
@@ -127,7 +127,7 @@ class Game:
 
 
         nextMove = self.weightEnclosedSpaces(target)
-        print "Following path: " + str(self.weightGrid.optimumPath(usSnake.getHeadPosition(),\
+        #print "Following path: " + str(self.weightGrid.optimumPath(usSnake.getHeadPosition(),\
         nextMove))
         return self.convertNodeToDirection(nextMove, self.you)
 
@@ -154,7 +154,7 @@ class Game:
         # pylint: disable=E1121
 
         for s in self.snakes:
-            print s
+            #print s
             positions = self.snakes[s].getAllPositions()
             head = positions[0]
             tail = positions[-1]
@@ -301,8 +301,8 @@ class Game:
     def weightEnclosedSpaces(self, u):
         """Negatively weight enclosed spaces to prevent us from going in."""
 
-        # print self.snakes[self.you].getAllPositions()[-1]
-        # print u
+        # #print self.snakes[self.you].getAllPositions()[-1]
+        # #print u
         #self.weightGrid.showWeights(True, True)
         tailPos = self.snakes[self.you].getTailPosition()
         h = self.snakes[self.you].getAllPositions()[0]
@@ -310,7 +310,7 @@ class Game:
         self.weightGrid.setWeight(tailPos, 1)
         self.weightGrid.setEdges()
         if self.weightGrid.optimumPathLength(u, tailPos) != float('inf'):
-            print "Did not run weightEnclosedSpaces"
+            #print "Did not run weightEnclosedSpaces"
             return path[1]
         us_id = self.you
         for snk in self.snakes: #Set weight of all possible next moves of other snakes to 0.
@@ -357,7 +357,7 @@ class Game:
                 dont = True
         self.weightGrid.setWeights(n, 1)
         if dont:
-            print "Switched directions from weightEnclosedSpaces"
+            #print "Switched directions from weightEnclosedSpaces"
             return otherOptions[0]
         return path[1]
         #set other snak eotpions to 1
@@ -416,4 +416,4 @@ if __name__ == '__main__':
     INITDATA = {"width": 20, "height": 20, "game_id": "b1dadee8-a112-4e0e-afa2-2845cd1f21aa"}
     b = Game(INITDATA)
     b.weightGrid.showWeights(True, True)
-    print b.getNextMove()
+    #print b.getNextMove()
