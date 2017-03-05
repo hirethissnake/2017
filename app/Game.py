@@ -280,14 +280,14 @@ class Game:
                     x = headCoords[0]
                     y = headCoords[1]
                     if x >= 1:
-                        if x<= self.width-1:
+                        if x< self.width-1:
                             self.weightGrid.setWeights([[x+1,y],[x-1,y]], 0)
                         else:
                             self.weightGrid.setWeights([[x-1,y]], 0)
                     else:
                         self.weightGrid.setWeights([[x+1,y]], 0)
                     if y >= 1:
-                        if y<= self.height-1:
+                        if y < self.height-1:
                             self.weightGrid.setWeights([[x,y+1],[x,y-1]], 0)
                         else:
                             self.weightGrid.setWeights([[x,y-1]], 0)
