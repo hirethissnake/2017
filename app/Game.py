@@ -210,13 +210,17 @@ class Game:
         oursnake = self.snakes[self.you]
         ourSize = oursnake.getSize()
         weightAdd = 7
+
         for otherSnake in self.snakes:
-            otherSnakeSize = self.snakes[otherSnake].getSize()
-            headA = self.headArea(self.snakes[otherSnake])
-            if  otherSnakeSize < ourSize:
-                weightAdd = 12
-            for headCoord in headA:
-                self.weightGrid.addWeight(headCoord, weightAdd)
+            if otherSnake != self.you:
+                otherSnakeSize = self.snakes[otherSnake].getSize()
+                if  otherSnakeSize < ourSize:
+                    """Run this code for every snake on the board that's
+                    not you AND smaller than you"""
+                    headA = self.headArea(self.snakes[otherSnake])
+                    weightAdd = 12
+                    for headCoord in headA:
+                        self.weightGrid.addWeight(headCoord, weightAdd)
 
 
     def headArea(self, snek):
@@ -244,7 +248,7 @@ class Game:
             lowerBoundY = 0
         if lowerBoundX < 0:
             lowerBoundX = 0
-        #goes through a 4x4 grid around the snake and creates an array of those coordinates
+        #goes through a 5x5 grid around the snake and creates an array of those coordinates
         for xCoordNew in range(lowerBoundX, upperBoundX+1):
             for yCoordNew in range(lowerBoundY, upperBoundY+1):
                 newCoordinates.append([xCoordNew, yCoordNew])
