@@ -209,7 +209,7 @@ class Game:
             #How much food is around for the snake to grow?
         oursnake = self.snakes[self.you]
         ourSize = oursnake.getSize()
-        weightAdd = 7
+        weightAdd = 0
 
         for otherSnake in self.snakes:
             if otherSnake != self.you:
@@ -218,6 +218,7 @@ class Game:
                     """Run this code for every snake on the board that's
                     not you AND smaller than you"""
                     headA = self.headArea(self.snakes[otherSnake])
+                    #this algorithm could be altered to add varying values not just a blanket range
                     weightAdd = 12
                     for headCoord in headA:
                         self.weightGrid.addWeight(headCoord, weightAdd)
