@@ -255,6 +255,7 @@ class Game:
         #removes any body segments from the grid
         for otherSnakes in self.snakes:
             for bodySegment in self.snakes[otherSnakes].getAllPositions():
+                #Run this code for all body (and head) segments of all snakes
                 if bodySegment in newCoordinates:
                     newCoordinates.remove(bodySegment)
         #return new bodyless coordinates
