@@ -260,37 +260,38 @@ class Game:
 
 
     def weightLargeSnakes(self):
-        """Negativly weight squares where large snake heads could move to next round"""
-        #TODO
-            #Compare size
-            #Can we get food and grow bigger?
+        """Negativly weight squares where larger snake heads could move to next round"""
+
         ourSnake = self.snakes[self.you]
         ourSize = ourSnake.getSize()
         for otherSnake in self.snakes:
             if otherSnake != self.you:
                 otherSnakeSize = self.snakes[otherSnake].getSize()
                 if  otherSnakeSize >= ourSize:
+                    """Run this code for every snake on the board that's
+                    not you AND longer or equal to you"""
                     headCoords = self.snakes[otherSnake].getHeadPosition()
                     x = headCoords[0]
                     y = headCoords[1]
-                    if x >= 1:
+                    """Weight coordinates left and right to 0, provided that
+                    they are within the board indices (0 - width-1)"""
+                    if x > 0:
                         if x < self.width-1:
                             self.weightGrid.setWeights([[x+1, y], [x-1, y]], 0)
                         else:
                             self.weightGrid.setWeights([[x-1, y]], 0)
                     else:
                         self.weightGrid.setWeights([[x+1, y]], 0)
-                    if y >= 1:
+
+                    """Weight coordinates up and down to 0, provided that
+                    they are within the board indices (0 - height-1)"""
+                    if y > 0:
                         if y < self.height-1:
                             self.weightGrid.setWeights([[x, y+1], [x, y-1]], 0)
                         else:
                             self.weightGrid.setWeights([[x, y-1]], 0)
                     else:
                         self.weightGrid.setWeights([[x, y+1]], 0)
-
-            #ourSnake.weightFood()
-            #otherSnake.weightFood()
-
 
     def weightEnclosedSpaces(self, u):
         """Negatively weight enclosed spaces to prevent us from going in."""
