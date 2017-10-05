@@ -2,4 +2,4 @@ language: python
 install:
   - npm install -r requirements.txt
 script:
-  -  python Test.py
+  -  python app/Test.py
