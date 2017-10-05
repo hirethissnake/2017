@@ -6,3 +6,4 @@ appJar==0.42
 sortedcollections==0.4.2
 python-igraph
 requests
+python-coveralls
