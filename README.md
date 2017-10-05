@@ -1,5 +1,5 @@
 ## Sneaky Snake
-[![Coverage Status](https://coveralls.io/repos/github/phildenhoff/sneakysnake/badge.svg?branch=add-ci)](https://coveralls.io/github/phildenhoff/sneakysnake?branch=add-ci)
+[![Build Status](https://travis-ci.org/phildenhoff/sneakysnake.svg?branch=add-ci)](https://travis-ci.org/phildenhoff/sneakysnake) [![Coverage Status](https://coveralls.io/repos/github/phildenhoff/sneakysnake/badge.svg?branch=add-ci)](https://coveralls.io/github/phildenhoff/sneakysnake?branch=add-ci)
 
 A aggressive / defensive Battlesnake implementation. Written by Phil Denhoff, Daniel Frankcom, Eric Showers, Kyle Thorpe, and Alex Welsh-Piedrahita.
 
