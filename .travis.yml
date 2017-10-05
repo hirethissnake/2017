@@ -1,5 +1,9 @@
 language: python
-install:
+python:
+ - '3.5'
+before_script:
   - pip install -r requirements.txt
 script:
-  -  python app/Test.py
+  - python app/Test.py
+after_success:
+  - coveralls
