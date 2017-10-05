@@ -5,6 +5,6 @@ cache: pip
 before_script:
   - pip install -r requirements.txt
 script:
-  - coverage run app/Test.py --source app/
+  - coverage run --source app/ app/Test.py
 after_success:
   - coveralls
